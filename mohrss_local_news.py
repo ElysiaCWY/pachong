@@ -15,7 +15,7 @@
 """
 
 import os
-import time  # 补上缺失的 time 模块导入
+import time  
 from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content
 from news_crawlers.dingtalk import dingtalk_send_markdown
 from news_crawlers.sina import crawl_sina_target_day
@@ -35,7 +35,7 @@ from news_crawlers.neimenggu_rst import crawl_neimenggu_rst_policy
 # ===================== Markdown 组装（最终样式） =====================
 
 def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> str:
-    lines = ["## 财经新闻"]
+    lines = ["## 人力新闻"]
     idx = 1
     
     # 先三茅要点
