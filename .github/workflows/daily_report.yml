@@ -1,0 +1,48 @@
+name: Daily News Crawler
+
+on:
+  schedule:
+    # 每天北京时间早上 9:00 运行 (UTC 1:00)
+    - cron: '0 1 * * *'
+  # 允许在 GitHub 网页上手动点击 "Run workflow" 按钮触发
+  workflow_dispatch:
+
+jobs:
+  run-crawler:
+    runs-on: ubuntu-latest
+    
+    # 设置时区为上海，确保代码中以此为准
+    env:
+      TZ: 'Asia/Shanghai'
+
+    steps:
+    - name: Checkout code (检出代码)
+      uses: actions/checkout@v3
+      
+    - name: Set up Python (设置Python环境)
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies (安装依赖)
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # 安装 playwright 浏览器内核 (因为 news_crawlers/mohrss.py 用到了)
+        playwright install chromium
+        
+    - name: Run Crawler Script (运行爬虫脚本)
+      env:
+        # 如果你想配置私有的钉钉 Webhook，请在 GitHub 仓库 Settings -> Secrets 中添加
+        # 你的代码目前有硬编码的 Token，如果失效了，可以在这里配置
+        DINGDINGSHANGYEWEBHOOK: ${{ secrets.DINGDINGSHANGYEWEBHOOK }}
+        DINGDINGSHANGYESECRET: ${{ secrets.DINGDINGSHANGYESECRET }}
+        
+        # 环境变量开关 (1=开启, 0=关闭)
+        RUN_HRLOO: "1"
+        RUN_SINA: "1"
+        RUN_MOHRSS: "1"
+        RUN_TOPHR: "1"
+        RUN_CHINATAX: "1"
+      run: |
+        python mohrss_local_news.py

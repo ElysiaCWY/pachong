@@ -11,6 +11,6 @@ def render_markdown(title, items):
     lines = [f"### {title}", ""]
     for i, it in enumerate(items, 1):
         lines.append(
-            f"{i}. {it['title']}（{it['date']}） 👉 [详情]({it['url']})"
+            f"{i}. {it['title']}（{it['date']}） [详情]({it['url']})"
         )
     return "\n".join(lines)
