@@ -109,11 +109,11 @@ def call_ai_summary(content: str) -> str:
         return ""
 
     system_prompt = (
-        "你是一个专业的文章摘要助手。请阅读以下文章内容，生成一段 100 字以内的精炼摘要。"
+        "你是一个专业的文章摘要助手。请阅读以下文章内容，提取并总结其中的重要语句，生成一段 150 字以内的精炼摘要。"
         "要求：\n"
-        "1. 概括核心事实、关键数据或结论；\n"
+        "1. 概括核心事实、关键数据或结论，只保留最有价值的信息；\n"
         "2. 语言客观、简洁，不要使用'本文' '作者'等词，直接陈述事实；\n"
-        "3. 控制在 100 字以内。"
+        "3. 控制在 150 字以内。"
     )
 
     headers = {
@@ -143,4 +143,61 @@ def call_ai_summary(content: str) -> str:
     except Exception as e:
         print(f"[AI Summary] 生成失败: {e}")
         return ""
-    return filtered
+
+def call_ai_analysis(news_items: list, policy_items: list) -> str:
+    """
+    综合新闻摘要和政策标题，生成每日行业洞察。
+    """
+    if not news_items and not policy_items:
+        return ""
+
+    # 构造 Prompt 输入内容
+    news_text = "\n".join([
+        f"- {it.get('title', '')}: {it.get('summary', '')}" 
+        for it in news_items if it.get('summary')
+    ])
+    
+    policy_text = "\n".join([
+        f"- {it.get('title', '')}" for it in policy_items
+    ])
+
+    system_prompt = (
+        "你是一个资深的人力资源行业专家，专注于人力资源外包、灵活用工及企业合规领域。请阅读今日抓取的【财经与行业新闻】（含AI摘要）以及【最新政策动态】，"
+        "仅挑选与人力资源行业（特别是HR外包）强相关的关键信息，结合当前国内宏观经济形势与政策环境，输出一份融合分析与建议的【每日行业洞察】。\n\n"
+        "要求：\n"
+        "1. **聚焦核心**：忽略无关新闻，仅聚焦对HR外包、劳务派遣、合规代理等业务有直接影响的内容（如大厂裁员/招聘、社保税收新政、合规监管、灵工平台动态等）。\n"
+        "2. **深度融合**：不要将“分析”与“建议”割裂，而是针对每一条关键趋势，直接给出其背后的业务机会（如“企业降本增效带来的外包需求”）或风险（如“社保入税带来的合规成本”），并紧接着给出战术建议。\n"
+        "3. **格式优化**：请务必使用清晰的 Markdown 列表（bullet points）格式，提升阅读体验，避免大段文字堆砌。例如：\n"
+        "   - **【趋势关键词】**：分析趋势 + 具体建议。\n"
+        "4. **篇幅**：整体控制在 300-400 字左右，言简意赅，语气专业、敏锐、务实。"
+    )
+
+    user_content = f"【财经与行业新闻】\n{news_text}\n\n【最新政策动态】\n{policy_text}"
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        "temperature": 0.7
+    }
+
+    try:
+        # url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" # Already defined above? No, local variable.
+        # Check if url assignment is needed
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=40)
+        resp.raise_for_status()
+
+        data = resp.json()
+        analysis = data["choices"][0]["message"]["content"].strip()
+        return analysis
+    except Exception as e:
+        print(f"[AI Analysis] 生成失败: {e}")
+        return ""

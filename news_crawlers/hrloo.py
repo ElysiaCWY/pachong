@@ -203,13 +203,14 @@ class HRLooCrawler:
                     # 简单逻辑：找到该标题在 lines 中的位置，取到下一个标题之前的内容
                     # 注意：这只是个模糊匹配，因为标题在 正文 里可能带序号
                     # 优化：在 DOM 中找最近邻
-                    content_map[t] = self._find_content_for_title(container, t)
+                    next_t = titles[i+1] if i + 1 < len(titles) else None
+                    content_map[t] = self._find_content_for_title(container, t, next_t)
 
             return None, titles, page_title, content_map
         except Exception:
             return None, [], "", {}
 
-    def _find_content_for_title(self, container: Tag, title_text: str) -> str:
+    def _find_content_for_title(self, container: Tag, title_text: str, next_title_text: str = None) -> str:
         """
         简单尝试：在 container 中找到包含 title_text 的标签，然后往下找 p 标签的内容，直到遇到下一个疑似标题
         """
@@ -232,20 +233,26 @@ class HRLooCrawler:
         curr = target.next_sibling
         while curr:
             if isinstance(curr, Tag):
-                # 如果遇到下一个类似标题的特征（比如 h2, 或者带序号的 strong），则停止
                 txt = norm(curr.get_text())
+                
+                # 如果明确传入了下一个标题，且文本大概匹配，则停止
+                if next_title_text and len(next_title_text) > 2 and next_title_text in txt:
+                    break
+                
+                # 如果遇到下一个类似标题的特征（比如 h2, 或者带序号的 strong），则停止
                 if looks_like_numbered(txt) and len(txt) < 30: # 疑似下一个标题
                      break
+
                 if txt:
                     content.append(txt)
             curr = curr.next_sibling
-            if len(content) > 5: # 只要抓几段即可，不需要全文
+            if len(content) > 10: # 只要抓几段即可，不需要全文，但也稍微多一点给 AI
                 break
         
         # 过滤掉不需要的固定结尾文案
         result = "".join(content)
         result = result.replace("注：文中内容整合于网络。如有侵权，请留言小编删除。", "")
-        return result[:300] # 截断一下
+        return result
 
 def crawl_hrloo():
     c = HRLooCrawler()

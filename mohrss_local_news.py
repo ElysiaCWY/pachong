@@ -24,7 +24,7 @@ from news_crawlers.tophr import crawl_tophr
 from news_crawlers.chinatax import crawl_chinatax
 from news_crawlers.chinatax_policy import crawl_chinatax_policy
 from news_crawlers.mohrss import crawl_mohrss_target_day, crawl_mohrss_policy_target_day
-from news_crawlers.ai_crawler import filter_by_ai_batch, call_ai_summary
+from news_crawlers.ai_crawler import filter_by_ai_batch, call_ai_summary, call_ai_analysis
 from news_crawlers.beijing_rsj import crawl_beijing_rsj_policy
 from news_crawlers.tianjin_hrss import crawl_tianjin_hrss_policy
 from news_crawlers.hebei_rst import crawl_hebei_rst_policy
@@ -34,9 +34,10 @@ from news_crawlers.neimenggu_rst import crawl_neimenggu_rst_policy
 
 # ===================== Markdown 组装（最终样式） =====================
 
-def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> str:
+def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> tuple[str, list]:
     lines = ["## 人力新闻"]
     idx = 1
+    enterprise_items_all = [] # 收集所有合规的新闻，用于后续 AI 分析
     
     # 先三茅要点
     if run_hrloo:
@@ -46,12 +47,20 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
                 for t in hr_titles:
                     # 三茅要点详情统一跳到当天三茅日报文章页（同一个 url）
                     # 尝试获取该标题对应的摘要内容
-                    summary = hr_content_map.get(t, "")
-                    # 如果内容太长，也可以考虑再让 AI 润色一下，或者直接截取
-                    if len(summary) > 150:
-                        summary = summary[:145] + "..."
-                        
+                    raw_content = hr_content_map.get(t, "")
+                    
+                    # 使用 AI 进行摘要，只保留重要语句
+                    summary = ""
+                    if raw_content:
+                        # 如果内容过短，直接使用；否则调用 AI
+                        if len(raw_content) < 100:
+                            summary = raw_content
+                        else:
+                            ai_sum = call_ai_summary(raw_content)
+                            summary = ai_sum if ai_sum else raw_content[:150] + "..."
+                    
                     lines.append(md_item_with_detail(idx, t, hr_item["url"], summary))
+                    enterprise_items_all.append({"title": t, "summary": summary, "url": hr_item["url"]})
                     idx += 1
             else:
                 lines.append("（未发现当天的三茅日报）")
@@ -119,21 +128,24 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         time.sleep(1) # 避免太快
 
     for it in enterprise_items:
+        # 将这些新闻也加入到汇总列表
+        enterprise_items_all.append(it)
         lines.append(md_item_with_detail(idx, it["title"], it["url"], it.get("summary")))
         idx += 1
 
     # 使用双换行以确保在移动端钉钉能正确分段显示
-    return "\n\n".join(lines).strip()
+    return "\n\n".join(lines).strip(), enterprise_items_all
 
-def build_policy_block(run_mohrss: bool) -> str:
+def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
     lines = ["## 人社动态 & 政策"]
+    policy_items_all = [] # 收集所有政策标题，用于后续 AI 分析
 
     # 周末不抓
     now = now_cn()
     wd = now.weekday()
     if wd >= 5:
         lines.append("（周末不抓取）")
-        return "\n\n".join(lines).strip()
+        return "\n\n".join(lines).strip(), []
 
     hit_dynamics = []
     hit_policies = []
@@ -190,7 +202,7 @@ def build_policy_block(run_mohrss: bool) -> str:
              lines.append("（本次未启用）")
         else:
              lines.append("（无更新或本次未命中）")
-        return "\n\n".join(lines).strip()
+        return "\n\n".join(lines).strip(), []
 
     idx = 1
     # 先展示政策文件（人社部 + 税务总局 + 京津冀 + 山西 + 内蒙古）
@@ -199,34 +211,39 @@ def build_policy_block(run_mohrss: bool) -> str:
     if has_policy:
         lines.append("**政策文件**")
         for it in hit_policies:
+            policy_items_all.append(it)
             lines.append(md_item_with_detail(idx, it["title"], it["url"]))
             idx += 1
         for it in chinatax_policies:
             title = f"【税务总局】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
         for it in beijing_policies:
             title = f"【北京】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
         for it in tianjin_policies:
             title = f"【天津】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
         for it in hebei_policies:
             title = f"【河北】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
         for it in shanxi_policies:
             title = f"【山西】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
         for it in neimenggu_policies:
             title = f"【内蒙古】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
-
-    # 再展示人社部的地方动态
 
     # 再展示人社部的地方动态
     if hit_dynamics:
@@ -234,17 +251,24 @@ def build_policy_block(run_mohrss: bool) -> str:
             lines.append("")
         lines.append("**地方动态**")
         for it in hit_dynamics:
+            policy_items_all.append(it)
             lines.append(md_item_with_detail(idx, it["title"], it["url"]))
             idx += 1
 
-    return "\n\n".join(lines).strip()
+    return "\n\n".join(lines).strip(), policy_items_all
 
-def build_markdown(enterprise_block: str, policy_block: str) -> str:
+def build_markdown(enterprise_block: str, policy_block: str, analysis_block: str = "") -> str:
     mmdd = now_cn().strftime("%m-%d")
     md = [f"## {mmdd} 每日简报", ""]
     md.append(enterprise_block or "## 财经新闻\n（本次未生成）")
     md.append("\n---\n")
     md.append(policy_block or "## 人社动态\n（本次未生成）")
+
+    if analysis_block:
+        md.append("\n---\n")
+        md.append("## 每日行业洞察与建议")
+        md.append(analysis_block)
+
     return "\n".join(md).strip() + "\n"
 
 
@@ -259,10 +283,21 @@ def main():
     run_sina = (os.getenv("RUN_SINA", "1").strip() != "0")
     run_mohrss = (os.getenv("RUN_MOHRSS", "1").strip() != "0")
 
-    enterprise_block = build_enterprise_block(run_hrloo, run_sina)
-    policy_block = build_policy_block(run_mohrss)
+    enterprise_block, enterprise_items = build_enterprise_block(run_hrloo, run_sina)
+    policy_block, policy_items = build_policy_block(run_mohrss)
+    
+    print(f"Collected {len(enterprise_items)} enterprise items and {len(policy_items)} policy items for analysis.")
+    
+    analysis_block = ""
+    # 调用 AI 进行行业分析
+    try:
+        # 当有内容时才进行分析
+        if enterprise_items or policy_items:
+            analysis_block = call_ai_analysis(enterprise_items, policy_items)
+    except Exception as e:
+        print("Error during AI analysis:", e)
 
-    md = build_markdown(enterprise_block, policy_block)
+    md = build_markdown(enterprise_block, policy_block, analysis_block)
 
     out_file = os.getenv("OUT_FILE", "daily_all.md")
     with open(out_file, "w", encoding="utf-8") as f:
