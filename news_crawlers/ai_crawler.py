@@ -3,11 +3,10 @@ import requests
 import json
 import re
 
-# ===================== AI 智能筛选 (通义千问 Qwen3.5-Flash) =====================
+# ===================== AI 智能筛选 =====================
 DASHSCOPE_API_KEY = "sk-86fa3d1f35784c80a85640bb1df05909"
-# Qwen3.5-Flash 的 API 模型 ID 通常为 "qwen-turbo" (代表最新的快速模型) 或 "qwen-flash"
-# 这里根据你的要求改为 "qwen-turbo" (目前该模型在 DashScope 上对应 Flash 级别的速度和成本)
-DASHSCOPE_MODEL   = "qwen-turbo" 
+# 使用更强理解能力的模型进行筛选和摘要
+DASHSCOPE_MODEL   = "qwen-plus" 
 
 def call_ai_filter(titles: list[str]) -> list[bool]:
     """
@@ -18,16 +17,27 @@ def call_ai_filter(titles: list[str]) -> list[bool]:
     
     # 构造 Prompt
     system_prompt = (
-        "你是一个资深的人力资源行业专家。请从给定的新闻标题列表中，筛选出对'人力资源公司'（特别是'人力资源外包'业务）"
-        "有利、有价值或相关性高的信息。\n"
-        "筛选标准：\n"
-        "1. 涉及劳动法、社保、公积金、个税等政策调整（利于外包合规或需求增加）；\n"
-        "2. 涉及灵活用工、劳务派遣、外包服务的利好政策或趋势；\n"
-        "3. 涉及企业用工成本、招聘难、裁员潮（利于外包机会）；\n"
-        "4. 行业标杆（如人瑞、科锐等）的重大积极动态；\n"
-        "5. 头部公司（如互联网大厂、各行业巨头）的重大财经动态（如市值大幅蒸发、市场份额滑落、重大战略收缩或扩张），因为这通常意味着用工规模或策略的重大调整；\n"
-        "6. 排除无关的娱乐、纯技术细节、甚至负面或无价值的通稿。\n\n"
-        "请返回一个 JSON 数组，长度与输入数组一致，只包含 true 或 false。"
+        "你是一位深耕人力资源外包（HRO/BPO/RPO）领域的资深战略咨询顾问。你的核心任务是从海量新闻标题中，"
+        "精准筛选出对'人力资源外包业务'具有极高商业价值的情报。\n\n"
+        "【地域优先级】\n"
+        "- 默认优先保留中国境内新闻（政策、企业、行业、就业、用工与合规）。\n"
+        "- 海外新闻默认从严筛选，仅当其主体为全球或区域头部企业，且事件会对中国市场的人才需求、用工结构、薪酬水平、外包需求或合规环境产生显著传导影响时才保留。\n"
+        "- 仅是海外本地经营动态、与中国无明显关联的新闻，一律剔除。\n\n"
+        "【高价值判断标准】（只要符合任意一条即保留）：\n"
+        "1. **政策红利与风险**：涉及劳动法、社保、公积金、个税、灵活用工监管等直接影响用工成本或合规性的政策变动（这是外包服务的核心痛点）。\n"
+        "2. **甲方需求信号**：头部企业（互联网大厂、制造业巨头等）的大规模裁员（Outplacement机会）、招聘冻结、或大规模扩张（RPO/派遣机会）、业务外包招标信息。\n"
+        "3. **行业竞争情报**：主要竞争对手（如FESCO、中智、人瑞、科锐、万宝盛华、得科等）的战略动作、投融资、并购或重大产品发布。\n"
+        "4. **用工趋势**：灵活用工、零工经济、共享员工等新兴用工模式的数据报告或趋势分析。\n"
+        "5. **技术冲击**：AI、数字化对招聘、薪酬管理等HR流程的颠覆性影响。\n\n"
+        "【必须剔除的内容】：\n"
+        "- 纯粹的职场鸡汤、管理技巧分享（如'如何搞好团队关系'）。\n"
+        "- 与劳动力市场无关的宏观经济新闻或个股波动（除非是巨头崩盘影响就业）。\n"
+        "- 纯技术层面的IT新闻，除非涉及HR SaaS。\n"
+        "- 创业空间建设、人才公寓/住房保障、园区配套等民生或招商类信息；除非明确直接影响企业用工成本、劳动合规或外包需求。\n"
+        "- 与中国市场无实质关联的海外一般性企业新闻。\n"
+        "- 无实质内容的通稿或广告。\n\n"
+        "请返回一个 JSON 数组，长度与输入数组严格一致，只包含 true 或 false。\n"
+        "True表示极具价值，False表示一般或无价值。\n"
         "例如：[true, false, true...]"
     )
     
@@ -144,35 +154,58 @@ def call_ai_summary(content: str) -> str:
         print(f"[AI Summary] 生成失败: {e}")
         return ""
 
-def call_ai_analysis(news_items: list, policy_items: list) -> str:
-    """
-    综合新闻摘要和政策标题，生成每日行业洞察。
-    """
-    if not news_items and not policy_items:
-        return ""
 
-    # 构造 Prompt 输入内容
-    news_text = "\n".join([
-        f"- {it.get('title', '')}: {it.get('summary', '')}" 
-        for it in news_items if it.get('summary')
-    ])
-    
-    policy_text = "\n".join([
-        f"- {it.get('title', '')}" for it in policy_items
-    ])
+def call_ai_daily_insight(current_items: list[dict], recent_history_items: list[dict]) -> str:
+    """
+    基于当日已筛选新闻与近 3 个月历史样本，生成每日洞察。
+    若判断为无明显趋势或对人力资源外包行业影响有限，返回 NO_INSIGHT。
+    """
+    if not current_items:
+        return "NO_INSIGHT"
+
+    current_text_lines = []
+    for it in current_items:
+        title = (it.get("title") or "").strip()
+        if not title:
+            continue
+        category = (it.get("category") or "unknown").strip()
+        summary = (it.get("summary") or "").strip()
+        current_text_lines.append(f"- [{category}] {title} | 摘要: {summary}")
+
+    if not current_text_lines:
+        return "NO_INSIGHT"
+
+    # 控制上下文长度，优先使用最近样本
+    history_lines = []
+    for it in recent_history_items[-160:]:
+        d = (it.get("date") or "").strip()
+        title = (it.get("title") or "").strip()
+        if not d or not title:
+            continue
+        category = (it.get("category") or "unknown").strip()
+        history_lines.append(f"- {d} [{category}] {title}")
 
     system_prompt = (
-        "你是一个资深的人力资源行业专家，专注于人力资源外包、灵活用工及企业合规领域。请阅读今日抓取的【财经与行业新闻】（含AI摘要）以及【最新政策动态】，"
-        "仅挑选与人力资源行业（特别是HR外包）强相关的关键信息，结合当前国内宏观经济形势与政策环境，输出一份融合分析与建议的【每日行业洞察】。\n\n"
-        "要求：\n"
-        "1. **聚焦核心**：忽略无关新闻，仅聚焦对HR外包、劳务派遣、合规代理等业务有直接影响的内容（如大厂裁员/招聘、社保税收新政、合规监管、灵工平台动态等）。\n"
-        "2. **深度融合**：不要将“分析”与“建议”割裂，而是针对每一条关键趋势，直接给出其背后的业务机会（如“企业降本增效带来的外包需求”）或风险（如“社保入税带来的合规成本”），并紧接着给出战术建议。\n"
-        "3. **格式优化**：请务必使用清晰的 Markdown 列表（bullet points）格式，提升阅读体验，避免大段文字堆砌。例如：\n"
-        "   - **【趋势关键词】**：分析趋势 + 具体建议。\n"
-        "4. **篇幅**：整体控制在 300-400 字左右，言简意赅，语气专业、敏锐、务实。"
+        "你是人力资源外包行业研究员。请根据【今日已筛选新闻】与【近3个月历史新闻样本】完成洞察判断。\n\n"
+        "任务要求：\n"
+        "1. 在近3个月历史中识别与今日新闻相似或同主题的事件，判断是否形成连续趋势。\n"
+        "2. 仅当该趋势对中国人力资源外包行业有显著影响时，才输出洞察。\n"
+        "3. 显著影响包括：外包需求显著增加/收缩、合规成本显著变化、客户预算与用工结构明显调整、竞争格局明显变化。\n"
+        "4. 如果没有形成趋势，或对行业影响不明显，请仅返回 NO_INSIGHT（必须完全一致，不要附加任何文字）。\n"
+        "5. 若需要输出洞察，使用简洁 Markdown，结构如下：\n"
+        "   - **近3个月相似信号**：2-4条\n"
+        "   - **趋势判断**：1段\n"
+        "   - **行业影响**：1-2条\n"
+        "   - **建议动作**：2-3条\n"
+        "6. 总字数控制在 220-380 字，聚焦中国市场。"
     )
 
-    user_content = f"【财经与行业新闻】\n{news_text}\n\n【最新政策动态】\n{policy_text}"
+    user_content = (
+        "【今日已筛选新闻】\n"
+        + "\n".join(current_text_lines)
+        + "\n\n【近3个月历史新闻样本】\n"
+        + ("\n".join(history_lines) if history_lines else "- 无历史样本")
+    )
 
     headers = {
         "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
@@ -185,19 +218,109 @@ def call_ai_analysis(news_items: list, policy_items: list) -> str:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_content}
         ],
-        "temperature": 0.7
+        "temperature": 0.2
     }
 
     try:
-        # url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" # Already defined above? No, local variable.
-        # Check if url assignment is needed
         url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
-        resp = requests.post(url, headers=headers, json=payload, timeout=40)
+        resp = requests.post(url, headers=headers, json=payload, timeout=35)
         resp.raise_for_status()
 
         data = resp.json()
-        analysis = data["choices"][0]["message"]["content"].strip()
-        return analysis
+        content = data["choices"][0]["message"]["content"].strip()
+        content = re.sub(r"```markdown|```", "", content).strip()
+        if content == "NO_INSIGHT":
+            return "NO_INSIGHT"
+        return content
     except Exception as e:
-        print(f"[AI Analysis] 生成失败: {e}")
+        print(f"[AI Insight] 生成失败: {e}")
         return ""
+
+
+def call_ai_behavior_similarity_hits(current_enterprise_items: list[dict], recent_history_items: list[dict]) -> int:
+    """
+    使用 AI 判断“不同公司是否出现相同行为模式”，并返回历史命中数。
+    示例：多家头部企业共同裁员/招聘冻结/组织收缩等。
+    """
+    if not current_enterprise_items or not recent_history_items:
+        return 0
+
+    current_lines = []
+    for it in current_enterprise_items[:40]:
+        title = (it.get("title") or "").strip()
+        if title:
+            summary = (it.get("summary") or "").strip()
+            current_lines.append(f"- {title} | 摘要: {summary}")
+
+    history_lines = []
+    for it in recent_history_items[-200:]:
+        if it.get("category") != "enterprise":
+            continue
+        d = (it.get("date") or "").strip()
+        title = (it.get("title") or "").strip()
+        if d and title:
+            history_lines.append(f"- {d} | {title}")
+
+    if not current_lines or not history_lines:
+        return 0
+
+    system_prompt = (
+        "你是商业情报分析师。请识别‘不同公司发生相同行为’的历史命中数量。\n\n"
+        "判定规则：\n"
+        "1. 相同行为是指同一类企业动作，如：裁员、招聘冻结、组织优化、降本增效、业务收缩、业务剥离、关闭业务线、加速招聘扩张等。\n"
+        "2. 必须是不同公司之间的同类行为，不能把同一公司重复事件当作跨公司命中。\n"
+        "3. 只统计近3个月历史样本中，能与今日行为形成可比关系的历史事件条数。\n"
+        "4. 输出必须是 JSON 对象，不要输出其他文字，格式：\n"
+        "{\"similar_hit_count\": 3, \"patterns\": [\"多家头部企业裁员\", \"互联网公司招聘冻结\"]}"
+    )
+
+    user_content = (
+        "【今日企业新闻】\n"
+        + "\n".join(current_lines)
+        + "\n\n【近3个月历史企业样本】\n"
+        + "\n".join(history_lines)
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        "temperature": 0.1
+    }
+
+    try:
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=35)
+        resp.raise_for_status()
+
+        data = resp.json()
+        content = data["choices"][0]["message"]["content"].strip()
+        content = re.sub(r"```json|```", "", content).strip()
+
+        # 尝试直接解析 JSON；若模型有冗余文本，则截取首尾大括号兜底
+        obj = None
+        try:
+            obj = json.loads(content)
+        except Exception:
+            m = re.search(r"\{[\s\S]*\}", content)
+            if m:
+                obj = json.loads(m.group(0))
+
+        if not isinstance(obj, dict):
+            return 0
+
+        hit_count = int(obj.get("similar_hit_count", 0) or 0)
+        if hit_count < 0:
+            hit_count = 0
+        return hit_count
+    except Exception as e:
+        print(f"[AI Similarity] 判断失败: {e}")
+        return 0
+
