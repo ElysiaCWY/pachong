@@ -41,6 +41,9 @@ from news_crawlers.shanxi_rst import crawl_shanxi_rst_policy
 from news_crawlers.neimenggu_rst import crawl_neimenggu_rst_policy
 from news_crawlers.yicai_hongguan import crawl_yicai_hongguan
 from news_crawlers.clssn_rlzy import crawl_clssn_rlzy
+from news_crawlers.hrbrand_news import crawl_hrbrand_news
+from news_crawlers.hrvalue_kuai import crawl_hrvalue_kuai
+from news_crawlers.hrvalue_policy import crawl_hrvalue_policy
 
 
 # ===================== Markdown 组装（最终样式） =====================
@@ -179,7 +182,7 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         except Exception as e:
             lines.append(f"（三茅抓取错误: {e}）")
 
-    # 再新浪财经 + 第一资源 + 一财大政 + 劳动保障网人力资源
+    # 再新浪财经 + 第一资源 + 一财大政 + 劳动保障网人力资源 + HRbrand品牌动态 + HR价值网快讯
     enterprise_items = []
     
     if run_sina:
@@ -224,6 +227,28 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         except Exception as e:
             print(f"CLSSN RLZY error: {e}")
 
+    # HRbrand - 品牌动态
+    run_hrbrand_env = (os.getenv("RUN_HRBRAND_NEWS", "1") != "0")
+    if run_hrbrand_env:
+        try:
+            hrbrand_list = crawl_hrbrand_news()
+            for it in hrbrand_list:
+                it["source"] = "hrbrand_news"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"HRbrand News error: {e}")
+
+    # HR价值网 - 快讯（近24小时）
+    run_hrvalue_kuai_env = (os.getenv("RUN_HRVALUE_KUAI", "1") != "0")
+    if run_hrvalue_kuai_env:
+        try:
+            hrvalue_kuai_list = crawl_hrvalue_kuai()
+            for it in hrvalue_kuai_list:
+                it["source"] = "hrvalue_kuai"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"HRValue Kuai error: {e}")
+
     # 国家税务总局 (Chinatax)
     run_chinatax_env = (os.getenv("RUN_CHINATAX", "1") != "0")
     if run_chinatax_env:
@@ -239,13 +264,13 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
     if enterprise_items:
         enterprise_items = filter_by_ai_batch(enterprise_items)
         
-    if not enterprise_items and (run_sina or (run_tophr and run_tophr_env) or run_yicai_env or run_clssn_env):
+    if not enterprise_items and (run_sina or (run_tophr and run_tophr_env) or run_yicai_env or run_clssn_env or run_hrbrand_env or run_hrvalue_kuai_env):
         lines.append("（AI 筛选后暂无相关高价值新闻）")
     
     # ===== AI 摘要生成 =====
     for it in enterprise_items:
         print(f"正在生成摘要: {it['title']} ...")
-        content = fetch_url_content(it['url'])
+        content = it.get("raw_content") or fetch_url_content(it['url'])
         if not content:
             print(f"  -> 内容抓取为空，跳过摘要")
             it['summary'] = ""
@@ -291,6 +316,7 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
     hebei_policies = []
     shanxi_policies = []
     neimenggu_policies = []
+    hrvalue_policies = []
     
     # 1. 人社部
     if run_mohrss:
@@ -321,6 +347,14 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
     except Exception as e:
         print(f"JJJ/SX/NM Policy error: {e}")
 
+    # 4. HR价值网 - 政策
+    run_hrvalue_policy_env = (os.getenv("RUN_HRVALUE_POLICY", "1") != "0")
+    if run_hrvalue_policy_env:
+        try:
+            hrvalue_policies = crawl_hrvalue_policy()
+        except Exception as e:
+            print(f"HRValue policy fetch error: {e}")
+
     # 汇总判断
     all_empty = (
         not hit_dynamics and 
@@ -330,7 +364,8 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         not tianjin_policies and 
         not hebei_policies and
         not shanxi_policies and
-        not neimenggu_policies
+        not neimenggu_policies and
+        not hrvalue_policies
     )
 
     if all_empty:
@@ -356,6 +391,7 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         or hebei_policies
         or shanxi_policies
         or neimenggu_policies
+        or hrvalue_policies
     )
 
     if not has_policy and not hit_dynamics:
@@ -395,6 +431,11 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
             idx += 1
         for it in neimenggu_policies:
             title = f"【内蒙古】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in hrvalue_policies:
+            title = f"【HR价值网】{it['title']}"
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1

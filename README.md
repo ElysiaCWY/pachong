@@ -1,22 +1,28 @@
-# 人社与财经新闻自动抓取项目
+# 人社与行业情报自动抓取项目
 
-本项目旨在每日自动抓取主要的人力资源社会保障部动态、地方人社局政策、税务总局政策以及财经新闻，并通过钉钉机器人发送汇总简报。
+本项目用于每日自动抓取人力新闻与政策动态，结合 AI 完成高价值筛选、摘要生成与趋势洞察，并通过钉钉机器人发送汇总简报。
 
 ## 功能特性
 
-1.  **财经新闻抓取**：
-    *   整合三茅网、新浪财经、第一资源等渠道。
-    *   使用 AI (通义千问) 智能筛选高价值信息（需配置 API Key）。
-2.  **国家政策抓取**：
+1.  **人力新闻抓取（企业/行业）**：
+    *   三茅日报、新浪财经、第一资源、第一财经大政、中国劳动保障新闻网人力资源板块。
+    *   HRbrand 品牌动态（近 24 小时）。
+    *   HR 价值网快讯（近 24 小时，按页面时间精度过滤）。
+2.  **政策与动态抓取**：
     *   人社部（MOHRSS）动态与政策。
     *   国家税务总局政策法规。
-3.  **地方人社局政策抓取**（新增）：
+    *   HR 价值网政策板块。
+3.  **地方人社局政策抓取**：
     *   **北京**：北京市人社局政策文件。
     *   **天津**：天津市人社局政策解读。
     *   **河北**：河北省人社厅政策解读。
     *   **山西**：山西省人社厅部门文件。
     *   **内蒙古**：内蒙古人社厅政策解读。
-4.  **自动推送**：
+4.  **AI 分析能力**：
+    *   AI 批量筛选：按“对中国人力资源外包/用工市场影响”筛出高价值条目。
+    *   AI 摘要生成：为入选新闻生成简洁摘要。
+    *   AI 洞察分析：基于当日结果与近 3 个月历史记录，进行关联分组、当下市场分析与趋势预测。
+5.  **自动推送**：
     *   支持钉钉群机器人 Webhook 推送。
     *   生成 Markdown 格式的日报，包含文章标题、链接和来源。
 
@@ -24,7 +30,7 @@
 
 ### 1. 主程序运行（推荐）
 
-运行主程序将执行所有已启用的抓取任务（财经 + 国家政策 + 5个地方人社局），并汇总发送一条消息。
+运行主程序将执行所有已启用的抓取任务（人力新闻 + 政策动态 + 地方政策），并汇总发送一条消息。
 
 ```bash
 python mohrss_local_news.py
@@ -40,6 +46,14 @@ python mohrss_local_news.py
 *   **山西**：`python shanxi_rst_task.py`
 *   **内蒙古**：`python neimenggu_rst_task.py`
 
+### 3. 单独测试某个站点抓取（示例）
+
+```bash
+python -c "from news_crawlers.hrbrand_news import crawl_hrbrand_news; print(crawl_hrbrand_news())"
+python -c "from news_crawlers.hrvalue_kuai import crawl_hrvalue_kuai; print(crawl_hrvalue_kuai())"
+python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(crawl_hrvalue_policy())"
+```
+
 ## 环境变量配置
 
 请在运行前确保设置了以下环境变量（或在代码中硬编码）：
@@ -49,6 +63,18 @@ python mohrss_local_news.py
 *   `DINGDINGSHANGYEWEBHOOK` / `DINGDINGSHANGYESECRET`: 钉钉群 2 的 Webhook 和 Secret。
 *   `RUN_CHINATAX`: 是否运行税务总局抓取（1=运行，0=不运行）。
 *   `RUN_TOPHR`: 是否运行第一资源抓取（1=运行，0=不运行）。
+*   `RUN_YICAI_HONGGUAN`: 是否运行第一财经大政抓取（1=运行，0=不运行）。
+*   `RUN_CLSSN_RLZY`: 是否运行中国劳动保障新闻网人力资源抓取（1=运行，0=不运行）。
+*   `RUN_HRBRAND_NEWS`: 是否运行 HRbrand 品牌动态抓取（1=运行，0=不运行）。
+*   `RUN_HRVALUE_KUAI`: 是否运行 HR 价值网快讯抓取（1=运行，0=不运行）。
+*   `RUN_HRVALUE_POLICY`: 是否运行 HR 价值网政策抓取（1=运行，0=不运行）。
+
+常用可选参数：
+
+*   `SINA_TARGET_DATE`: 指定新浪/第一资源目标日期（格式 `YYYY-MM-DD`）。
+*   `HRVALUE_POLICY_TARGET_DATE`: 指定 HR 价值网政策目标日期（格式 `YYYY-MM-DD`）。
+*   `OUT_FILE`: 输出 Markdown 文件名（默认 `daily_all.md`）。
+*   `INSIGHT_HISTORY_FILE`: 洞察历史样本文件（默认 `insight_history.jsonl`）。
 
 ## 核心文件结构
 
@@ -59,6 +85,11 @@ python mohrss_local_news.py
     *   `hebei_rst.py`: 河北爬虫。
     *   `shanxi_rst.py`: 山西爬虫。
     *   `neimenggu_rst.py`: 内蒙古爬虫。
+    *   `yicai_hongguan.py`: 第一财经大政爬虫。
+    *   `clssn_rlzy.py`: 中国劳动保障新闻网人力资源爬虫（近 24 小时）。
+    *   `hrbrand_news.py`: HRbrand 品牌动态爬虫（近 24 小时）。
+    *   `hrvalue_kuai.py`: HR 价值网快讯爬虫（近 24 小时）。
+    *   `hrvalue_policy.py`: HR 价值网政策爬虫。
     *   `ai_crawler.py`: AI 筛选逻辑。
     *   `dingtalk.py`: 钉钉发送逻辑。
     *   ... 其他爬虫模块。
@@ -69,4 +100,7 @@ python mohrss_local_news.py
     *   周一：抓取上周五的数据。
     *   周二至周五：抓取昨天的数据。
     *   周末：默认不运行抓取。
+*   **24 小时源说明**：
+    *   HRbrand、CLSSN、HR 价值网快讯按“近 24 小时”策略抓取。
+    *   部分站点时间粒度仅到“日期”，会按页面可用时间精度做近似过滤。
 *   **网络环境**：部分政府网站响应较慢，脚本设置了超时处理，请保持网络畅通。
