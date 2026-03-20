@@ -64,9 +64,9 @@ def get_dingtalk_targets():
 
         # Hardcode for 实验群
         if w_key == "SHIYANQUNWEBHOOK":
-            w = "https://oapi.dingtalk.com/robot/send?access_token=3d124a7c7eecfa394c9d2a0ad56eeb7c334bbb06850b4de3ea7f3fad9fbb4160"
+            w = "https://oapi.dingtalk.com/robot/send?access_token=faab6d223739948d5644b12a7478923a98b188bceb1960d02cd66dff9b061a0c"
         if s_key == "SHIYANQUNSECRET":
-            s = "SECe616c966612e6f28c9a33c0ff6f85afdc50158721b998f0434cc063f76087b8f"
+            s = "SEC6bbb8f9fc11b6355482d53a9d56142237b481cf38172cdd7536d49d88273baa2"
 
         if w and s:
             targets.append((w, s, label))
