@@ -1,0 +1,152 @@
+=================================================
+日志记录已启动
+日志文件: C:\Users\admin\Desktop\pachong-main\pachong-main\logs\run_log_20260320_095848.txt
+启动时间: 2026-03-20 09:58:48
+=================================================
+正在筛选三茅新闻 (5 条)...
+  -> [AI Filter] 筛掉三茅: 腾讯：2025总薪酬1307亿，人均年薪超112万
+  -> [AI Filter] 筛掉三茅: 腾讯青云：实习生招聘正式启动
+  -> [AI Filter] 筛掉三茅: 贾国龙：创办新品牌，承接一部分西贝门店和员工
+  -> [AI Filter] 筛掉三茅: ‌澳大利亚就业依然强劲，支持澳央行的鹰派立场
+[Jiemian] Crawling page 1...
+[Jiemian] Crawling page 2: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=2
+[Jiemian] Crawling page 3: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=3
+[Jiemian] Page 3 has no recent items. Stopping.
+[Jiemian] Collected 27 items within 24h.
+[CNFIN] Crawling page 1: https://www.cnfin.com/dj/index.html
+[CNFIN] Page 1 has no recent items. Stopping.
+[CNFIN] Collected 0 items within 24h.
+[TMTPost] Start crawling with Playwright...
+[TMTPost] Scroll 1/30, items found: 41
+[TMTPost] Scroll 2/30, items found: 61
+[TMTPost] Scroll 3/30, items found: 81
+[TMTPost] Scroll 4/30, items found: 100
+[TMTPost] Scroll 5/30, items found: 120
+[TMTPost] Scroll 6/30, items found: 139
+[TMTPost] Scroll 7/30, items found: 159
+[TMTPost] Scroll 8/30, items found: 179
+[TMTPost] Scroll 9/30, items found: 198
+[TMTPost] Scroll 10/30, items found: 218
+[TMTPost] Scroll 11/30, items found: 234
+[TMTPost] Scroll 12/30, items found: 254
+[TMTPost] Scroll 13/30, items found: 274
+[TMTPost] Scroll 14/30, items found: 294
+[TMTPost] Scroll 15/30, items found: 314
+[TMTPost] Scroll 16/30, items found: 334
+[TMTPost] Scroll 17/30, items found: 350
+[TMTPost] Scroll 18/30, items found: 369
+[TMTPost] Scroll 19/30, items found: 389
+[TMTPost] Scroll 20/30, items found: 409
+[TMTPost] Scroll 21/30, items found: 429
+[TMTPost] Scroll 22/30, items found: 449
+[TMTPost] Scroll 23/30, items found: 469
+[TMTPost] Scroll 24/30, items found: 489
+[TMTPost] Scroll 25/30, items found: 509
+[TMTPost] Scroll 26/30, items found: 529
+[TMTPost] Scroll 27/30, items found: 544
+[TMTPost] Scroll 28/30, items found: 564
+[TMTPost] Scroll 29/30, items found: 584
+[TMTPost] Scroll 30/30, items found: 604
+[TMTPost] Parsing 604 total items...
+[TMTPost] Collected 7 items within 24h.
+[THSI] Target Date: 2026-03-19 (Previous Workday)
+[THSI] Start crawling items...
+[THSI] Total collected: 418
+[FortuneCN] Target date: 2026-03-19
+[FortuneCN] Found candidates: 18
+[FortuneCN] Collected 3 items for 2026-03-19
+
+[AI Filter] 正在筛选来源: sina (共 5 条) ...
+  -> 筛掉: 耗材卖不动、获客成本飙升 行业版权纠纷阴云下xTool赴港上市胜算几何？
+  -> 筛掉: 中英科技业绩断崖下滑扣非利润亏损 豪掷现金收购“兄弟”企业是业绩突围还是家族利益腾挪？
+  -> 筛掉: 华软科技连亏五年跨界并购求转型 标的公司曾辅导两年终放弃IPO 利润增长同样乏力
+  -> ... (及其它 2 条被筛掉)
+  -> sina: 保留 0 / 5
+
+[AI Filter] 正在筛选来源: tophr (共 1 条) ...
+  -> 筛掉: 47天一换TLS/SSL证书，企业IT运维扛得住吗？亚数TrustAsia CaaS 2.0 发布会给出解法！
+  -> tophr: 保留 0 / 1
+
+[AI Filter] 正在筛选来源: yicai_hongguan (共 5 条) ...
+  -> 筛掉: 国际燃气联盟副主席：天然气将是长期核心能源，中国市场潜力巨大 建议中国将建设天然气战略储备提上议事日程。 122 昨天 21:37
+  -> 筛掉: 全国服务业大会将召开，百万亿规模市场蕴含哪些新机遇 当前，居民服务性消费占比已接近居民消费的“半壁江山”，成为消费增长的核心动力。 92 昨天 20:01
+  -> 筛掉: 多地预算报告盘点：地方民生支出占比普遍超七成|财税益侃 今年各省份继续加大财力下沉力度，推动财税改革。 115 昨天 20:01
+  -> ... (及其它 1 条被筛掉)
+  -> yicai_hongguan: 保留 1 / 5
+
+[AI Filter] 正在筛选来源: caixin_companies (共 25 条) ...
+[AI Filter] 警告：返回长度 (9) 与输入 (10) 不一致，保留全部。
+  -> 筛掉: 评论(0)
+  -> 筛掉: 治理骑手改装超速 广州将清退超标换电设施
+  -> 筛掉: 评论(0)
+  -> ... (及其它 12 条被筛掉)
+  -> caixin_companies: 保留 10 / 25
+
+[AI Filter] 正在筛选来源: jiemian_business (共 27 条) ...
+  -> 筛掉: 东吴人寿、同方全球人寿2025年净利何以狂飙超30倍？
+  -> 筛掉: 受地缘冲突、通胀风险影响， 黄金白银价格暴跌
+  -> 筛掉: 4个月之内，小米把SU7改款做成了一次“精益”销售切换
+  -> ... (及其它 24 条被筛掉)
+  -> jiemian_business: 保留 0 / 27
+
+[AI Filter] 正在筛选来源: tmtpost (共 7 条) ...
+  -> 筛掉: lululemon是时候找个更懂中国的CEO了
+  -> 筛掉: 3个月估值翻4倍：Kimi的沉寂与狂飙
+  -> 筛掉: 腾讯AI，“老登”不服输
+  -> ... (及其它 4 条被筛掉)
+  -> tmtpost: 保留 0 / 7
+
+[AI Filter] 正在筛选来源: thsi_unlisted (共 418 条) ...
+  -> 筛掉: 国内遥感大数据应用和地理情报服务高科技公司“觅熵”澄清 X 平台账号：无任何关联
+  -> 筛掉: 中央第六生态环境保护督察组向鞍钢集团有限公司反馈督察情况
+  -> 筛掉: 育碧旗下 30 年老牌工作室“红色风暴”终止游戏开发业务，裁撤百余岗位
+  -> ... (及其它 412 条被筛掉)
+  -> thsi_unlisted: 保留 3 / 418
+
+[AI Filter] 正在筛选来源: fortune_cn (共 3 条) ...
+  -> 筛掉: 美国劳动力市场受AI影响程度如何？高薪职业受影响最严重
+  -> 筛掉: 美国国会预算办公室称，过去五个月美国每周借款500亿美元
+  -> 筛掉: 历经93年的等待，美国华盛顿州终于开征个人所得税
+  -> fortune_cn: 保留 0 / 3
+正在生成摘要: 提速发展的商业航天，面对哪些待解之题 中山大学航空航天学院院长吴志刚对第一财经表示，当前较为突出的问题在于掌握核心工艺的高素质技能型人才存在较大缺口。 136 昨天 18:59 ...
+  -> 摘要生成成功 (len=93): 商业航天加速发展，但面临核心工艺技能人才...
+正在生成摘要: AI需求暴增、硬件价格疯涨 云厂商齐涨价 ...
+  -> [AI SecFilter] 剔除无关内容: AI需求暴增、硬件价格疯涨 云厂商齐涨价
+正在生成摘要: 英伟达：AI编程兴起不会削弱CUDA生态护城河 ...
+  -> [AI SecFilter] 剔除无关内容: 英伟达：AI编程兴起不会削弱CUDA生态护城河
+正在生成摘要: 评论(0) ...
+  -> [AI SecFilter] 剔除无关内容: 评论(0)
+正在生成摘要: T早报｜阿里国内外电商收入增速放缓；小米发布新一代SU7轿车；LABUBU将出真人动画电影 ...
+  -> [AI SecFilter] 剔除无关内容: T早报｜阿里国内外电商收入增速放缓；小米发布新一代SU7轿车；LABUBU将出真人动画电影
+正在生成摘要: 评论(0) ...
+  -> [AI SecFilter] 剔除无关内容: 评论(0)
+正在生成摘要: 中国联通2026年资本开支下滑近8% 称将适度超前建设算力基础设施 ...
+  -> [AI SecFilter] 剔除无关内容: 中国联通2026年资本开支下滑近8% 称将适度超前建设算力基础设施
+正在生成摘要: 评论(0) ...
+  -> [AI SecFilter] 剔除无关内容: 评论(0)
+正在生成摘要: 2026年前两月中欧班列开行量同比增长超三成 反超中亚班列｜出海·物流 ...
+  -> [AI SecFilter] 剔除无关内容: 2026年前两月中欧班列开行量同比增长超三成 反超中亚班列｜出海·物流
+正在生成摘要: 评论(0) ...
+  -> [AI SecFilter] 剔除无关内容: 评论(0)
+正在生成摘要: 阿里国内外电商收入增速放缓 即时零售拖累利润率 ...
+  -> [AI SecFilter] 剔除无关内容: 阿里国内外电商收入增速放缓 即时零售拖累利润率
+正在生成摘要: 贾国龙再创业：“天边砂锅焖面”落地北京 新品牌将承接部分西贝员工 ...
+  -> 摘要生成成功 (len=92): 贾国龙新创“天边砂锅焖面”落地北京798...
+正在生成摘要: 贾国龙创办新品牌，已悄悄落地，人均消费40元至50元，本人回应：不会放弃西贝，但要关一部分店，希望承接部分员工 ...
+  -> 摘要生成成功 (len=80): 贾国龙创办新品牌“天边砂锅焖面”，人均消...
+正在生成摘要: 椰树集团招标50台机器人剥椰子 ...
+  -> [AI SecFilter] 剔除无关内容: 椰树集团招标50台机器人剥椰子
+  -> 标题过长 (88字)，AI正在缩写: 提速发展的商业航天，面对哪些待解之题 中山大学航空航天学院院长吴志刚对第一财经表示，当前较为突出的问题在于掌握核心工艺的高素质技能型人才存在较大缺口。 136 昨天 18:59
+     => 商业航天发展面临核心人才短缺 (len=14)
+  -> 标题过长 (32字)，AI正在缩写: 贾国龙再创业：“天边砂锅焖面”落地北京 新品牌将承接部分西贝员工
+     => 贾国龙新品牌天边砂锅焖面落地北京 (len=16)
+  -> 标题过长 (55字)，AI正在缩写: 贾国龙创办新品牌，已悄悄落地，人均消费40元至50元，本人回应：不会放弃西贝，但要关一部分店，希望承接部分员工
+     => 贾国龙推新品牌人均40-50元 将关部分西贝门店 (len=24)
+
+[AI Filter] 正在筛选来源: unknown (共 1 条) ...
+  -> unknown: 保留 1 / 1
+[AI Filter][人社部动态] 共 1 条，保留 1 条
+[Insight] 触发检查: 当日高价值新闻=4, 历史相似命中=3
+[Insight] 已更新历史记录文件（新增 1 条，保留最近 6 个月）
+✅ DingTalk OK (实验群): {'errcode': 0, 'errmsg': 'ok'}
+✅ wrote: daily_all.md

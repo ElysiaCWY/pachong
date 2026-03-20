@@ -38,6 +38,12 @@ def safe_md_text(s: str) -> str:
     # 移除零宽字符等（可选）
     return s
 
+def clean_yicai_summary(summary: str) -> str:
+    """去掉一财摘要末尾的字数统计，如（149字）/（约149字）。"""
+    if not summary:
+        return summary
+    return re.sub(r"\s*[（(](?:约\s*)?\d+\s*字[）)]\s*$", "", summary).strip()
+
 def parse_ymd(s: str):
     s = (s or "").strip()
     if not s:

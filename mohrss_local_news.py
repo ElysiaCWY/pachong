@@ -18,8 +18,11 @@ import os
 import json
 import time  
 import re
+import sys
 from datetime import date, timedelta
-from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content
+from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content, clean_yicai_summary
+from news_crawlers.log_utils import setup_logging
+from news_crawlers.history_manager import load_recent_history, append_history_items
 from news_crawlers.dingtalk import dingtalk_send_markdown
 from news_crawlers.sina import crawl_sina_target_day
 from news_crawlers.hrloo import crawl_hrloo
@@ -31,6 +34,8 @@ from news_crawlers.ai_crawler import (
     filter_by_ai_batch,
     call_ai_summary,
     call_ai_filter,
+    call_ai_check_relevance,
+    call_ai_shorten_title,
     call_ai_daily_insight,
     call_ai_behavior_similarity_hits,
 )
@@ -44,6 +49,12 @@ from news_crawlers.clssn_rlzy import crawl_clssn_rlzy
 from news_crawlers.hrbrand_news import crawl_hrbrand_news
 from news_crawlers.hrvalue_kuai import crawl_hrvalue_kuai
 from news_crawlers.hrvalue_policy import crawl_hrvalue_policy
+from news_crawlers.caixin_companies import crawl_caixin_companies
+from news_crawlers.jiemian_business import crawl_jiemian_business
+from news_crawlers.thsi_unlisted import crawl_thsi_unlisted
+from news_crawlers.cnfin_dj import crawl_cnfin_dj
+from news_crawlers.tmtpost import crawl_tmtpost
+from news_crawlers.fortune_cn import crawl_fortune_cn
 
 
 # ===================== Markdown 组装（最终样式） =====================
@@ -51,137 +62,7 @@ from news_crawlers.hrvalue_policy import crawl_hrvalue_policy
 INSIGHT_SKIP_TOKEN = "NO_INSIGHT"
 
 
-def clean_yicai_summary(summary: str) -> str:
-    """去掉一财摘要末尾的字数统计，如（149字）/（约149字）。"""
-    if not summary:
-        return summary
-    return re.sub(r"\s*[（(](?:约\s*)?\d+\s*字[）)]\s*$", "", summary).strip()
 
-
-def load_recent_history(history_file: str, days: int = 180) -> list[dict]:
-    if not os.path.exists(history_file):
-        return []
-
-    cutoff = now_cn().date() - timedelta(days=days)
-    results = []
-
-    try:
-        with open(history_file, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    item = json.loads(line)
-                except Exception:
-                    continue
-
-                d = item.get("date", "")
-                title = item.get("title", "")
-                if not d or not title:
-                    continue
-
-                try:
-                    d_obj = date.fromisoformat(d)
-                except Exception:
-                    continue
-
-                if d_obj >= cutoff:
-                    results.append(item)
-    except Exception as e:
-        print(f"[Insight] 读取历史文件失败: {e}")
-        return []
-
-    return results
-
-
-def append_history_items(history_file: str, run_date: str, items: list[dict]):
-    if not items:
-        return
-
-    # 1) 读取现有历史记录，并过滤保留最近 6 个月（180 天）
-    #    "从头依次覆盖" -> 意味着只保留设定时间窗内的数据，旧数据丢弃
-    cutoff_date = now_cn().date() - timedelta(days=180)
-    preserved_records = []
-    existing_keys = set()
-
-    if os.path.exists(history_file):
-        try:
-            with open(history_file, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        item = json.loads(line)
-                        d_str = item.get("date", "")
-                        # 解析日期以便过滤
-                        try:
-                            d_obj = date.fromisoformat(d_str)
-                        except ValueError:
-                            continue
-                        
-                        # 只保留 cutoff_date 之后的
-                        if d_obj >= cutoff_date:
-                            # 优化去重逻辑：优先使用 URL 去重，忽略日期（避免同一新闻不同日期重复入库）
-                            # 只有当 URL 为空时，才使用 (category, title)
-                            i_url = (item.get("url") or "").strip()
-                            i_title = (item.get("title") or "").strip()
-                            i_cat = item.get("category", "")
-                            
-                            if i_url and len(i_url) > 5:
-                                key = i_url
-                            else:
-                                key = (i_cat, i_title)
-
-                            # 防止历史文件中本身有重复记录
-                            if key not in existing_keys:
-                                preserved_records.append(item)
-                                existing_keys.add(key)
-                    except Exception:
-                        continue
-        except Exception as e:
-            print(f"[Insight] 读取/清理历史文件失败: {e}")
-
-    # 2) 追加新记录（去重）
-    new_records_count = 0
-    for it in items:
-        title = (it.get("title") or "").strip()
-        if not title:
-            continue
-        
-        url = (it.get("url") or "").strip()
-        cat = it.get("category", "unknown")
-
-        rec = {
-            "date": run_date,
-            "category": cat,
-            "title": title,
-            "summary": (it.get("summary") or "").strip(),
-            "url": url,
-        }
-        
-        if url and len(url) > 5:
-            key = url
-        else:
-            key = (cat, title)
-
-        if key in existing_keys:
-            continue
-        
-        preserved_records.append(rec)
-        existing_keys.add(key)
-        new_records_count += 1
-    
-    # 3) 全量覆盖写入（保留最近 6 个月）
-    try:
-        with open(history_file, "w", encoding="utf-8") as f:
-            for rec in preserved_records:
-                f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-        if new_records_count > 0:
-            print(f"[Insight] 已更新历史记录文件（新增 {new_records_count} 条，保留最近 6 个月）")
-    except Exception as e:
-        print(f"[Insight] 写入历史文件失败: {e}")
 
 
 def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> tuple[str, list]:
@@ -293,6 +174,72 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         except Exception as e:
             print(f"HRValue Kuai error: {e}")
 
+    # 财新网 - 公司（近24小时）
+    run_caixin_env = (os.getenv("RUN_CAIXIN_COMPANIES", "1") != "0")
+    if run_caixin_env:
+        try:
+            caixin_list = crawl_caixin_companies()
+            for it in caixin_list:
+                it["source"] = "caixin_companies"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"Caixin Companies error: {e}")
+
+    # 界面新闻 - 商业（近24小时）
+    run_jiemian_env = (os.getenv("RUN_JIEMIAN_BUSINESS", "1") != "0")
+    if run_jiemian_env:
+        try:
+            jiemian_list = crawl_jiemian_business()
+            for it in jiemian_list:
+                it["source"] = "jiemian_business"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"Jiemian Business error: {e}")
+
+    # 中国金融信息网 - 独家（近24小时）
+    run_cnfin_dj_env = (os.getenv("RUN_CNFIN_DJ", "1") != "0")
+    if run_cnfin_dj_env:
+        try:
+            cnfin_list = crawl_cnfin_dj()
+            for it in cnfin_list:
+                it["source"] = "cnfin_dj"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"CNFIN Exclusive error: {e}")
+
+    # 钛媒体 - 最新（近24小时）
+    run_tmtpost_env = (os.getenv("RUN_TMTPOST", "1") != "0")
+    if run_tmtpost_env:
+        try:
+            tmtpost_list = crawl_tmtpost()
+            for it in tmtpost_list:
+                it["source"] = "tmtpost"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"TMTPost error: {e}")
+
+    # 同花顺 - 非上市公司（前一工作日）
+    run_thsi_env = (os.getenv("RUN_THSI_UNLISTED", "1") != "0")
+    if run_thsi_env:
+        try:
+            thsi_list = crawl_thsi_unlisted()
+            for it in thsi_list:
+                it["source"] = "thsi_unlisted"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"THSI Unlisted error: {e}")
+
+    # 财富中文网 - 商业（昨天）
+    run_fortune_env = (os.getenv("RUN_FORTUNE_CN", "1") != "0")
+    if run_fortune_env:
+        try:
+            fortune_list = crawl_fortune_cn()
+            for it in fortune_list:
+                it["source"] = "fortune_cn"
+                enterprise_items.append(it)
+        except Exception as e:
+           print(f"FortuneCN error: {e}")
+
     # 国家税务总局 (Chinatax)
     run_chinatax_env = (os.getenv("RUN_CHINATAX", "1") != "0")
     if run_chinatax_env:
@@ -312,27 +259,45 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         lines.append("（AI 筛选后暂无相关高价值新闻）")
     
     # ===== AI 摘要生成 =====
+    final_enterprise_items = []
+    
     for it in enterprise_items:
         print(f"正在生成摘要: {it['title']} ...")
         content = it.get("raw_content") or fetch_url_content(it['url'])
         if not content:
             print(f"  -> 内容抓取为空，跳过摘要")
             it['summary'] = ""
+            final_enterprise_items.append(it)
             continue
             
         summary = call_ai_summary(content)
         if summary:
+            # === AI 二次筛选（针对正文/摘要） ===
+            if not call_ai_check_relevance(it['title'], summary):
+                print(f"  -> [AI SecFilter] 剔除无关内容: {it['title']}")
+                continue
+
             print(f"  -> 摘要生成成功 (len={len(summary)}): {summary[:20]}...")
             if it.get("source") == "yicai_hongguan":
                 summary = clean_yicai_summary(summary)
             it['summary'] = summary
         else:
-            print(f"  -> 摘要生成失败/为空")
             it['summary'] = ""
             
-        time.sleep(1) # 避免太快
+        final_enterprise_items.append(it)
+    
+    enterprise_items = final_enterprise_items
 
     for it in enterprise_items:
+        # 检查标题长度，若超过30字，进行缩写
+        title_len = len(it["title"])
+        if title_len > 30:
+            print(f"  -> 标题过长 ({title_len}字)，AI正在缩写: {it['title']}")
+            short_t = call_ai_shorten_title(it["title"])
+            if short_t:
+                print(f"     => {short_t} (len={len(short_t)})")
+                it["title"] = short_t
+
         # 将这些新闻也加入到汇总列表
         enterprise_items_all.append(it)
         lines.append(md_item_with_detail(idx, it["title"], it["url"], it.get("summary")))
@@ -512,6 +477,8 @@ def build_markdown(enterprise_block: str, policy_block: str, insight_block: str 
 
 
 def main():
+    setup_logging()
+    
     # 周末不运行（你规则里周六/周日不抓）
     wd = now_cn().weekday()
     if wd >= 5:

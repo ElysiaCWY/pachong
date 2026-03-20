@@ -8,6 +8,13 @@
     *   三茅日报、新浪财经、第一资源、第一财经大政、中国劳动保障新闻网人力资源板块。
     *   HRbrand 品牌动态（近 24 小时）。
     *   HR 价值网快讯（近 24 小时，按页面时间精度过滤）。
+    *   中国金融信息网独家新闻（近 24 小时）。
+    *   钛媒体最新资讯（近 24 小时，Playwright 深度抓取）。
+    *   界面新闻商业板块（已过滤视频）。
+    *   同花顺非上市公司资讯。
+    *   财富中文网商业新闻。
+    *   财新网公司频道公司新闻。
+    *   国家税务总局。
 2.  **政策与动态抓取**：
     *   人社部（MOHRSS）动态与政策。
     *   国家税务总局政策法规。
@@ -68,6 +75,9 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `RUN_HRBRAND_NEWS`: 是否运行 HRbrand 品牌动态抓取（1=运行，0=不运行）。
 *   `RUN_HRVALUE_KUAI`: 是否运行 HR 价值网快讯抓取（1=运行，0=不运行）。
 *   `RUN_HRVALUE_POLICY`: 是否运行 HR 价值网政策抓取（1=运行，0=不运行）。
+*   `RUN_JIEMIAN_BUSINESS`: 是否运行界面新闻商业抓取（1=运行，0=不运行）。
+*   `RUN_CNFIN_DJ`: 是否运行中国金融信息网独家抓取（1=运行，0=不运行）。
+*   `RUN_TMTPOST`: 是否运行钛媒体最新抓取（1=运行，0=不运行）。
 
 常用可选参数：
 
@@ -88,6 +98,9 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
     *   `yicai_hongguan.py`: 第一财经大政爬虫。
     *   `clssn_rlzy.py`: 中国劳动保障新闻网人力资源爬虫（近 24 小时）。
     *   `hrbrand_news.py`: HRbrand 品牌动态爬虫（近 24 小时）。
+    *   `cnfin_dj.py`: 中国金融信息网独家爬虫。
+    *   `tmtpost.py`: 钛媒体最新爬虫（Playwright 实现）。
+    *   `jiemian_business.py`: 界面新闻商业爬虫（含视频过滤）。
     *   `hrvalue_kuai.py`: HR 价值网快讯爬虫（近 24 小时）。
     *   `hrvalue_policy.py`: HR 价值网政策爬虫。
     *   `ai_crawler.py`: AI 筛选逻辑。
