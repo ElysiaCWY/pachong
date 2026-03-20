@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
 import requests
 import json
 import re
 
 # ===================== AI 智能筛选 =====================
-DASHSCOPE_API_KEY = "sk-86fa3d1f35784c80a85640bb1df05909"
+DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "sk-86fa3d1f35784c80a85640bb1df05909")
 # 使用更强理解能力的模型进行筛选和摘要
 DASHSCOPE_MODEL   = "qwen-plus" 
 

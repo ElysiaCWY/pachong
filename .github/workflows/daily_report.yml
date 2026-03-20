@@ -37,12 +37,33 @@ jobs:
         # 你的代码目前有硬编码的 Token，如果失效了，可以在这里配置
         DINGDINGSHANGYEWEBHOOK: ${{ secrets.DINGDINGSHANGYEWEBHOOK }}
         DINGDINGSHANGYESECRET: ${{ secrets.DINGDINGSHANGYESECRET }}
+        SHIYANQUNWEBHOOK: ${{ secrets.SHIYANQUNWEBHOOK }}
+        SHIYANQUNSECRET: ${{ secrets.SHIYANQUNSECRET }}
+        DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
         
         # 环境变量开关 (1=开启, 0=关闭)
+        # 人力新闻
         RUN_HRLOO: "1"
         RUN_SINA: "1"
-        RUN_MOHRSS: "1"
         RUN_TOPHR: "1"
+        RUN_CLSSN_RLZY: "1"
+        RUN_HRBRAND_NEWS: "1"
+        RUN_HRVALUE_KUAI: "1"
+        RUN_CAIXIN_COMPANIES: "1"
+        RUN_JIEMIAN_BUSINESS: "1"
+        RUN_CNFIN_DJ: "1"
+        RUN_TMTPOST: "1"
+        RUN_THSI_UNLISTED: "1"
+        RUN_FORTUNE_CN: "1"
+        RUN_YICAI_HONGGUAN: "1"
+        
+        # 政策法规
+        RUN_MOHRSS: "1"
         RUN_CHINATAX: "1"
+        RUN_HRVALUE_POLICY: "1"
+        
+        # 其他配置
+        OUT_FILE: "daily_all.md"
+        INSIGHT_HISTORY_FILE: "insight_history.jsonl"
       run: |
         python mohrss_local_news.py
