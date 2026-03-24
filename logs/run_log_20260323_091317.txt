@@ -1,0 +1,174 @@
+=================================================
+日志记录已启动
+日志文件: C:\Users\admin\Desktop\pachong-main\pachong-main\logs\run_log_20260323_091317.txt
+启动时间: 2026-03-23 09:13:18
+=================================================
+正在筛选三茅新闻 (5 条)...
+[Token Usage] Filter: 692 (In: 0, Out: 0)
+  -> [AI Filter] 筛掉三茅: 道路运输从业人员年龄上限今起放宽至63岁
+[Token Usage] Summary: 255 (In: 0, Out: 0)
+  -> [AI Filter] 筛掉三茅: 摩根大通：运用技术监控初级银行员工工作时长
+  -> [AI Filter] 筛掉三茅: 美国：AI冲击下，毕业生恐将面临有史以来最高失业率
+[Jiemian] Crawling page 1...
+[Jiemian] Crawling page 2: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=2
+[Jiemian] Crawling page 3: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=3
+[Jiemian] Page 3 has no recent items. Stopping.
+[Jiemian] Collected 19 items within 24h.
+[CNFIN] Crawling page 1: https://www.cnfin.com/dj/index.html
+[CNFIN] Page 1 has no recent items. Stopping.
+[CNFIN] Collected 0 items within 24h.
+[TMTPost] Start crawling with Playwright...
+[TMTPost] Scroll 1/30, items found: 45
+[TMTPost] Scroll 2/30, items found: 63
+[TMTPost] Scroll 3/30, items found: 83
+[TMTPost] Scroll 4/30, items found: 103
+[TMTPost] Scroll 5/30, items found: 123
+[TMTPost] Scroll 6/30, items found: 142
+[TMTPost] Scroll 7/30, items found: 162
+[TMTPost] Scroll 8/30, items found: 179
+[TMTPost] Scroll 9/30, items found: 197
+[TMTPost] Scroll 10/30, items found: 215
+[TMTPost] Scroll 11/30, items found: 235
+[TMTPost] Scroll 12/30, items found: 255
+[TMTPost] Scroll 13/30, items found: 274
+[TMTPost] Scroll 14/30, items found: 294
+[TMTPost] Scroll 15/30, items found: 313
+[TMTPost] Scroll 16/30, items found: 333
+[TMTPost] Scroll 17/30, items found: 353
+[TMTPost] Scroll 18/30, items found: 373
+[TMTPost] Scroll 19/30, items found: 392
+[TMTPost] Scroll 20/30, items found: 412
+[TMTPost] Scroll 21/30, items found: 428
+[TMTPost] Scroll 22/30, items found: 448
+[TMTPost] Scroll 23/30, items found: 468
+[TMTPost] Scroll 24/30, items found: 488
+[TMTPost] Scroll 25/30, items found: 508
+[TMTPost] Scroll 26/30, items found: 526
+[TMTPost] Scroll 27/30, items found: 544
+[TMTPost] Scroll 28/30, items found: 563
+[TMTPost] Scroll 29/30, items found: 583
+[TMTPost] Scroll 30/30, items found: 603
+[TMTPost] Parsing 603 total items...
+[TMTPost] Collected 8 items within 24h.
+[THSI] Target Date: 2026-03-20 (Previous Workday)
+[THSI] Start crawling items...
+[THSI] Total collected: 331
+[FortuneCN] Target date: 2026-03-22
+[FortuneCN] Found candidates: 18
+[FortuneCN] Collected 4 items for 2026-03-22
+
+[AI Filter] 正在筛选来源: sina (共 10 条) ...
+[Token Usage] Filter: 935 (In: 0, Out: 0)
+  -> 筛掉: 福立旺激进扩张野心与自身造血能力错配？拟定增募10亿 前次募投项目远不及预期
+  -> 筛掉: 莎普爱思24倍高溢价收购背后：莆田系关联腾挪资本局？此前高溢价收购标的已减值暴雷
+  -> 筛掉: 韩建河山重组问询答复"姗姗来迟"背后：精准控线避借壳?控股稳定性待考 标的业绩差
+  -> ... (及其它 7 条被筛掉)
+  -> sina: 保留 0 / 10
+
+[AI Filter] 正在筛选来源: tophr (共 1 条) ...
+[Token Usage] Filter: 628 (In: 0, Out: 0)
+  -> 筛掉: TLS/SSL证书自动化CLM哪家强？国内主流厂商优劣势全拆解
+  -> tophr: 保留 0 / 1
+
+[AI Filter] 正在筛选来源: yicai_hongguan (共 5 条) ...
+[Token Usage] Filter: 896 (In: 0, Out: 0)
+  -> 筛掉: “地方附加税”改革将启，万亿级新税种如何设立 由于“一税两费”征税对象、税基相同，部分专家认为未来地方附加税总体沿用此前征税范围和税基可能性大，但如何合理设定税率值得研究。 124 昨天 19:58
+  -> 筛掉: 蔡昉：养老保障的主要挑战不在资金缺口，而需共享生产率成果 中国社会劳动生产率的提升可以跑赢人口老龄化。 87 昨天 18:36
+  -> 筛掉: 韩文秀：在今后一个时期，扩大消费是重中之重也是难中之难 “十五五”规划纲要中涉及民生福祉类指标最多，达七项，覆盖就业、收入等关键领域。 282 昨天 15:28
+  -> ... (及其它 2 条被筛掉)
+  -> yicai_hongguan: 保留 0 / 5
+
+[AI Filter] 正在筛选来源: caixin_companies (共 14 条) ...
+[Token Usage] Filter: 781 (In: 0, Out: 0)
+[Token Usage] Filter: 680 (In: 0, Out: 0)
+  -> 筛掉: 上海财经大学刘元春：中国已处于消费升级关键期｜中国发展高层论坛
+  -> 筛掉: 能源内参｜成品油零售价将迎大涨 汽油进入“9元时代”；中国变压器生产企业满负荷运转 海外订单爆满
+  -> 筛掉: 评论(0)
+  -> ... (及其它 11 条被筛掉)
+  -> caixin_companies: 保留 0 / 14
+
+[AI Filter] 正在筛选来源: jiemian_business (共 19 条) ...
+[Token Usage] Filter: 882 (In: 0, Out: 0)
+[Token Usage] Filter: 826 (In: 0, Out: 0)
+  -> 筛掉: 厦门富豪林秀成被立案调查，实控公司三安光电或现上市以来首次年度亏损
+  -> 筛掉: 广东智能眼镜新锐：向海外富人卖高端AI眼镜，估值数亿美元
+  -> 筛掉: 3月23日投资早报|三安光电实际控制人被留置，紫金矿业取得赤峰黄金控制权，中国石化2025年净利润同比下降36.8%
+  -> ... (及其它 16 条被筛掉)
+  -> jiemian_business: 保留 0 / 19
+
+[AI Filter] 正在筛选来源: tmtpost (共 8 条) ...
+[Token Usage] Filter: 797 (In: 0, Out: 0)
+  -> 筛掉: 同属 IP 赛道，泡泡玛特估值是其 2 倍：名创优品差在哪？
+  -> 筛掉: 买猫500、治病5000，年轻人抛弃宠物医院
+  -> 筛掉: AI越火，科大讯飞越难
+  -> ... (及其它 5 条被筛掉)
+  -> tmtpost: 保留 0 / 8
+
+[AI Filter] 正在筛选来源: thsi_unlisted (共 331 条) ...
+[Token Usage] Filter: 783 (In: 0, Out: 0)
+[Token Usage] Filter: 853 (In: 0, Out: 0)
+[Token Usage] Filter: 825 (In: 0, Out: 0)
+[Token Usage] Filter: 832 (In: 0, Out: 0)
+[Token Usage] Filter: 811 (In: 0, Out: 0)
+[Token Usage] Filter: 837 (In: 0, Out: 0)
+[Token Usage] Filter: 836 (In: 0, Out: 0)
+[Token Usage] Filter: 866 (In: 0, Out: 0)
+[Token Usage] Filter: 837 (In: 0, Out: 0)
+[Token Usage] Filter: 807 (In: 0, Out: 0)
+[Token Usage] Filter: 844 (In: 0, Out: 0)
+[Token Usage] Filter: 827 (In: 0, Out: 0)
+[Token Usage] Filter: 824 (In: 0, Out: 0)
+[Token Usage] Filter: 865 (In: 0, Out: 0)
+[Token Usage] Filter: 844 (In: 0, Out: 0)
+[Token Usage] Filter: 844 (In: 0, Out: 0)
+[Token Usage] Filter: 826 (In: 0, Out: 0)
+[Token Usage] Filter: 840 (In: 0, Out: 0)
+[Token Usage] Filter: 819 (In: 0, Out: 0)
+[Token Usage] Filter: 841 (In: 0, Out: 0)
+[Token Usage] Filter: 796 (In: 0, Out: 0)
+[Token Usage] Filter: 821 (In: 0, Out: 0)
+[Token Usage] Filter: 829 (In: 0, Out: 0)
+[Token Usage] Filter: 797 (In: 0, Out: 0)
+[Token Usage] Filter: 886 (In: 0, Out: 0)
+[Token Usage] Filter: 847 (In: 0, Out: 0)
+[Token Usage] Filter: 797 (In: 0, Out: 0)
+[Token Usage] Filter: 857 (In: 0, Out: 0)
+[Token Usage] Filter: 795 (In: 0, Out: 0)
+[Token Usage] Filter: 855 (In: 0, Out: 0)
+[Token Usage] Filter: 807 (In: 0, Out: 0)
+[Token Usage] Filter: 812 (In: 0, Out: 0)
+[Token Usage] Filter: 821 (In: 0, Out: 0)
+[Token Usage] Filter: 632 (In: 0, Out: 0)
+  -> 筛掉: 今天，主角荣耀归来
+  -> 筛掉: METALIGHT：武汉云光就在公交自动驾驶领域开展深度战略合作与杭州数知梦订立战略合作框架协议
+  -> 筛掉: 点赞华漕服务！华峰集团总裁林建一在这场营商大会上作交流发言
+  -> ... (及其它 327 条被筛掉)
+  -> thsi_unlisted: 保留 1 / 331
+
+[AI Filter] 正在筛选来源: fortune_cn (共 4 条) ...
+[Token Usage] Filter: 679 (In: 0, Out: 0)
+  -> 筛掉: 这十条关键建议，或许能让你今年留在“牌桌”上
+  -> 筛掉: 全球电动汽车可以取代七成伊朗石油，油价走高刺激电车购买需求
+  -> 筛掉: 美国经济困境加剧孤独危机：年轻人为省钱放弃社交
+  -> ... (及其它 1 条被筛掉)
+  -> fortune_cn: 保留 0 / 4
+正在生成摘要: 美的洗衣机全球KD中心项目落地合肥高新区 ...
+[Token Usage] Summary: 562 (In: 0, Out: 0)
+[Token Usage] Check Relevance: 336 (In: 0, Out: 0)
+  -> [AI SecFilter] 剔除无关内容: 美的洗衣机全球KD中心项目落地合肥高新区
+[AI Deduplicate]正在对 2 条新闻进行去重检查...
+[Token Usage] Deduplicate: 380 (In: 0, Out: 0)
+[AI Deduplicate] 去重完成：2 -> 2
+
+[AI Filter] 正在筛选来源: unknown (共 2 条) ...
+[Token Usage] Filter: 646 (In: 0, Out: 0)
+  -> 筛掉: 青海海北州：抢抓黄金期，助力就业工作开好局
+  -> 筛掉: 天津：构建“产教评”技能生态 赋能现代化产业体系
+  -> unknown: 保留 0 / 2
+[AI Filter][人社部动态] 共 2 条，保留 0 条
+[Token Usage] Behavior Similarity: 1232 (In: 0, Out: 0)
+[Insight] 触发检查: 当日高价值新闻=2, 历史相似命中=4
+[Token Usage] Daily Insight: 4355 (In: 0, Out: 0)
+[Insight] 已更新历史记录文件（新增 1 条，保留最近 6 个月）
+✅ DingTalk OK (实验群): {'errcode': 0, 'errmsg': 'ok'}
+✅ wrote: daily_all.md

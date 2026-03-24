@@ -4,7 +4,7 @@ import re
 from datetime import date
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from .common import make_session, norm, target_prev_workday, now_cn, parse_ymd
+from .common import make_session, norm, target_prev_workday, now_cn, parse_ymd, mark_income_related
 
 # ===================== 国家税务总局：税务新闻 =====================
 CHINATAX_NEWS_URL = "https://www.chinatax.gov.cn/chinatax/n810219/n810724/common_list_swxw.html"
@@ -63,6 +63,7 @@ def crawl_chinatax():
             if url not in seen:
                 # 简单过滤：税务总局网站内链接
                 if "chinatax.gov.cn" in url or url.startswith("/"):
+                    title = mark_income_related(title)
                     seen.add(url)
                     results.append({"title": title, "url": url, "date": dt})
 

@@ -4,7 +4,7 @@ import re
 from datetime import date
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from .common import make_session, norm, target_prev_workday, now_cn, parse_ymd
+from .common import make_session, norm, target_prev_workday, now_cn, parse_ymd, mark_income_related
 
 # ===================== 国家税务总局：政策法规 =====================
 # “最新文件”列表页
@@ -83,6 +83,7 @@ def crawl_chinatax_policy():
             title = norm(found_link.get_text())
             
             if url not in seen:
+                title = mark_income_related(title)
                 seen.add(url)
                 results.append({"title": title, "url": url, "date": target})
                 

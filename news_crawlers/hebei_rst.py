@@ -3,7 +3,7 @@ import re
 from urllib.parse import urljoin
 from datetime import date
 from bs4 import BeautifulSoup
-from .common import make_session, parse_ymd, norm
+from .common import make_session, parse_ymd, norm, mark_income_related
 
 HEBEI_RST_URL = "https://rst.hebei.gov.cn/zxdtChild?isId=1427&id=3&orientation=0"
 HEBEI_BASE_URL = "https://rst.hebei.gov.cn"
@@ -85,6 +85,8 @@ def crawl_hebei_rst_policy(target_date: date = None) -> list:
             # 去重
             if any(r['url'] == full_url for r in results):
                 continue
+            
+            title = mark_income_related(title)
 
             results.append({
                 "title": title,

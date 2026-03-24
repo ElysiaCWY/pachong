@@ -5,7 +5,7 @@ import time
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-from .common import norm, now_cn, target_prev_workday
+from .common import norm, now_cn, target_prev_workday, mark_income_related
 
 # ===================== 地方政策：人社部-人社动态（Playwright） =====================
 MOHRSS_DEFAULT_LIST_URL = "https://www.mohrss.gov.cn/SYrlzyhshbzb/dongtaixinwen/dfdt/index.html"
@@ -99,9 +99,11 @@ def parse_list_robust(html: str, page_url: str) -> list[dict]:
             if a and norm(a.get_text()):
                 href = a["href"].strip()
                 if ".html" in href:
+                    title = norm(a.get_text())
+                    title = mark_income_related(title)
                     items.append({
                         "date": dt,
-                        "title": norm(a.get_text()),
+                        "title": title,
                         "url": urljoin(page_url, href)
                     })
                     break

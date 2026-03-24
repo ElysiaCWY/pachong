@@ -125,3 +125,22 @@ def make_session():
     r = Retry(total=3, backoff_factor=0.6, status_forcelist=[500, 502, 503, 504])
     s.mount("https://", LegacyTLSAdapter(max_retries=r))
     return s
+
+# ===================== 关键字过滤（收入/个税） =====================
+INCOME_KEYWORDS = [
+    "工资", "薪酬", "薪资", "个人所得税", "个税", 
+    "津贴", "补贴", "社保", "公积金", "最低工资", 
+    "收入", "待遇", "养老金", "失业金"
+]
+
+def is_income_related(text: str) -> bool:
+    """判断标题或内容是否与个人收入相关"""
+    if not text:
+        return False
+    return any(kw in text for kw in INCOME_KEYWORDS)
+
+def mark_income_related(title: str) -> str:
+    """如果是收入相关，给标题加标记"""
+    if is_income_related(title):
+        return f"【💰收入】{title}"
+    return title

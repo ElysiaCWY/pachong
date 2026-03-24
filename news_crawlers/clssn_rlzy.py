@@ -4,7 +4,7 @@ import re
 from datetime import datetime, timedelta
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from .common import make_session, norm, now_cn
+from .common import make_session, norm, now_cn, mark_income_related
 
 # ===================== 中国劳动保障新闻网：人力资源 =====================
 CLSSN_RLZY_URL = "https://www.clssn.com/yw/rlzy/index.shtml"
@@ -59,6 +59,8 @@ def crawl_clssn_rlzy():
         title = norm(a.get_text(" ", strip=True))
         if not title or len(title) < 6:
             continue
+            
+        title = mark_income_related(title)
 
         url = urljoin(CLSSN_RLZY_URL, href)
         if url in seen:

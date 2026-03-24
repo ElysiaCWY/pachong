@@ -38,6 +38,7 @@ from news_crawlers.ai_crawler import (
     call_ai_shorten_title,
     call_ai_daily_insight,
     call_ai_behavior_similarity_hits,
+    call_ai_deduplicate,
 )
 from news_crawlers.beijing_rsj import crawl_beijing_rsj_policy
 from news_crawlers.tianjin_hrss import crawl_tianjin_hrss_policy
@@ -55,6 +56,10 @@ from news_crawlers.thsi_unlisted import crawl_thsi_unlisted
 from news_crawlers.cnfin_dj import crawl_cnfin_dj
 from news_crawlers.tmtpost import crawl_tmtpost
 from news_crawlers.fortune_cn import crawl_fortune_cn
+from news_crawlers.vbdata import crawl_vbdata
+from news_crawlers.fmcg_china import crawl_fmcg_china
+from news_crawlers.gasgoo import crawl_gasgoo
+from news_crawlers.infoq import crawl_infoq
 
 
 # ===================== Markdown 组装（最终样式） =====================
@@ -67,10 +72,9 @@ INSIGHT_SKIP_TOKEN = "NO_INSIGHT"
 
 def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> tuple[str, list]:
     lines = ["## 人力新闻"]
-    idx = 1
-    enterprise_items_all = [] # 收集所有合规的新闻，用于后续 AI 分析
+    candidates = [] # 收集所有（HRloo + 其他）待展示新闻
     
-    # 先三茅要点
+    # ================= 1. 三茅 (HRloo) =================
     if run_hrloo:
         try:
             hr_item, hr_titles, hr_content_map = crawl_hrloo()
@@ -86,34 +90,30 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
                         continue
 
                     # 三茅要点详情统一跳到当天三茅日报文章页（同一个 url）
-                    # 尝试获取该标题对应的摘要内容
                     raw_content = hr_content_map.get(t, "")
                     
-                    # 使用 AI 进行摘要，只保留重要语句
+                    # 使用 AI 进行摘要
                     summary = ""
                     if raw_content:
-                        # 如果内容过短，直接使用；否则调用 AI
                         if len(raw_content) < 100:
                             summary = raw_content
                         else:
                             ai_sum = call_ai_summary(raw_content)
                             summary = ai_sum if ai_sum else raw_content[:150] + "..."
                     
-                    lines.append(md_item_with_detail(idx, t, hr_item["url"], summary))
-                    enterprise_items_all.append({"title": t, "summary": summary, "url": hr_item["url"]})
-                    idx += 1
+                    # 加入候选池 (不直接生成 lines)
+                    candidates.append({"title": t, "summary": summary, "url": hr_item["url"], "source": "hrloo"})
             else:
                 lines.append("（未发现当天的三茅日报）")
         except Exception as e:
             lines.append(f"（三茅抓取错误: {e}）")
 
-    # 再新浪财经 + 第一资源 + 一财大政 + 劳动保障网人力资源 + HRbrand品牌动态 + HR价值网快讯
+    # ================= 2. 其他平台聚合 =================
     enterprise_items = []
     
     if run_sina:
         try:
             _, sina_list = crawl_sina_target_day()
-            # 统一格式化为 dict
             for dt, title, url in sina_list:
                 enterprise_items.append({"title": title, "url": url, "source": "sina"})
         except Exception as e:
@@ -251,56 +251,108 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         except Exception as e:
             print(f"Chinatax error: {e}")
 
-    # ===== AI 批量筛选 =====
+    # 动脉网 - 指定栏目（近24小时）
+    run_vbdata_env = (os.getenv("RUN_VBDATA", "1") != "0")
+    if run_vbdata_env:
+        try:
+            vbdata_list = crawl_vbdata()
+            for it in vbdata_list:
+                it["source"] = "vbdata"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"VBData error: {e}")
+
+    # 快消品网 - 多板块（独家、饮品、食品、日化、零售、电商、综合）
+    # 通常该网站更新不频繁，但板块多，合并抓取
+    run_fmcg_env = (os.getenv("RUN_FMCG_CHINA", "1") != "0")
+    if run_fmcg_env:
+        try:
+            fmcg_list = crawl_fmcg_china()
+            for it in fmcg_list:
+                it["source"] = "fmcg_china"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"FMCG China error: {e}")
+
+    # 盖世汽车 - 产业+车企
+    run_gasgoo_env = (os.getenv("RUN_GASGOO", "1") != "0")
+    if run_gasgoo_env:
+        try:
+            # 默认抓取目标工作日新闻（内部自动判断）
+            gasgoo_list = crawl_gasgoo()
+            for it in gasgoo_list:
+                it["source"] = "gasgoo"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"Gasgoo error: {e}")
+
+    # InfoQ - 产业动态
+    run_infoq_env = (os.getenv("RUN_INFOQ", "1") != "0")
+    if run_infoq_env:
+        try:
+            infoq_list = crawl_infoq()
+            for it in infoq_list:
+                it["source"] = "infoq"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"InfoQ error: {e}")
+
+    # ===== AI 批量筛选 (其他平台) =====
     if enterprise_items:
         enterprise_items = filter_by_ai_batch(enterprise_items)
         
     if not enterprise_items and (run_sina or (run_tophr and run_tophr_env) or run_yicai_env or run_clssn_env or run_hrbrand_env or run_hrvalue_kuai_env):
         lines.append("（AI 筛选后暂无相关高价值新闻）")
     
-    # ===== AI 摘要生成 =====
-    final_enterprise_items = []
-    
+    # ===== AI 摘要生成 & 二次筛选 (其他平台) =====
     for it in enterprise_items:
         print(f"正在生成摘要: {it['title']} ...")
         content = it.get("raw_content") or fetch_url_content(it['url'])
         if not content:
             print(f"  -> 内容抓取为空，跳过摘要")
             it['summary'] = ""
-            final_enterprise_items.append(it)
+            candidates.append(it) # 虽然无摘要，但也加入
             continue
             
         summary = call_ai_summary(content)
         if summary:
-            # === AI 二次筛选（针对正文/摘要） ===
+            # 二次筛选
             if not call_ai_check_relevance(it['title'], summary):
                 print(f"  -> [AI SecFilter] 剔除无关内容: {it['title']}")
                 continue
 
-            print(f"  -> 摘要生成成功 (len={len(summary)}): {summary[:20]}...")
+            print(f"  -> 摘要生成成功: {summary[:20]}...")
             if it.get("source") == "yicai_hongguan":
                 summary = clean_yicai_summary(summary)
             it['summary'] = summary
         else:
             it['summary'] = ""
             
-        final_enterprise_items.append(it)
-    
-    enterprise_items = final_enterprise_items
+        candidates.append(it)
 
-    for it in enterprise_items:
+    # ================= 3. 全局去重 (HRloo + Others) =================
+    if candidates:
+        candidates = call_ai_deduplicate(candidates)
+
+    # ================= 4. 最终渲染 =================
+    idx = 1
+    enterprise_items_all = []
+    
+    for it in candidates:
         # 检查标题长度，若超过30字，进行缩写
-        title_len = len(it["title"])
+        t = it["title"]
+        title_len = len(t)
         if title_len > 30:
-            print(f"  -> 标题过长 ({title_len}字)，AI正在缩写: {it['title']}")
-            short_t = call_ai_shorten_title(it["title"])
+            print(f"  -> 标题过长 ({title_len}字)，AI正在缩写: {t}")
+            short_t = call_ai_shorten_title(t)
             if short_t:
                 print(f"     => {short_t} (len={len(short_t)})")
                 it["title"] = short_t
+                t = short_t
 
-        # 将这些新闻也加入到汇总列表
+        # 收集最终结果
         enterprise_items_all.append(it)
-        lines.append(md_item_with_detail(idx, it["title"], it["url"], it.get("summary")))
+        lines.append(md_item_with_detail(idx, t, it["url"], it.get("summary")))
         idx += 1
 
     # 使用双换行以确保在移动端钉钉能正确分段显示

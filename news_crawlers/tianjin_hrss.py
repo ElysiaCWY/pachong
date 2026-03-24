@@ -3,7 +3,7 @@ import re
 from urllib.parse import urljoin
 from datetime import date
 from bs4 import BeautifulSoup
-from .common import make_session, parse_ymd, norm
+from .common import make_session, parse_ymd, norm, mark_income_related
 
 TIANJIN_HRSS_URL = "https://hrss.tj.gov.cn/zhengwugongkai/zhengcezhinan/zcjdnew/"
 
@@ -56,7 +56,9 @@ def crawl_tianjin_hrss_policy(target_date: date = None) -> list:
             
             if not title or not href:
                 continue
-                
+            
+            title = mark_income_related(title)
+
             # 天津人社链接可能是相对路径
             full_url = urljoin(TIANJIN_HRSS_URL, href)
             

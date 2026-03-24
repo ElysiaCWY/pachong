@@ -3,7 +3,7 @@ import re
 from urllib.parse import urljoin
 from datetime import date
 from bs4 import BeautifulSoup
-from .common import make_session, parse_ymd, norm
+from .common import make_session, parse_ymd, norm, mark_income_related
 
 NEIMENGGU_RST_URL = "https://rst.nmg.gov.cn/zfxxgk/fdzdgknr/?gk=3&cid=14006"
 NEIMENGGU_BASE_URL = "https://rst.nmg.gov.cn"
@@ -58,9 +58,11 @@ def crawl_neimenggu_rst_policy(target_date: date = None) -> list:
             
             if not title or not href:
                 continue
-                
+
             full_url = urljoin(NEIMENGGU_BASE_URL, href)
             
+            title = mark_income_related(title)
+
             # 去重
             if any(r['url'] == full_url for r in results):
                 continue

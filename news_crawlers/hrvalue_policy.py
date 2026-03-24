@@ -4,7 +4,7 @@ import re
 from datetime import date
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from .common import make_session, norm, now_cn, target_prev_workday, parse_ymd
+from .common import make_session, norm, now_cn, target_prev_workday, parse_ymd, mark_income_related
 
 # ===================== HR价值网：政策 =====================
 HRVALUE_POLICY_URL = "https://www.hrvalue.com.cn/news/?category=13"
@@ -55,6 +55,8 @@ def crawl_hrvalue_policy():
         title = norm(title_node.get_text(" ", strip=True) if title_node else a.get("title") or "")
         if not title or len(title) < 6:
             continue
+            
+        title = mark_income_related(title)
 
         h3 = li.find("h3")
         spans = h3.find_all("span") if h3 else []

@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 from datetime import date
 import requests
 from bs4 import BeautifulSoup
-from .common import make_session, parse_ymd, norm
+from .common import make_session, parse_ymd, norm, mark_income_related
 
 BEIJING_RSJ_URL = "https://rsj.beijing.gov.cn/xxgk/2024zcwj/"
 
@@ -71,6 +71,8 @@ def crawl_beijing_rsj_policy(target_date: date = None) -> list:
                 
             full_url = urljoin(BEIJING_RSJ_URL, href)
             
+            title = mark_income_related(title)
+
             # 去重或添加到结果
             item = {
                 "title": title,
