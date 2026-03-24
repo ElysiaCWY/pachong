@@ -13,6 +13,35 @@ if not DASHSCOPE_API_KEY:
 # 使用更强理解能力的模型进行筛选和摘要
 DASHSCOPE_MODEL   = "qwen-plus" 
 
+OTHER_HR_COMPANY_KEYWORDS = [
+    "fesco", "中智", "科锐国际", "人瑞人才", "万宝盛华", "得科", "任仕达",
+    "前程无忧", "智联招聘", "猎聘", "boss直聘", "58同城", "中华英才网",
+]
+
+
+def _is_other_hr_company_news(text: str) -> bool:
+    """
+    硬规则：剔除关于其他人力资源公司（竞品/同行）的公司动态新闻。
+    """
+    if not text:
+        return False
+    lowered = text.lower()
+    return any(k in lowered for k in OTHER_HR_COMPANY_KEYWORDS)
+
+def _log_token_usage(response_data: dict, context: str):
+    """
+    Log token usage from DashScope API response.
+    """
+    try:
+        usage = response_data.get("usage", {})
+        total_tokens = usage.get("total_tokens", 0)
+        input_tokens = usage.get("input_tokens", 0)
+        output_tokens = usage.get("output_tokens", 0)
+        if total_tokens > 0:
+            print(f"[Token Usage] {context}: {total_tokens} (In: {input_tokens}, Out: {output_tokens})")
+    except Exception:
+        pass
+
 def call_ai_filter(titles: list[str]) -> list[bool]:
     """
     通过 DashScope API 筛选有利于人力资源公司（尤其是人力资源外包）的信息。
@@ -30,11 +59,10 @@ def call_ai_filter(titles: list[str]) -> list[bool]:
         "   - 明确提及'人员外包'、'灵活用工'、'劳务派遣'、'业务外包'招标或需求的动态。\n"
         "2. **硬核政策法规（成本与合规）**：\n"
         "   - 只有涉及：社保/公积金费率调整、最低工资、个税政策、劳动法修订、劳务派遣暂行规定修缮、特殊工时审批等直接改变**用工成本**或**合规底线**的政策。\n"
-        "3. **HRO行业竞品动态**：\n"
-        "   - 专指：FESCO、中智、科锐国际、人瑞人才、万宝盛华、得科、任仕达、趣活等直接竞争对手的并购、财报、新产品发布。\n"
-        "4. **用工模式变革**：\n"
+        "3. **用工模式变革**：\n"
         "   - 涉及零工经济平台、共享员工、众包模式的监管或数据报告。\n\n"
         "【必须无情剔除的噪音】（凡是沾边的一律False）：\n"
+        "- **其他人力资源公司动态**：FESCO、中智、科锐国际、人瑞人才、万宝盛华、得科、任仕达等同行公司的财报、融资、并购、发布会、人事变动。\n"
         "- **内训与职场鸡汤**：'如何提升领导力'、'职场沟通技巧'、'HR如何做绩效'（这是给甲方HR看的，外包公司不关心）。\n"
         "- **无关宏观与个股**：'某公司股价涨跌'、'GDP预测'、'某行业大会召开'（除非明确讲就业规模变化）。\n"
         "- **普通企业新闻**：'某公司发布新手机'、'某车企销量夺冠'（除非提到扩招/裁员/建厂）。\n"
@@ -72,6 +100,7 @@ def call_ai_filter(titles: list[str]) -> list[bool]:
         resp.raise_for_status()
         
         data = resp.json()
+        _log_token_usage(data, "Filter")
         content = data["choices"][0]["message"]["content"]
         
         # 清洗可能存在的 markdown 代码块
@@ -95,6 +124,9 @@ def call_ai_check_relevance(title: str, summary: str) -> bool:
     二次筛选：基于标题和摘要，判断文章是否对人力资源行业有实际影响。
     用于在摘要生成后，踢出看起来有关但实际内容无关的新闻。
     """
+    if _is_other_hr_company_news(f"{title}\n{summary}"):
+        return False
+
     if not summary or len(summary) < 10:
         return True # 如果没有摘要，默认保留，以免误删
         
@@ -105,9 +137,9 @@ def call_ai_check_relevance(title: str, summary: str) -> bool:
         "1. **保留** (True)：\n"
         "   - 涉及企业裁员、大规模招聘、迁址、用工纠纷。\n"
         "   - 涉及社保公积金、个税、最低工资、劳动法政策变化。\n"
-        "   - 涉及人力资源服务商（竞品）动态。\n"
         "   - 涉及灵活用工、零工经济平台监管。\n"
         "2. **剔除** (False)：\n"
+        "   - 其他人力资源公司（竞品/同行）的公司动态新闻。\n"
         "   - 纯粹的股市/财报新闻（除非明确提到大幅裁员/扩招）。\n"
         "   - 纯粹的产品发布会（如发布新手机/新车，未提及工厂招工）。\n"
         "   - 泛泛的宏观经济分析（GDP、CPI等，未落实到就业）。\n"
@@ -141,6 +173,7 @@ def call_ai_check_relevance(title: str, summary: str) -> bool:
         resp.raise_for_status()
         
         data = resp.json()
+        _log_token_usage(data, "Check Relevance")
         content = data["choices"][0]["message"]["content"].strip().lower()
         
         if "true" in content:
@@ -153,11 +186,128 @@ def call_ai_check_relevance(title: str, summary: str) -> bool:
         print(f"[AI Check] 二次筛选调用失败: {e}，默认保留。")
         return True
 
+def call_ai_deduplicate(items: list[dict]) -> list[dict]:
+    """
+    对最终的新闻列表进行去重。
+    将所有新闻标题+摘要发给 AI，让 AI 识别是否报道了同一件事。
+    如果有重复，保留信息量最大的一条。
+    返回去重后的 items 列表。
+    """
+    if not items or len(items) < 2:
+        return items
+
+    print(f"[AI Deduplicate]正在对 {len(items)} 条新闻进行去重检查...")
+    
+    # 构造输入列表，带上索引
+    # 格式：
+    # 1. <Title>
+    #    <Summary>
+    prompt_text = ""
+    for i, it in enumerate(items):
+        t = it.get("title", "无标题")
+        s = it.get("summary", "")[:100] # 摘要截取前100字避免过长
+        prompt_text += f"No.{i}\nTitle: {t}\nSummary: {s}\n\n"
+
+    system_prompt = (
+        "你是一个极其严格的新闻去重专家。你的任务是找出**完全相同事件**的重复报道。\n"
+        "【判断标准】\n"
+        "1. **完全重复**：针对同一个具体的事件（如“某公司发布财报”、“某高管离职”）。\n"
+        "   - 标题相似度高，主体一致。\n"
+        "   - 例子：“贾国龙新品牌落地北京” 与 “西贝贾国龙推新品牌” -> 重复。\n"
+        "2. **非重复**：\n"
+        "   - 同一公司的不同事件。\n"
+        "   - 相似话题但通过的政策/发生的地点不同。\n\n"
+        "【操作】\n"
+        "对于重复的一组新闻，只保留**信息量最丰富**（通常摘要更详细或标题更完整）的那一条。\n"
+        "对于不重复的新闻，全部保留。\n\n"
+        "【输出格式】\n"
+        "请返回一个 JSON 数组，包含由于**保留**的新闻的编号（No.后面的数字）。\n"
+        "例如：[0, 2, 5, 8]\n"
+        "只返回数字列表，不要任何废话。"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt_text}
+        ],
+        "temperature": 0.1
+    }
+
+    try:
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=40)
+        resp.raise_for_status()
+        
+        data = resp.json()
+        _log_token_usage(data, "Deduplicate")
+        content = data["choices"][0]["message"]["content"]
+        content = re.sub(r"```json|```", "", content).strip()
+        
+        # 尝试解析
+        keep_indices = json.loads(content)
+        if not isinstance(keep_indices, list):
+            print("[AI Deduplicate] 返回格式错误(不是list)，跳过去重。")
+            return items
+            
+        # 过滤出合法的 index
+        valid_indices = set()
+        for idx in keep_indices:
+            try:
+                idx_int = int(idx)
+                if 0 <= idx_int < len(items):
+                    valid_indices.add(idx_int)
+            except:
+                pass
+        
+        if not valid_indices:
+            print("[AI Deduplicate] 解析后无有效索引，跳过去重。")
+            return items
+
+        # 按原顺序重组
+        deduplicated = []
+        for i in range(len(items)):
+            if i in valid_indices:
+                deduplicated.append(items[i])
+            else:
+                print(f"  -> [Duplicate] 剔除重复/低质项: {items[i].get('title', '')}")
+                
+        print(f"[AI Deduplicate] 去重完成：{len(items)} -> {len(deduplicated)}")
+        return deduplicated
+
+    except Exception as e:
+        print(f"[AI Deduplicate] 调用失败: {e}，跳过去重。")
+        return items
+
 def filter_by_ai_batch(items):
     """
     输入：列表，每个元素为 {"title": "...", "url": "...", "source": "..."}
     输出：AI 筛选后的列表
     """
+    if not items:
+        return []
+
+    # 硬规则预过滤：先剔除其他人力资源公司的公司动态新闻
+    prefiltered_items = []
+    dropped_other_hr = 0
+    for it in items:
+        if _is_other_hr_company_news(it.get("title", "")):
+            dropped_other_hr += 1
+            if dropped_other_hr <= 3:
+                print(f"  -> [Hard Filter] 剔除其他HR公司新闻: {it.get('title', '')}")
+            continue
+        prefiltered_items.append(it)
+
+    if dropped_other_hr > 3:
+        print(f"  -> [Hard Filter] 及其它 {dropped_other_hr - 3} 条其他HR公司新闻被剔除")
+
+    items = prefiltered_items
     if not items:
         return []
     
@@ -242,6 +392,7 @@ def call_ai_summary(content: str) -> str:
         resp.raise_for_status()
 
         data = resp.json()
+        _log_token_usage(data, "Summary")
         summary = data["choices"][0]["message"]["content"].strip()
         # 清理可能的多余换行
         summary = re.sub(r"\s+", " ", summary)
@@ -293,6 +444,7 @@ def call_ai_shorten_title(title: str) -> str:
         resp.raise_for_status()
         
         data = resp.json()
+        _log_token_usage(data, "Shorten Title")
         new_title = data["choices"][0]["message"]["content"].strip()
         # 清理可能的多余引号或解释
         new_title = re.sub(r"^['\"]|['\"]$", "", new_title)
@@ -374,6 +526,7 @@ def call_ai_daily_insight(current_items: list[dict], recent_history_items: list[
         resp.raise_for_status()
 
         data = resp.json()
+        _log_token_usage(data, "Daily Insight")
         content = data["choices"][0]["message"]["content"].strip()
         content = re.sub(r"```markdown|```", "", content).strip()
         if content == "NO_INSIGHT":
@@ -448,6 +601,7 @@ def call_ai_behavior_similarity_hits(current_enterprise_items: list[dict], recen
         resp.raise_for_status()
 
         data = resp.json()
+        _log_token_usage(data, "Behavior Similarity")
         content = data["choices"][0]["message"]["content"].strip()
         content = re.sub(r"```json|```", "", content).strip()
 
