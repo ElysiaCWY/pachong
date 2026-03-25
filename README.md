@@ -19,6 +19,8 @@
     *   **快消品网**：多板块整合（独家、饮品、食品、日化、零售、电商、综合）。
     *   **盖世汽车**：产业与车企新闻（近 24 小时）。
     *   **InfoQ**：产业新闻板块（Playwright 深度抓取）。
+    *   **创业邦 (Cyzone)**：资讯频道（Playwright 深度抓取）。
+    *   **虎嗅 (Huxiu)**：资讯列表（支持相对时间解析）。
 2.  **政策与动态抓取**：
     *   人社部（MOHRSS）动态与政策。
     *   国家税务总局政策法规。
@@ -86,6 +88,8 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `RUN_FMCG_CHINA`: 是否运行快消品网抓取（1=运行，0=不运行）。
 *   `RUN_GASGOO`: 是否运行盖世汽车抓取（1=运行，0=不运行）。
 *   `RUN_INFOQ`: 是否运行 InfoQ 抓取（1=运行，0=不运行）。
+*   `RUN_CYZONE`: 是否运行创业邦 (Cyzone) 抓取（1=运行，0=不运行）。
+*   `RUN_HUXIU`: 是否运行虎嗅 (Huxiu) 抓取（1=运行，0=不运行）。
 
 常用可选参数：
 

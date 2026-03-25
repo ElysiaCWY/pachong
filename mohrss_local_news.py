@@ -60,6 +60,9 @@ from news_crawlers.vbdata import crawl_vbdata
 from news_crawlers.fmcg_china import crawl_fmcg_china
 from news_crawlers.gasgoo import crawl_gasgoo
 from news_crawlers.infoq import crawl_infoq
+from news_crawlers.cyzone import crawl_cyzone
+from news_crawlers.huxiu import crawl_huxiu
+from news_crawlers.cyzone import crawl_cyzone
 
 
 # ===================== Markdown 组装（最终样式） =====================
@@ -290,12 +293,37 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
     run_infoq_env = (os.getenv("RUN_INFOQ", "1") != "0")
     if run_infoq_env:
         try:
+            # 默认抓取目标工作日新闻
             infoq_list = crawl_infoq()
             for it in infoq_list:
                 it["source"] = "infoq"
                 enterprise_items.append(it)
         except Exception as e:
             print(f"InfoQ error: {e}")
+
+    # 创业邦 - 资讯频道
+    run_cyzone_env = (os.getenv("RUN_CYZONE", "1") != "0")
+    if run_cyzone_env:
+        try:
+            # 默认抓取目标工作日新闻
+            cyzone_list = crawl_cyzone()
+            for it in cyzone_list:
+                it["source"] = "cyzone"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"Cyzone error: {e}")
+
+    # 虎嗅 - 资讯
+    run_huxiu_env = (os.getenv("RUN_HUXIU", "1") != "0")
+    if run_huxiu_env:
+        try:
+            # 默认抓取目标工作日新闻
+            huxiu_list = crawl_huxiu()
+            for it in huxiu_list:
+                it["source"] = "huxiu"
+                enterprise_items.append(it)
+        except Exception as e:
+            print(f"Huxiu error: {e}")
 
     # ===== AI 批量筛选 (其他平台) =====
     if enterprise_items:
