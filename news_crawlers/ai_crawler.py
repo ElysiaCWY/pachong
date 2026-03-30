@@ -18,6 +18,39 @@ OTHER_HR_COMPANY_KEYWORDS = [
     "前程无忧", "智联招聘", "猎聘", "boss直聘", "58同城", "中华英才网",
 ]
 
+TECH_BREAKTHROUGH_KEYWORDS = [
+    "技术突破", "重大突破", "实现突破", "核心技术", "关键技术", "攻克", "首创", "首个",
+    "自主研发", "发布大模型", "技术升级", "工艺突破", "算力突破",
+]
+
+LARGE_COMPANY_NEW_BIZ_KEYWORDS = [
+    "成立新部门", "新设部门", "成立事业部", "新设事业部", "成立研究院", "新设研究院",
+    "成立子公司", "新设子公司", "上线新业务", "发布新业务", "布局新业务", "拓展新业务",
+    "进军", "切入", "开辟新赛道",
+]
+
+FINANCIAL_NEWS_KEYWORDS = [
+    "财报", "业绩", "营收", "收入", "净利润", "归母净利润", "年报", "季报", "半年报",
+]
+
+NEGATIVE_FINANCIAL_KEYWORDS = [
+    "负增长", "同比下滑", "同比下降", "营收下滑", "收入下滑", "由盈转亏", "亏损", "净亏损",
+    "利润下滑", "业绩下滑", "营收下降", "收入下降",
+]
+
+LOW_REVENUE_HINT_KEYWORDS = [
+    "营收仅", "收入仅", "营收不足", "收入不足", "营收不到", "收入不到", "营收低于", "收入低于",
+]
+
+LATE_STAGE_FINANCING_PATTERNS = [
+    r"\b[bB]轮\b", r"B\+轮", r"C轮", r"D轮", r"E轮", r"F轮", r"G轮", r"H轮",
+    r"战略融资", r"pre-ipo", r"Pre-IPO", r"IPO前", r"上市前融资", r"并购融资",
+]
+
+EARLY_STAGE_FINANCING_PATTERNS = [
+    r"天使轮", r"种子轮", r"A轮", r"Pre-A", r"pre-a", r"A\+轮",
+]
+
 
 def _is_other_hr_company_news(text: str) -> bool:
     """
@@ -27,6 +60,59 @@ def _is_other_hr_company_news(text: str) -> bool:
         return False
     lowered = text.lower()
     return any(k in lowered for k in OTHER_HR_COMPANY_KEYWORDS)
+
+
+def _contains_any_keyword(text: str, keywords: list[str]) -> bool:
+    return any(k in text for k in keywords)
+
+
+def _matches_any_pattern(text: str, patterns: list[str]) -> bool:
+    return any(re.search(p, text) for p in patterns)
+
+
+def _is_financial_news(title: str) -> bool:
+    return _contains_any_keyword(title, FINANCIAL_NEWS_KEYWORDS)
+
+
+def _is_hard_keep_by_business_rules(title: str) -> bool:
+    """
+    用户新增规则中的“必须保留”项：
+    1) 技术突破；2) B轮及之后融资；3) 大公司新部门/新业务。
+    """
+    if not title:
+        return False
+
+    if _contains_any_keyword(title, TECH_BREAKTHROUGH_KEYWORDS):
+        return True
+
+    if "融资" in title and _matches_any_pattern(title, LATE_STAGE_FINANCING_PATTERNS):
+        return True
+
+    if _contains_any_keyword(title, LARGE_COMPANY_NEW_BIZ_KEYWORDS):
+        return True
+
+    return False
+
+
+def _is_hard_drop_by_business_rules(title: str) -> bool:
+    """
+    用户新增规则中的“必须剔除”项：
+    - 财报/营收类中的负增长或明显低收入提示；
+    - 融资新闻中的早期轮次（天使/A轮及之前）。
+    """
+    if not title:
+        return False
+
+    if _is_financial_news(title):
+        if _contains_any_keyword(title, NEGATIVE_FINANCIAL_KEYWORDS):
+            return True
+        if _contains_any_keyword(title, LOW_REVENUE_HINT_KEYWORDS):
+            return True
+
+    if "融资" in title and _matches_any_pattern(title, EARLY_STAGE_FINANCING_PATTERNS):
+        return True
+
+    return False
 
 def _log_token_usage(response_data: dict, context: str):
     """
@@ -60,12 +146,22 @@ def call_ai_filter(titles: list[str]) -> list[bool]:
         "2. **硬核政策法规（成本与合规）**：\n"
         "   - 只有涉及：社保/公积金费率调整、最低工资、个税政策、劳动法修订、劳务派遣暂行规定修缮、特殊工时审批等直接改变**用工成本**或**合规底线**的政策。\n"
         "3. **用工模式变革**：\n"
-        "   - 涉及零工经济平台、共享员工、众包模式的监管或数据报告。\n\n"
+        "   - 涉及零工经济平台、共享员工、众包模式的监管或数据报告。\n"
+        "4. **企业技术突破**：\n"
+        "   - 只要明确出现关键技术突破、核心技术攻克、行业首创等信息，保留。\n"
+        "5. **企业财报/营收（有条件保留）**：\n"
+        "   - 仅保留营收体量较大或增长明显的企业财报/营收新闻。\n"
+        "   - 负增长、亏损扩大、收入规模明显偏小的一律剔除。\n"
+        "6. **企业融资（轮次门槛）**：\n"
+        "   - 保留 B 轮及之后（B/C/D/E/战略融资/Pre-IPO 等）融资新闻。\n"
+        "   - 天使轮、种子轮、A轮及更早轮次默认剔除。\n"
+        "7. **大公司组织与业务扩张**：\n"
+        "   - 大公司成立新部门、事业部、研究院，或发布/布局新业务，保留。\n\n"
         "【必须无情剔除的噪音】（凡是沾边的一律False）：\n"
         "- **其他人力资源公司动态**：FESCO、中智、科锐国际、人瑞人才、万宝盛华、得科、任仕达等同行公司的财报、融资、并购、发布会、人事变动。\n"
         "- **内训与职场鸡汤**：'如何提升领导力'、'职场沟通技巧'、'HR如何做绩效'（这是给甲方HR看的，外包公司不关心）。\n"
         "- **无关宏观与个股**：'某公司股价涨跌'、'GDP预测'、'某行业大会召开'（除非明确讲就业规模变化）。\n"
-        "- **普通企业新闻**：'某公司发布新手机'、'某车企销量夺冠'（除非提到扩招/裁员/建厂）。\n"
+        "- **普通企业新闻**：'某公司发布新手机'、'某车企销量夺冠'（除非提到扩招/裁员/建厂/技术突破/新业务）。\n"
         "- **海外无关动态**：发生在海外且未提及对华影响的罢工、政策或人事变动。\n"
         "- **泛SaaS/技术**：'某公司上线新OA'、'AI技术原理'（除非是专门的招聘/算薪SaaS竞品）。\n"
         "- **民生福利**：人才公寓、一般性人才补贴（除非直接补贴给企业/外包商）。\n\n"
@@ -138,9 +234,14 @@ def call_ai_check_relevance(title: str, summary: str) -> bool:
         "   - 涉及企业裁员、大规模招聘、迁址、用工纠纷。\n"
         "   - 涉及社保公积金、个税、最低工资、劳动法政策变化。\n"
         "   - 涉及灵活用工、零工经济平台监管。\n"
+        "   - 涉及企业明确的技术突破。\n"
+        "   - 涉及 B 轮及之后融资（B/C/D/E/战略融资/Pre-IPO）。\n"
+        "   - 涉及大公司成立新部门、事业部、研究院或布局新业务。\n"
+        "   - 涉及财报/营收且属于高收入或高增长企业。\n"
         "2. **剔除** (False)：\n"
         "   - 其他人力资源公司（竞品/同行）的公司动态新闻。\n"
-        "   - 纯粹的股市/财报新闻（除非明确提到大幅裁员/扩招）。\n"
+        "   - 财报/营收中出现负增长、亏损扩大、收入偏小。\n"
+        "   - 天使轮、种子轮、A轮融资新闻。\n"
         "   - 纯粹的产品发布会（如发布新手机/新车，未提及工厂招工）。\n"
         "   - 泛泛的宏观经济分析（GDP、CPI等，未落实到就业）。\n"
         "   - 职场鸡汤、管理心得、内训资料。\n"
@@ -293,17 +394,30 @@ def filter_by_ai_batch(items):
     if not items:
         return []
 
-    # 硬规则预过滤：先剔除其他人力资源公司的公司动态新闻
+    # 硬规则预处理：先做“强制保留/强制剔除”，其余再交给 AI
+    pre_kept_items = []
     prefiltered_items = []
     for it in items:
-        if _is_other_hr_company_news(it.get("title", "")):
+        title = it.get("title", "")
+
+        if _is_hard_keep_by_business_rules(title):
+            pre_kept_items.append(it)
+            print(f"  -> [Hard Keep] 命中新规则保留: {title}")
+            continue
+
+        if _is_hard_drop_by_business_rules(title):
+            print(f"  -> [Hard Filter] 命中新规则剔除: {title}")
+            continue
+
+        if _is_other_hr_company_news(title):
             print(f"  -> [Hard Filter] 剔除其他HR公司新闻: {it.get('title', '')}")
             continue
+
         prefiltered_items.append(it)
 
     items = prefiltered_items
     if not items:
-        return []
+        return pre_kept_items
     
     # 按来源分组
     grouped = {}
@@ -345,7 +459,7 @@ def filter_by_ai_batch(items):
 
         print(f"  -> {src}: 保留 {kept_count} / {len(group_items)}")
         
-    return final_filtered
+    return pre_kept_items + final_filtered
 
 def call_ai_summary(content: str) -> str:
     """
