@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import re
+import html
 
 # ===================== AI 智能筛选 =====================
 # 优先读取环境变量；如果环境变量不存在或为空字符串，则使用默认的硬编码 Key
@@ -50,6 +51,13 @@ LATE_STAGE_FINANCING_PATTERNS = [
 EARLY_STAGE_FINANCING_PATTERNS = [
     r"天使轮", r"种子轮", r"A轮", r"Pre-A", r"pre-a", r"A\+轮",
 ]
+
+INDUSTRY_TAG_CANDIDATES = [
+    "车企", "AI", "半导体", "互联网", "金融", "医药", "能源", "消费",
+    "制造", "物流", "地产", "教育", "人力资源", "科技", "创投", "企业",
+]
+
+_INDUSTRY_TAG_CACHE: dict[str, str] = {}
 
 
 def _is_other_hr_company_news(text: str) -> bool:
@@ -113,6 +121,133 @@ def _is_hard_drop_by_business_rules(title: str) -> bool:
         return True
 
     return False
+
+
+def _truncate_summary_before_period(summary: str, max_len: int = 90) -> str:
+    """
+    超长摘要优先在字数上限前的句号处截断，不追加省略号。
+    若上限前无句号，则直接硬截断到上限。
+    """
+    if len(summary) <= max_len:
+        return summary
+
+    # 优先找中文句号，其次英文句号
+    cut_idx_cn = summary.rfind("。", 0, max_len + 1)
+    cut_idx_en = summary.rfind(".", 0, max_len + 1)
+    cut_idx = max(cut_idx_cn, cut_idx_en)
+
+    if cut_idx != -1:
+        return summary[: cut_idx + 1].strip()
+
+    return summary[:max_len].strip()
+
+
+def _strip_html_tags(text: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = html.unescape(text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _duckduckgo_search_snippets(query: str, max_results: int = 5) -> list[str]:
+    """
+    轻量联网搜索：抓取 DuckDuckGo HTML 搜索页标题与摘要片段。
+    """
+    if not query:
+        return []
+
+    url = "https://duckduckgo.com/html/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
+    try:
+        resp = requests.get(url, params={"q": query, "kl": "cn-zh"}, headers=headers, timeout=12)
+        resp.raise_for_status()
+        page = resp.text
+
+        title_matches = re.findall(r'<a[^>]*class="result__a"[^>]*>(.*?)</a>', page, flags=re.I | re.S)
+        snippet_matches = re.findall(r'<a[^>]*class="result__snippet"[^>]*>(.*?)</a>', page, flags=re.I | re.S)
+
+        merged = []
+        for i in range(min(max_results, max(len(title_matches), len(snippet_matches)))):
+            t = _strip_html_tags(title_matches[i]) if i < len(title_matches) else ""
+            s = _strip_html_tags(snippet_matches[i]) if i < len(snippet_matches) else ""
+            line = f"{t} | {s}".strip(" |")
+            if line:
+                merged.append(line)
+        return merged
+    except Exception:
+        return []
+
+
+def _normalize_industry_tag(raw_tag: str) -> str:
+    if not raw_tag:
+        return "企业"
+    cleaned = raw_tag.strip().replace("【", "").replace("】", "")
+    for tag in INDUSTRY_TAG_CANDIDATES:
+        if tag in cleaned:
+            return tag
+    return "企业"
+
+
+def call_ai_industry_tag_with_web(title: str, summary: str = "", url: str = "") -> str:
+    """
+    使用“联网搜索片段 + AI”识别公司行业标签。
+    返回值限制在 INDUSTRY_TAG_CANDIDATES 内。
+    """
+    if not title:
+        return "企业"
+
+    cache_key = re.sub(r"\s+", " ", f"{title}|{summary}|{url}").strip().lower()
+    if cache_key in _INDUSTRY_TAG_CACHE:
+        return _INDUSTRY_TAG_CACHE[cache_key]
+
+    query = re.sub(r"^【[^】]{1,12}】", "", title).strip()
+    search_lines = _duckduckgo_search_snippets(f"{query} 公司 行业", max_results=5)
+    if not search_lines and url:
+        search_lines = _duckduckgo_search_snippets(f"{query} {url} 公司", max_results=5)
+
+    web_context = "\n".join(f"- {x}" for x in search_lines) if search_lines else "- （未获取到有效搜索结果）"
+
+    system_prompt = (
+        "你是企业行业分类助手。请基于新闻标题、摘要和联网搜索片段判断公司行业。\n"
+        "可选标签仅限：车企、AI、半导体、互联网、金融、医药、能源、消费、制造、物流、地产、教育、人力资源、科技、创投、企业。\n"
+        "输出要求：只输出1个标签，不要解释。"
+    )
+    user_prompt = (
+        f"标题：{title}\n"
+        f"摘要：{summary or '（无）'}\n"
+        f"原文链接：{url or '（无）'}\n"
+        f"联网搜索片段：\n{web_context}\n"
+        "请输出唯一行业标签："
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        "temperature": 0,
+    }
+
+    try:
+        api_url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(api_url, headers=headers, json=payload, timeout=20)
+        resp.raise_for_status()
+        data = resp.json()
+        _log_token_usage(data, "IndustryTag")
+        content = data["choices"][0]["message"]["content"].strip()
+        tag = _normalize_industry_tag(content)
+        _INDUSTRY_TAG_CACHE[cache_key] = tag
+        return tag
+    except Exception:
+        return "企业"
 
 def _log_token_usage(response_data: dict, context: str):
     """
@@ -386,6 +521,174 @@ def call_ai_deduplicate(items: list[dict]) -> list[dict]:
         print(f"[AI Deduplicate] 调用失败: {e}，跳过去重。")
         return items
 
+
+def _call_ai_extract_company_names(items: list[dict]) -> list[str]:
+    """
+    为每条新闻提取公司名（无法判断则返回空字符串）。
+    返回长度必须与 items 一致。
+    """
+    if not items:
+        return []
+
+    prompt_text = ""
+    for i, it in enumerate(items):
+        t = it.get("title", "无标题")
+        s = (it.get("summary", "") or "")[:120]
+        prompt_text += f"No.{i}\nTitle: {t}\nSummary: {s}\n\n"
+
+    system_prompt = (
+        "你是企业识别助手。请从每条新闻中提取核心公司主体名称。\n"
+        "要求：\n"
+        "1) 输出 JSON 数组，长度与输入严格一致。\n"
+        "2) 每个元素是公司名字符串，例如“长安汽车”“比亚迪”。\n"
+        "3) 如果无法判断公司，输出空字符串。\n"
+        "4) 不要输出任何解释。"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt_text}
+        ],
+        "temperature": 0
+    }
+
+    try:
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+        _log_token_usage(data, "CompanyNameExtract")
+        content = data["choices"][0]["message"]["content"]
+        content = re.sub(r"```json|```", "", content).strip()
+        names = json.loads(content)
+        if isinstance(names, list) and len(names) == len(items):
+            return [str(x).strip() for x in names]
+    except Exception:
+        pass
+
+    return [""] * len(items)
+
+
+def _call_ai_pick_max_impact_index_for_same_company(company: str, group_items: list[dict]) -> int:
+    """
+    对同一家公司的一组新闻，返回“影响最大”的组内索引（0-based）。
+    失败时返回 -1。
+    """
+    if not group_items:
+        return -1
+    if len(group_items) == 1:
+        return 0
+
+    prompt_text = ""
+    for i, it in enumerate(group_items):
+        t = it.get("title", "无标题")
+        s = (it.get("summary", "") or "")[:150]
+        src = it.get("source", "")
+        prompt_text += f"No.{i}\nTitle: {t}\nSummary: {s}\nSource: {src}\n\n"
+
+    system_prompt = (
+        "你是人力资源外包（HRO）行业情报分析师。\n"
+        f"以下新闻都属于同一家公司：{company or '同一公司'}。\n"
+        "请只选择其中对人力资源外包行业影响最大的一条。\n"
+        "判断优先级：用工规模变化、招聘外包需求、裁员/扩招、用工合规风险、业务外包机会。\n"
+        "输出要求：仅输出一个整数编号（No.后面的数字），不要解释。"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt_text}
+        ],
+        "temperature": 0.1
+    }
+
+    try:
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+        _log_token_usage(data, "CompanyImpactPickOne")
+        content = data["choices"][0]["message"]["content"].strip()
+        content = re.sub(r"```json|```|```", "", content).strip()
+        m = re.search(r"-?\d+", content)
+        if not m:
+            return -1
+        idx = int(m.group())
+        if 0 <= idx < len(group_items):
+            return idx
+        return -1
+    except Exception:
+        return -1
+
+
+def call_ai_keep_max_impact_per_company(items: list[dict]) -> list[dict]:
+    """
+    仅针对“同一公司有多条新闻”的情况进行影响力比较并保留1条。
+    只有1条新闻的公司直接保留，不做影响力判断。
+    """
+    if not items or len(items) < 2:
+        return items
+
+    print(f"[AI CompanyImpact] 检查同公司多新闻影响力：共 {len(items)} 条...")
+
+    company_names = _call_ai_extract_company_names(items)
+    if len(company_names) != len(items):
+        print("[AI CompanyImpact] 公司识别结果异常，跳过该步骤。")
+        return items
+
+    groups: dict[str, list[int]] = {}
+    for i, name in enumerate(company_names):
+        key = (name or "").strip().lower()
+        if not key:
+            key = f"__single_{i}"  # 无法识别公司时按独立公司处理，确保不参与比较
+        groups.setdefault(key, []).append(i)
+
+    keep_indices = set()
+    multi_groups = []
+    for gkey, idx_list in groups.items():
+        if len(idx_list) <= 1:
+            keep_indices.update(idx_list)
+        else:
+            multi_groups.append((gkey, idx_list))
+
+    if not multi_groups:
+        print("[AI CompanyImpact] 未发现同公司多条新闻，跳过影响力比较。")
+        return items
+
+    for gkey, idx_list in multi_groups:
+        group_items = [items[i] for i in idx_list]
+        company_display = company_names[idx_list[0]] or "同一公司"
+        chosen_local_idx = _call_ai_pick_max_impact_index_for_same_company(company_display, group_items)
+        if chosen_local_idx == -1:
+            # 兜底：本组全部保留，避免误删
+            keep_indices.update(idx_list)
+            print(f"[AI CompanyImpact] 组内比较失败，保留该公司全部新闻: {company_display}")
+            continue
+        keep_indices.add(idx_list[chosen_local_idx])
+
+    result = []
+    for i, it in enumerate(items):
+        if i in keep_indices:
+            result.append(it)
+        else:
+            print(f"  -> [CompanyImpact] 剔除同公司低影响项: {it.get('title', '')}")
+
+    print(f"[AI CompanyImpact] 完成：{len(items)} -> {len(result)}")
+    return result
+
 def filter_by_ai_batch(items):
     """
     输入：列表，每个元素为 {"title": "...", "url": "...", "source": "..."}
@@ -501,9 +804,8 @@ def call_ai_summary(content: str) -> str:
         # 清理可能的多余换行
         summary = re.sub(r"\s+", " ", summary)
         
-        # 强制截断兜底
-        if len(summary) > 100:
-            summary = summary[:99] + "…"
+        # 强制截断兜底：在字数上限前的句号截断，不使用省略号
+        summary = _truncate_summary_before_period(summary, max_len=90)
             
         return summary
     except Exception as e:

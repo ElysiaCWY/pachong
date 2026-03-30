@@ -1,19 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-每日简报（钉钉友好最终版）
-- 企业新闻：三茅日报要点（当天） + 新浪财经（周一抓上周五，其他工作日抓昨天）合并输出，统一连续编号
-- 地方政策：人社部-人社动态（周一抓上周五，周二~周五抓昨天；周末不抓）
-
-展示要求（按你最新要求）：
-1) 不要底部“查看详细”
-2) 每条后面都要一个 [详情](url)（蓝字可点）
-3) 标题不做整段超链接（避免花眼），只让“详情”蓝字可点
-4) 企业新闻里：先三茅要点，再财经；编号统一连续
-5) 地方政策单独一块，单独编号从 1 开始
-
-核心代码已拆分至 news_crawlers/ 目录。
-"""
-
 import os
 import json
 import time  
@@ -39,6 +23,8 @@ from news_crawlers.ai_crawler import (
     call_ai_daily_insight,
     call_ai_behavior_similarity_hits,
     call_ai_deduplicate,
+    call_ai_industry_tag_with_web,
+    call_ai_keep_max_impact_per_company,
 )
 from news_crawlers.beijing_rsj import crawl_beijing_rsj_policy
 from news_crawlers.tianjin_hrss import crawl_tianjin_hrss_policy
@@ -68,6 +54,63 @@ from news_crawlers.cyzone import crawl_cyzone
 # ===================== Markdown 组装（最终样式） =====================
 
 INSIGHT_SKIP_TOKEN = "NO_INSIGHT"
+
+INDUSTRY_TAG_RULES = [
+    ("车企", ["汽车", "车企", "新能源车", "智能驾驶", "比亚迪", "长安", "吉利", "奇瑞", "长城", "上汽", "广汽", "一汽", "蔚来", "小鹏", "理想", "赛力斯", "特斯拉"]),
+    ("AI", ["人工智能", "大模型", "AI", "AIGC", "智能体", "算力"]),
+    ("半导体", ["半导体", "芯片", "晶圆", "EDA", "封测"]),
+    ("互联网", ["互联网", "平台", "电商", "社交", "本地生活", "云服务", "SaaS"]),
+    ("金融", ["银行", "保险", "券商", "基金", "信托", "金融科技", "支付"]),
+    ("医药", ["医药", "医疗", "生物", "器械", "创新药", "医院", "药企"]),
+    ("能源", ["能源", "光伏", "风电", "储能", "电池", "氢能", "石油", "天然气"]),
+    ("消费", ["快消", "零售", "食品", "饮料", "日化", "美妆", "连锁"]),
+    ("制造", ["制造", "工厂", "工业", "装备", "机器人", "供应链"]),
+    ("物流", ["物流", "快递", "仓储", "运输", "航运", "港口"]),
+    ("地产", ["地产", "房地产", "物业", "城投"]),
+    ("教育", ["教育", "职教", "培训", "高校", "学校"]),
+]
+
+SOURCE_DEFAULT_TAG = {
+    "gasgoo": "车企",
+    "fmcg_china": "消费",
+    "infoq": "科技",
+    "cyzone": "创投",
+    "hrloo": "人力资源",
+    "tophr": "人力资源",
+    "hrbrand_news": "人力资源",
+    "hrvalue_kuai": "人力资源",
+    "clssn_rlzy": "人力资源",
+}
+
+
+def _strip_leading_tag(title: str) -> str:
+    if not title:
+        return ""
+    return re.sub(r"^【[^】]{1,12}】", "", title).strip()
+
+
+def _infer_industry_tag(title: str, summary: str = "", source: str = "", url: str = "") -> str:
+    clean_title = _strip_leading_tag(title)
+    text = f"{clean_title} {summary}".lower()
+
+    # 优先用 AI + 联网搜索识别行业
+    ai_tag = call_ai_industry_tag_with_web(clean_title, summary, url)
+    if ai_tag and ai_tag != "企业":
+        return ai_tag
+
+    # 联网识别不确定时，回退本地关键词规则
+    for tag, kws in INDUSTRY_TAG_RULES:
+        for kw in kws:
+            if kw.lower() in text:
+                return tag
+
+    return SOURCE_DEFAULT_TAG.get(source, "企业")
+
+
+def _ensure_industry_tag(title: str, summary: str = "", source: str = "", url: str = "") -> str:
+    clean_title = _strip_leading_tag(title)
+    tag = _infer_industry_tag(clean_title, summary, source, url)
+    return f"【{tag}】{clean_title}" if clean_title else title
 
 
 
@@ -358,25 +401,33 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
             
         candidates.append(it)
 
-    # ================= 3. 全局去重 (HRloo + Others) =================
+    # ================= 3. 同公司多新闻影响力择优 =================
+    if candidates:
+        candidates = call_ai_keep_max_impact_per_company(candidates)
+
+    # ================= 4. 全局去重 (HRloo + Others) =================
     if candidates:
         candidates = call_ai_deduplicate(candidates)
 
-    # ================= 4. 最终渲染 =================
+    # ================= 5. 最终渲染 =================
     idx = 1
     enterprise_items_all = []
     
     for it in candidates:
         # 检查标题长度，若超过30字，进行缩写
         t = it["title"]
+        t = _strip_leading_tag(t)
         title_len = len(t)
         if title_len > 30:
             print(f"  -> 标题过长 ({title_len}字)，AI正在缩写: {t}")
             short_t = call_ai_shorten_title(t)
             if short_t:
                 print(f"     => {short_t} (len={len(short_t)})")
-                it["title"] = short_t
                 t = short_t
+
+        # 所有已筛选企业新闻统一补充行业前缀标签
+        t = _ensure_industry_tag(t, it.get("summary", ""), it.get("source", ""), it.get("url", ""))
+        it["title"] = t
 
         # 收集最终结果
         enterprise_items_all.append(it)
