@@ -295,17 +295,11 @@ def filter_by_ai_batch(items):
 
     # 硬规则预过滤：先剔除其他人力资源公司的公司动态新闻
     prefiltered_items = []
-    dropped_other_hr = 0
     for it in items:
         if _is_other_hr_company_news(it.get("title", "")):
-            dropped_other_hr += 1
-            if dropped_other_hr <= 3:
-                print(f"  -> [Hard Filter] 剔除其他HR公司新闻: {it.get('title', '')}")
+            print(f"  -> [Hard Filter] 剔除其他HR公司新闻: {it.get('title', '')}")
             continue
         prefiltered_items.append(it)
-
-    if dropped_other_hr > 3:
-        print(f"  -> [Hard Filter] 及其它 {dropped_other_hr - 3} 条其他HR公司新闻被剔除")
 
     items = prefiltered_items
     if not items:
@@ -347,11 +341,7 @@ def filter_by_ai_batch(items):
                 kept_count += 1
             else:
                 dropped_count += 1
-                if dropped_count <= 3: # 避免刷屏太多
-                     print(f"  -> 筛掉: {it['title']}")
-                     
-        if dropped_count > 3:
-             print(f"  -> ... (及其它 {dropped_count - 3} 条被筛掉)")
+                print(f"  -> 筛掉: {it['title']}")
 
         print(f"  -> {src}: 保留 {kept_count} / {len(group_items)}")
         
