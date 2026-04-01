@@ -67,3 +67,12 @@ jobs:
         INSIGHT_HISTORY_FILE: "insight_history.jsonl"
       run: |
         python mohrss_local_news.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add daily_all.md insight_history.jsonl logs/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update data files [skip ci]" && git push)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
