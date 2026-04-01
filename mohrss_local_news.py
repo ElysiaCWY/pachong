@@ -113,6 +113,51 @@ def _ensure_industry_tag(title: str, summary: str = "", source: str = "", url: s
     return f"【{tag}】{clean_title}" if clean_title else title
 
 
+def _build_fallback_summary(title: str, content: str = "") -> str:
+    """
+    当 AI 摘要失败时，给出尽量可读的兜底摘要，避免发布空摘要。
+    """
+    clean_title = _strip_leading_tag(title)
+    if content:
+        text = re.sub(r"\s+", " ", content).strip()
+        # 优先取第一句，避免粗暴按字数硬截断。
+        parts = [p.strip() for p in re.split(r"[。！？!?]", text) if p.strip()]
+        if parts:
+            first = parts[0]
+            if len(first) >= 12:
+                return first.strip("，,;；:：") + "。"
+
+    if clean_title:
+        return f"{clean_title}。"
+    return "暂无摘要。"
+
+
+def _pre_publish_fill_missing_summaries(items: list[dict]) -> tuple[list[dict], int]:
+    """
+    发布前检查：为缺失摘要的条目补齐摘要，避免发送空摘要。
+    """
+    fixed = 0
+    for it in items:
+        summary = (it.get("summary") or "").strip()
+        if summary:
+            continue
+
+        title = it.get("title", "")
+        url = it.get("url", "")
+        content = (it.get("raw_content") or "").strip()
+        if not content and url:
+            content = fetch_url_content(url)
+
+        ai_sum = call_ai_summary(content) if content else ""
+        if ai_sum:
+            it["summary"] = ai_sum
+        else:
+            it["summary"] = _build_fallback_summary(title, content)
+        fixed += 1
+
+    return items, fixed
+
+
 
 
 
@@ -142,10 +187,10 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
                     summary = ""
                     if raw_content:
                         if len(raw_content) < 100:
-                            summary = raw_content
+                            summary = _build_fallback_summary(t, raw_content)
                         else:
                             ai_sum = call_ai_summary(raw_content)
-                            summary = ai_sum if ai_sum else raw_content[:150] + "..."
+                            summary = ai_sum if ai_sum else _build_fallback_summary(t, raw_content)
                     
                     # 加入候选池 (不直接生成 lines)
                     candidates.append({"title": t, "summary": summary, "url": hr_item["url"], "source": "hrloo"})
@@ -380,8 +425,8 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         print(f"正在生成摘要: {it['title']} ...")
         content = it.get("raw_content") or fetch_url_content(it['url'])
         if not content:
-            print(f"  -> 内容抓取为空，跳过摘要")
-            it['summary'] = ""
+            print(f"  -> 内容抓取为空，使用兜底摘要")
+            it['summary'] = _build_fallback_summary(it['title'])
             candidates.append(it) # 虽然无摘要，但也加入
             continue
             
@@ -397,9 +442,15 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
                 summary = clean_yicai_summary(summary)
             it['summary'] = summary
         else:
-            it['summary'] = ""
+            it['summary'] = _build_fallback_summary(it['title'], content)
             
         candidates.append(it)
+
+    # ================= 发布前摘要检查（补齐空摘要） =================
+    if candidates:
+        candidates, fixed_count = _pre_publish_fill_missing_summaries(candidates)
+        if fixed_count > 0:
+            print(f"[Publish Check] 已补齐摘要 {fixed_count} 条")
 
     # ================= 3. 同公司多新闻影响力择优 =================
     if candidates:

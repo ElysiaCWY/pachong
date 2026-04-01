@@ -123,23 +123,28 @@ def _is_hard_drop_by_business_rules(title: str) -> bool:
     return False
 
 
-def _truncate_summary_before_period(summary: str, max_len: int = 90) -> str:
+def _summary_looks_truncated(summary: str) -> bool:
     """
-    超长摘要优先在字数上限前的句号处截断，不追加省略号。
-    若上限前无句号，则直接硬截断到上限。
+    判断摘要是否像是被模型在句子中途截断。
     """
-    if len(summary) <= max_len:
-        return summary
+    cleaned = (summary or "").strip()
+    if not cleaned:
+        return False
 
-    # 优先找中文句号，其次英文句号
-    cut_idx_cn = summary.rfind("。", 0, max_len + 1)
-    cut_idx_en = summary.rfind(".", 0, max_len + 1)
-    cut_idx = max(cut_idx_cn, cut_idx_en)
+    if re.search(r"\d+\.$", cleaned):
+        return True
 
-    if cut_idx != -1:
-        return summary[: cut_idx + 1].strip()
+    if cleaned.endswith(("，", ",", "、", "：", ":", "（", "(", "-", "—", "/")):
+        return True
 
-    return summary[:max_len].strip()
+    sentence_endings = "。！？!?…"
+    if cleaned[-1] not in sentence_endings:
+        if len(cleaned) >= 30 and re.search(r"[，,；;：:]", cleaned):
+            return True
+        if re.search(r"(支持|帮助|覆盖|面向|针对|服务|用于|聚焦|瞄准|推动|提供|包括|涉及|来自|由|对|向|受)$", cleaned):
+            return True
+
+    return bool(re.search(r"(同比|环比|增长|下降|增至|降至|达到|达|至|为|共|约)$", cleaned))
 
 
 def _strip_html_tags(text: str) -> str:
@@ -766,23 +771,37 @@ def filter_by_ai_batch(items):
 
 def call_ai_summary(content: str) -> str:
     """
-    调用 DashScope 给文章生成 90 字摘要（确保不超过 100 字）。
+    调用 DashScope 给文章生成“只保留最主要信息”的精简摘要。
+    不做硬截断，避免出现句子突然被截断。
     """
     if not content or len(content) < 50:
         return ""
 
     system_prompt = (
-        "你是一个专业的文章摘要助手。请阅读以下文章内容，提取并总结其中的重要事实，**生成一段严格限制在 90 字以内**的精炼摘要。"
+        "你是一个专业的文章摘要助手。请阅读文章内容，仅保留最主要的信息，生成 1 句精炼摘要。"
         "\n\n要求："
-        "\n1. 必须概括核心事实、关键数据（裁员人数、涨薪幅度等）或结论，去除所有废话。"
-        "\n2. 语言客观、极度简洁，禁止使用'本文'、'作者'、'文章指出'等套话，直接陈述事实。"
-        "\n3. **字数必须控制在 90 字以内**，绝对不能超过 100 字。"
+        "\n1. 只保留一个核心事实（谁做了什么、结果是什么），能带关键数字就带关键数字。"
+        "\n2. 语言客观、简洁，禁止使用'本文'、'作者'、'文章指出'等套话。"
+        "\n3. 建议 50-80 字；若信息很多，也要优先压缩，不要罗列次要背景。"
     )
 
     headers = {
         "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
         "Content-Type": "application/json"
     }
+    url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+
+    def _request_summary(request_payload: dict, timeout: int, context: str) -> tuple[str, str]:
+        resp = requests.post(url, headers=headers, json=request_payload, timeout=timeout)
+        resp.raise_for_status()
+
+        data = resp.json()
+        _log_token_usage(data, context)
+        choice = (data.get("choices") or [{}])[0]
+        message = choice.get("message") or {}
+        content_text = re.sub(r"\s+", " ", (message.get("content") or "").strip())
+        finish_reason = (choice.get("finish_reason") or "").strip().lower()
+        return content_text, finish_reason
 
     payload = {
         "model": DASHSCOPE_MODEL,
@@ -790,22 +809,65 @@ def call_ai_summary(content: str) -> str:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"文章内容：\n{content}"}
         ],
-        "temperature": 0.3  # 摘要需要相对确定，稍微低一点
+        "temperature": 0.3,  # 摘要需要相对确定，稍微低一点
+        "max_tokens": 220,
     }
 
     try:
-        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
-        resp = requests.post(url, headers=headers, json=payload, timeout=30)
-        resp.raise_for_status()
+        summary, finish_reason = _request_summary(payload, timeout=30, context="Summary")
 
-        data = resp.json()
-        _log_token_usage(data, "Summary")
-        summary = data["choices"][0]["message"]["content"].strip()
-        # 清理可能的多余换行
-        summary = re.sub(r"\s+", " ", summary)
-        
-        # 强制截断兜底：在字数上限前的句号截断，不使用省略号
-        summary = _truncate_summary_before_period(summary, max_len=90)
+        if finish_reason == "length" or _summary_looks_truncated(summary):
+            retry_prompt = (
+                "你是一个专业的文章摘要助手。请阅读文章内容，仅保留最主要的信息，生成 1 句完整的精炼摘要。"
+                "\n\n要求："
+                "\n1. 只保留一个核心事实（谁做了什么、结果是什么），能带关键数字就带关键数字。"
+                "\n2. 必须完整结束句子，不能输出半句，尤其不能截断小数、百分比、金额和人数。"
+                "\n3. 建议 50-80 字，不要罗列次要背景，不要解释。"
+            )
+            retry_payload = {
+                "model": DASHSCOPE_MODEL,
+                "messages": [
+                    {"role": "system", "content": retry_prompt},
+                    {"role": "user", "content": f"文章内容：\n{content}"}
+                ],
+                "temperature": 0.1,
+                "max_tokens": 260,
+            }
+            retry_summary, retry_finish_reason = _request_summary(retry_payload, timeout=30, context="SummaryRetry")
+            if retry_summary and retry_finish_reason != "length" and not _summary_looks_truncated(retry_summary):
+                summary = retry_summary
+                finish_reason = retry_finish_reason
+
+        # 当返回过长时，二次压缩为“单句核心信息”，避免直接硬截断导致断句。
+        if len(summary) > 95:
+            compact_prompt = (
+                "请把下面这段新闻摘要压缩成一句话，只保留最主要的信息。"
+                "不要截断句子，不要补充新信息，建议 50-80 字。\n\n"
+                f"原摘要：{summary}"
+            )
+            compact_payload = {
+                "model": DASHSCOPE_MODEL,
+                "messages": [
+                    {"role": "system", "content": "你是新闻摘要压缩助手。"},
+                    {"role": "user", "content": compact_prompt}
+                ],
+                "temperature": 0.1,
+                "max_tokens": 160,
+            }
+            try:
+                compact_summary, compact_finish_reason = _request_summary(compact_payload, timeout=20, context="SummaryCompact")
+                if compact_summary and compact_finish_reason != "length" and not _summary_looks_truncated(compact_summary):
+                    summary = compact_summary
+            except Exception:
+                pass
+
+        if _summary_looks_truncated(summary):
+            print(f"[AI Summary] 检测到半句摘要，放弃该结果: {summary}")
+            return ""
+
+        summary = summary.strip(" \n\t。；;，,")
+        if summary:
+            summary = summary + "。"
             
         return summary
     except Exception as e:
