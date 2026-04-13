@@ -4,9 +4,15 @@ import time
 import re
 import sys
 from datetime import date, timedelta
+from dotenv import load_dotenv
 from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content, clean_yicai_summary
 from news_crawlers.log_utils import setup_logging
-from news_crawlers.history_manager import load_recent_history, append_history_items
+from news_crawlers.history_manager import (
+    load_recent_history,
+    append_history_items,
+    filter_against_history,
+    verify_history_items_written,
+)
 from news_crawlers.dingtalk import dingtalk_send_markdown
 from news_crawlers.sina import crawl_sina_target_day
 from news_crawlers.hrloo import crawl_hrloo
@@ -22,6 +28,7 @@ from news_crawlers.ai_crawler import (
     call_ai_shorten_title,
     call_ai_daily_insight,
     call_ai_behavior_similarity_hits,
+    call_ai_industry_trend_impact_hit,
     call_ai_deduplicate,
     call_ai_industry_tag_with_web,
     call_ai_keep_max_impact_per_company,
@@ -31,11 +38,15 @@ from news_crawlers.tianjin_hrss import crawl_tianjin_hrss_policy
 from news_crawlers.hebei_rst import crawl_hebei_rst_policy
 from news_crawlers.shanxi_rst import crawl_shanxi_rst_policy
 from news_crawlers.neimenggu_rst import crawl_neimenggu_rst_policy
+from news_crawlers.jilin_hrss import crawl_jilin_hrss_policy
 from news_crawlers.yicai_hongguan import crawl_yicai_hongguan
 from news_crawlers.clssn_rlzy import crawl_clssn_rlzy
 from news_crawlers.hrbrand_news import crawl_hrbrand_news
 from news_crawlers.hrvalue_kuai import crawl_hrvalue_kuai
 from news_crawlers.hrvalue_policy import crawl_hrvalue_policy
+from news_crawlers.govcn_policy import crawl_govcn_policy
+from news_crawlers.heilongjiang_hrss import crawl_heilongjiang_hrss_policy
+from news_crawlers.liaoning_hrss import crawl_liaoning_hrss_policy
 from news_crawlers.caixin_companies import crawl_caixin_companies
 from news_crawlers.jiemian_business import crawl_jiemian_business
 from news_crawlers.thsi_unlisted import crawl_thsi_unlisted
@@ -49,6 +60,8 @@ from news_crawlers.infoq import crawl_infoq
 from news_crawlers.cyzone import crawl_cyzone
 from news_crawlers.huxiu import crawl_huxiu
 from news_crawlers.cyzone import crawl_cyzone
+
+load_dotenv()
 
 
 # ===================== Markdown 组装（最终样式） =====================
@@ -82,6 +95,21 @@ SOURCE_DEFAULT_TAG = {
     "clssn_rlzy": "人力资源",
 }
 
+# 强规则优先：这类关键词通常属于政策/监管，不应被打成金融行业新闻
+REGULATORY_POLICY_KEYWORDS = [
+    "税务总局",
+    "税务",
+    "补缴",
+    "查补",
+    "稽查",
+    "监管",
+    "财政部",
+    "发改委",
+    "政策",
+]
+
+POLICY_KEEP_KEYWORDS = ["社保", "医保", "保险", "人力资源", "工资", "劳务派遣", "外包"]
+
 
 def _strip_leading_tag(title: str) -> str:
     if not title:
@@ -92,6 +120,11 @@ def _strip_leading_tag(title: str) -> str:
 def _infer_industry_tag(title: str, summary: str = "", source: str = "", url: str = "") -> str:
     clean_title = _strip_leading_tag(title)
     text = f"{clean_title} {summary}".lower()
+
+    # 高优先级纠偏：监管/税务类信息直接归为政策
+    for kw in REGULATORY_POLICY_KEYWORDS:
+        if kw.lower() in text:
+            return "政策"
 
     # 优先用 AI + 联网搜索识别行业
     ai_tag = call_ai_industry_tag_with_web(clean_title, summary, url)
@@ -132,6 +165,23 @@ def _build_fallback_summary(title: str, content: str = "") -> str:
     return "暂无摘要。"
 
 
+def _policy_item_hit_keywords(item: dict) -> bool:
+    title = _strip_leading_tag((item.get("title") or "").strip())
+    summary = (item.get("summary") or "").strip()
+    text = f"{title} {summary}"
+    return any(kw in text for kw in POLICY_KEEP_KEYWORDS)
+
+
+def _filter_policy_items_by_keywords(items: list[dict], source_name: str) -> list[dict]:
+    kept = []
+    for it in items:
+        if _policy_item_hit_keywords(it):
+            kept.append(it)
+        else:
+            print(f"[Policy Keyword Filter] 剔除({source_name}): {(it.get('title') or '').strip()}")
+    return kept
+
+
 def _pre_publish_fill_missing_summaries(items: list[dict]) -> tuple[list[dict], int]:
     """
     发布前检查：为缺失摘要的条目补齐摘要，避免发送空摘要。
@@ -161,7 +211,7 @@ def _pre_publish_fill_missing_summaries(items: list[dict]) -> tuple[list[dict], 
 
 
 
-def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True) -> tuple[str, list]:
+def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = True, history_file: str = "insight_history.jsonl") -> tuple[str, list]:
     lines = ["## 人力新闻"]
     candidates = [] # 收集所有（HRloo + 其他）待展示新闻
     
@@ -170,8 +220,16 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         try:
             hr_item, hr_titles, hr_content_map = crawl_hrloo()
             if hr_item and hr_titles:
-                # 增加 AI 筛选逻辑
-                print(f"正在筛选三茅新闻 ({len(hr_titles)} 条)...")
+                # 三茅先过一把历史记录去重，以节省 AI 和后续的流程
+                hr_candidates = [{"title": t, "url": hr_item.get("url", "")} for t in hr_titles]
+                hr_candidates = filter_against_history(hr_candidates, history_file, category="enterprise")
+                hr_titles = [it["title"] for it in hr_candidates]
+
+                if not hr_titles:
+                    lines.append("（当天的三茅日报已发布过，或无新内容）")
+                else:
+                    # 增加 AI 筛选逻辑
+                    print(f"正在筛选三茅新闻 ({len(hr_titles)} 条)...")
                 keep_flags = call_ai_filter(hr_titles)
 
                 for i, t in enumerate(hr_titles):
@@ -413,6 +471,12 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         except Exception as e:
             print(f"Huxiu error: {e}")
 
+    # ===== 历史记录排重 (其他平台) =====
+    if enterprise_items:
+        before_len = len(enterprise_items)
+        enterprise_items = filter_against_history(enterprise_items, history_file, category="enterprise")
+        print(f"[History Filter] 财经/人力新闻排重: {before_len} -> {len(enterprise_items)}")
+
     # ===== AI 批量筛选 (其他平台) =====
     if enterprise_items:
         enterprise_items = filter_by_ai_batch(enterprise_items)
@@ -452,6 +516,12 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
         if fixed_count > 0:
             print(f"[Publish Check] 已补齐摘要 {fixed_count} 条")
 
+    # ================= 二次历史排重（含摘要语义近似） =================
+    if candidates:
+        before_len = len(candidates)
+        candidates = filter_against_history(candidates, history_file, category="enterprise")
+        print(f"[History Filter][2nd pass] 企业新闻排重: {before_len} -> {len(candidates)}")
+
     # ================= 3. 同公司多新闻影响力择优 =================
     if candidates:
         candidates = call_ai_keep_max_impact_per_company(candidates)
@@ -488,7 +558,7 @@ def build_enterprise_block(run_hrloo: bool, run_sina: bool, run_tophr: bool = Tr
     # 使用双换行以确保在移动端钉钉能正确分段显示
     return "\n\n".join(lines).strip(), enterprise_items_all
 
-def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
+def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.jsonl") -> tuple[str, list]:
     lines = ["## 人社动态 & 政策"]
     policy_items_all = [] # 收集所有政策标题，用于后续 AI 分析
 
@@ -507,7 +577,11 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
     hebei_policies = []
     shanxi_policies = []
     neimenggu_policies = []
+    jilin_policies = []
     hrvalue_policies = []
+    govcn_policies = []
+    heilongjiang_policies = []
+    liaoning_policies = []
     
     # 1. 人社部
     if run_mohrss:
@@ -535,6 +609,7 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         hebei_policies = crawl_hebei_rst_policy(target_date)
         shanxi_policies = crawl_shanxi_rst_policy(target_date)
         neimenggu_policies = crawl_neimenggu_rst_policy(target_date)
+        jilin_policies = crawl_jilin_hrss_policy(target_date)
     except Exception as e:
         print(f"JJJ/SX/NM Policy error: {e}")
 
@@ -546,6 +621,30 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         except Exception as e:
             print(f"HRValue policy fetch error: {e}")
 
+    # 5. 中国政府网 - 最新政策
+    run_govcn_policy_env = (os.getenv("RUN_GOVCN_POLICY", "1") != "0")
+    if run_govcn_policy_env:
+        try:
+            govcn_policies = crawl_govcn_policy()
+        except Exception as e:
+            print(f"GovCN policy fetch error: {e}")
+
+    # 6. 黑龙江省人社厅 - 政策（行政规范性文件/其它文件，近24小时）
+    run_heilongjiang_policy_env = (os.getenv("RUN_HEILONGJIANG_HRSS_POLICY", "1") != "0")
+    if run_heilongjiang_policy_env:
+        try:
+            heilongjiang_policies = crawl_heilongjiang_hrss_policy()
+        except Exception as e:
+            print(f"Heilongjiang HRSS policy fetch error: {e}")
+
+    # 7. 辽宁省人社厅 - 政策（三个规范性文件栏目，近24小时）
+    run_liaoning_policy_env = (os.getenv("RUN_LIAONING_HRSS_POLICY", "1") != "0")
+    if run_liaoning_policy_env:
+        try:
+            liaoning_policies = crawl_liaoning_hrss_policy()
+        except Exception as e:
+            print(f"Liaoning HRSS policy fetch error: {e}")
+
     # 汇总判断
     all_empty = (
         not hit_dynamics and 
@@ -556,7 +655,11 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         not hebei_policies and
         not shanxi_policies and
         not neimenggu_policies and
-        not hrvalue_policies
+        not jilin_policies and
+        not hrvalue_policies and
+        not govcn_policies and
+        not heilongjiang_policies and
+        not liaoning_policies
     )
 
     if all_empty:
@@ -565,6 +668,35 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         else:
              lines.append("（无更新或本次未命中）")
         return "\n\n".join(lines).strip(), []
+
+    # 进行全局的历史排重
+    hit_dynamics = filter_against_history(hit_dynamics, history_file, category="policy")
+    hit_policies = filter_against_history(hit_policies, history_file, category="policy")
+    chinatax_policies = filter_against_history(chinatax_policies, history_file, category="policy")
+    beijing_policies = filter_against_history(beijing_policies, history_file, category="policy")
+    tianjin_policies = filter_against_history(tianjin_policies, history_file, category="policy")
+    hebei_policies = filter_against_history(hebei_policies, history_file, category="policy")
+    shanxi_policies = filter_against_history(shanxi_policies, history_file, category="policy")
+    neimenggu_policies = filter_against_history(neimenggu_policies, history_file, category="policy")
+    jilin_policies = filter_against_history(jilin_policies, history_file, category="policy")
+    hrvalue_policies = filter_against_history(hrvalue_policies, history_file, category="policy")
+    govcn_policies = filter_against_history(govcn_policies, history_file, category="policy")
+    heilongjiang_policies = filter_against_history(heilongjiang_policies, history_file, category="policy")
+    liaoning_policies = filter_against_history(liaoning_policies, history_file, category="policy")
+
+    # 政策文件关键词白名单：仅保留社保/医保/保险/人力资源相关条目
+    hit_policies = _filter_policy_items_by_keywords(hit_policies, "mohrss_policy")
+    chinatax_policies = _filter_policy_items_by_keywords(chinatax_policies, "chinatax_policy")
+    beijing_policies = _filter_policy_items_by_keywords(beijing_policies, "beijing_policy")
+    tianjin_policies = _filter_policy_items_by_keywords(tianjin_policies, "tianjin_policy")
+    hebei_policies = _filter_policy_items_by_keywords(hebei_policies, "hebei_policy")
+    shanxi_policies = _filter_policy_items_by_keywords(shanxi_policies, "shanxi_policy")
+    neimenggu_policies = _filter_policy_items_by_keywords(neimenggu_policies, "neimenggu_policy")
+    jilin_policies = _filter_policy_items_by_keywords(jilin_policies, "jilin_policy")
+    hrvalue_policies = _filter_policy_items_by_keywords(hrvalue_policies, "hrvalue_policy")
+    govcn_policies = _filter_policy_items_by_keywords(govcn_policies, "govcn_policy")
+    heilongjiang_policies = _filter_policy_items_by_keywords(heilongjiang_policies, "heilongjiang_hrss_policy")
+    liaoning_policies = _filter_policy_items_by_keywords(liaoning_policies, "liaoning_hrss_policy")
 
     # 仅筛选人社动态，政策文件不筛选
     if hit_dynamics:
@@ -582,7 +714,11 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
         or hebei_policies
         or shanxi_policies
         or neimenggu_policies
+        or jilin_policies
         or hrvalue_policies
+        or govcn_policies
+        or heilongjiang_policies
+        or liaoning_policies
     )
 
     if not has_policy and not hit_dynamics:
@@ -625,8 +761,28 @@ def build_policy_block(run_mohrss: bool) -> tuple[str, list]:
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
+        for it in jilin_policies:
+            title = f"【吉林】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
         for it in hrvalue_policies:
             title = f"【HR价值网】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in govcn_policies:
+            title = f"【中国政府网】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in heilongjiang_policies:
+            title = f"【黑龙江】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in liaoning_policies:
+            title = f"【辽宁】{it['title']}"
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
@@ -672,8 +828,8 @@ def main():
     run_mohrss = (os.getenv("RUN_MOHRSS", "1").strip() != "0")
     history_file = os.getenv("INSIGHT_HISTORY_FILE", "insight_history.jsonl")
 
-    enterprise_block, enterprise_items = build_enterprise_block(run_hrloo, run_sina)
-    policy_block, policy_items = build_policy_block(run_mohrss)
+    enterprise_block, enterprise_items = build_enterprise_block(run_hrloo, run_sina, history_file=history_file)
+    policy_block, policy_items = build_policy_block(run_mohrss, history_file=history_file)
 
     insight_input_items = []
     for it in enterprise_items:
@@ -702,11 +858,15 @@ def main():
         enterprise_today_items = [it for it in insight_input_items if it.get("category") == "enterprise"]
         enterprise_today_count = len(enterprise_today_items)
         similar_hits = call_ai_behavior_similarity_hits(enterprise_today_items, recent_history)
+        trend_impact_hit = call_ai_industry_trend_impact_hit(enterprise_today_items, recent_history)
 
-        print(f"[Insight] 触发检查: 当日高价值新闻={enterprise_today_count}, 历史相似命中={similar_hits}")
+        print(
+            f"[Insight] 触发检查: 当日高价值新闻={enterprise_today_count}, "
+            f"历史相似命中={similar_hits}, 行业趋势影响命中={trend_impact_hit}"
+        )
 
-        # 最小触发阈值：当日至少一条高价值新闻 + 历史命中至少 2 条相似事件
-        if enterprise_today_count >= 1 and similar_hits >= 2:
+        # 触发阈值：当日至少一条高价值新闻 + (历史相似命中 >=2 或 行业趋势影响命中)
+        if enterprise_today_count >= 1 and (similar_hits >= 2 or trend_impact_hit):
             try:
                 insight_block = call_ai_daily_insight(insight_input_items, recent_history)
             except Exception as e:
@@ -718,7 +878,17 @@ def main():
     md = build_markdown(enterprise_block, policy_block, insight_block)
 
     run_date = now_cn().strftime("%Y-%m-%d")
-    append_history_items(history_file, run_date, insight_input_items)
+    write_ok = append_history_items(history_file, run_date, insight_input_items)
+    verify_ok, missing_items = verify_history_items_written(history_file, insight_input_items)
+    can_send_dingtalk = True
+
+    if not write_ok or not verify_ok:
+        can_send_dingtalk = False
+        print("[History Guard] 检测到历史记录未完整写入，已阻断钉钉发送")
+        if missing_items:
+            print(f"[History Guard] 缺失条数: {len(missing_items)}")
+            for it in missing_items[:5]:
+                print(f"[History Guard] 缺失新闻: {(it.get('title') or '').strip()}")
 
     out_file = os.getenv("OUT_FILE", "daily_all.md")
     with open(out_file, "w", encoding="utf-8") as f:
@@ -726,16 +896,19 @@ def main():
 
     title = f"{now_cn().strftime('%m-%d')} 每日简报"
     
-    # 尝试发送，如果失败打印日志但不抛出异常中断
-    try:
-        results = dingtalk_send_markdown(title, md)
-        for it in results:
-            print(f"✅ DingTalk OK ({it['group']}):", it["resp"])
-    except RuntimeError as e:
-        # 可能是没有配置钉钉，或者网络问题
-        print(f"⚠️ DingTalk Warning: {e}")
-    except Exception as e:
-        print(f"❌ DingTalk Error: {e}")
+    if can_send_dingtalk:
+        # 尝试发送，如果失败打印日志但不抛出异常中断
+        try:
+            results = dingtalk_send_markdown(title, md)
+            for it in results:
+                print(f"✅ DingTalk OK ({it['group']}):", it["resp"])
+        except RuntimeError as e:
+            # 可能是没有配置钉钉，或者网络问题
+            print(f"⚠️ DingTalk Warning: {e}")
+        except Exception as e:
+            print(f"❌ DingTalk Error: {e}")
+    else:
+        print("⚠️ DingTalk Skip: 历史记录写入校验失败")
         
     print("✅ wrote:", out_file)
 

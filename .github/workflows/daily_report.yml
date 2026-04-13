@@ -34,11 +34,11 @@ jobs:
     - name: Run Crawler Script (运行爬虫脚本)
       env:
         # 如果你想配置私有的钉钉 Webhook，请在 GitHub 仓库 Settings -> Secrets 中添加
-        # 你的代码目前有硬编码的 Token，如果失效了，可以在这里配置
-        DINGDINGSHANGYEWEBHOOK: ${{ secrets.DINGDINGSHANGYEWEBHOOK }}
-        DINGDINGSHANGYESECRET: ${{ secrets.DINGDINGSHANGYESECRET }}
-        SHIYANQUNWEBHOOK: ${{ secrets.SHIYANQUNWEBHOOK }}
-        SHIYANQUNSECRET: ${{ secrets.SHIYANQUNSECRET }}
+        # 新命名：群1 / 群2（推荐）
+        DINGTALK_GROUP1_WEBHOOK: ${{ secrets.SHIYANQUNWEBHOOK }}
+        DINGTALK_GROUP1_SECRET: ${{ secrets.SHIYANQUNSECRET }}
+        DINGTALK_GROUP2_WEBHOOK: ${{ secrets.DINGDINGSHANGYEWEBHOOK }}
+        DINGTALK_GROUP2_SECRET: ${{ secrets.DINGDINGSHANGYESECRET }}
         DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
         
         # 环境变量开关 (1=开启, 0=关闭)

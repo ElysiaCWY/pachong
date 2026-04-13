@@ -25,12 +25,16 @@
     *   人社部（MOHRSS）动态与政策。
     *   国家税务总局政策法规。
     *   HR 价值网政策板块。
+    *   中国政府网最新政策。
 3.  **地方人社局政策抓取**：
     *   **北京**：北京市人社局政策文件。
     *   **天津**：天津市人社局政策解读。
     *   **河北**：河北省人社厅政策解读。
     *   **山西**：山西省人社厅部门文件。
     *   **内蒙古**：内蒙古人社厅政策解读。
+    *   **吉林**：吉林省人社厅地方法规政策。
+    *   **黑龙江**：黑龙江省人社厅政策板块（行政规范性文件、其它文件，近24小时）。
+    *   **辽宁**：辽宁省人社厅政策文件三栏（辽人社规、辽人社发、辽人社，近24小时）。
 4.  **AI 分析能力**：
     *   AI 批量筛选：按“对中国人力资源外包/用工市场影响”筛出高价值条目。
     *   AI 摘要生成：为入选新闻生成简洁摘要。
@@ -72,8 +76,9 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 请在运行前确保设置了以下环境变量（或在代码中硬编码）：
 
 *   `DASHSCOPE_API_KEY`: 阿里云 DashScope API Key（用于 AI 筛选）。
-*   `SHIYANQUNWEBHOOK` / `SHIYANQUNSECRET`: 钉钉群 1 的 Webhook 和 Secret。
-*   `DINGDINGSHANGYEWEBHOOK` / `DINGDINGSHANGYESECRET`: 钉钉群 2 的 Webhook 和 Secret。
+*   `DINGTALK_GROUP1_WEBHOOK` / `DINGTALK_GROUP1_SECRET`: 钉钉群 1 的 Webhook 和 Secret。
+*   `DINGTALK_GROUP2_WEBHOOK` / `DINGTALK_GROUP2_SECRET`: 钉钉群 2 的 Webhook 和 Secret。
+*   兼容旧变量名：`SHIYANQUNWEBHOOK` / `SHIYANQUNSECRET`、`DINGDINGSHANGYEWEBHOOK` / `DINGDINGSHANGYESECRET`。
 *   `RUN_CHINATAX`: 是否运行税务总局抓取（1=运行，0=不运行）。
 *   `RUN_TOPHR`: 是否运行第一资源抓取（1=运行，0=不运行）。
 *   `RUN_YICAI_HONGGUAN`: 是否运行第一财经大政抓取（1=运行，0=不运行）。
@@ -81,6 +86,7 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `RUN_HRBRAND_NEWS`: 是否运行 HRbrand 品牌动态抓取（1=运行，0=不运行）。
 *   `RUN_HRVALUE_KUAI`: 是否运行 HR 价值网快讯抓取（1=运行，0=不运行）。
 *   `RUN_HRVALUE_POLICY`: 是否运行 HR 价值网政策抓取（1=运行，0=不运行）。
+*   `RUN_GOVCN_POLICY`: 是否运行中国政府网最新政策抓取（1=运行，0=不运行）。
 *   `RUN_JIEMIAN_BUSINESS`: 是否运行界面新闻商业抓取（1=运行，0=不运行）。
 *   `RUN_CNFIN_DJ`: 是否运行中国金融信息网独家抓取（1=运行，0=不运行）。
 *   `RUN_TMTPOST`: 是否运行钛媒体最新抓取（1=运行，0=不运行）。
@@ -90,11 +96,14 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `RUN_INFOQ`: 是否运行 InfoQ 抓取（1=运行，0=不运行）。
 *   `RUN_CYZONE`: 是否运行创业邦 (Cyzone) 抓取（1=运行，0=不运行）。
 *   `RUN_HUXIU`: 是否运行虎嗅 (Huxiu) 抓取（1=运行，0=不运行）。
+*   `RUN_HEILONGJIANG_HRSS_POLICY`: 是否运行黑龙江省人社厅政策抓取（1=运行，0=不运行）。
+*   `RUN_LIAONING_HRSS_POLICY`: 是否运行辽宁省人社厅政策抓取（1=运行，0=不运行）。
 
 常用可选参数：
 
 *   `SINA_TARGET_DATE`: 指定新浪/第一资源目标日期（格式 `YYYY-MM-DD`）。
 *   `HRVALUE_POLICY_TARGET_DATE`: 指定 HR 价值网政策目标日期（格式 `YYYY-MM-DD`）。
+*   `GOVCN_POLICY_TARGET_DATE`: 指定中国政府网政策目标日期（格式 `YYYY-MM-DD`）。
 *   `OUT_FILE`: 输出 Markdown 文件名（默认 `daily_all.md`）。
 *   `INSIGHT_HISTORY_FILE`: 洞察历史样本文件（默认 `insight_history.jsonl`）。
 
@@ -107,6 +116,9 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
     *   `hebei_rst.py`: 河北爬虫。
     *   `shanxi_rst.py`: 山西爬虫。
     *   `neimenggu_rst.py`: 内蒙古爬虫。
+    *   `jilin_hrss.py`: 吉林省人社厅地方法规政策爬虫。
+    *   `heilongjiang_hrss.py`: 黑龙江省人社厅政策爬虫（行政规范性文件、其它文件，近24小时）。
+    *   `liaoning_hrss.py`: 辽宁省人社厅政策文件爬虫（三栏近24小时）。
     *   `yicai_hongguan.py`: 第一财经大政爬虫。
     *   `clssn_rlzy.py`: 中国劳动保障新闻网人力资源爬虫（近 24 小时）。
     *   `hrbrand_news.py`: HRbrand 品牌动态爬虫（近 24 小时）。
@@ -115,6 +127,7 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
     *   `jiemian_business.py`: 界面新闻商业爬虫（含视频过滤）。
     *   `hrvalue_kuai.py`: HR 价值网快讯爬虫（近 24 小时）。
     *   `hrvalue_policy.py`: HR 价值网政策爬虫。
+    *   `govcn_policy.py`: 中国政府网最新政策爬虫。
     *   `vbdata.py`: 动脉网爬虫（指定栏目）。
     *   `fmcg_china.py`: 快消品网爬虫（多板块）。
     *   `gasgoo.py`: 盖世汽车爬虫（产业+车企）。

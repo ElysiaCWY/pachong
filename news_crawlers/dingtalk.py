@@ -8,6 +8,14 @@ import urllib.parse
 import json
 import requests
 
+
+def _pick_env(*keys: str) -> str:
+    for key in keys:
+        val = (os.getenv(key) or "").strip()
+        if val:
+            return val
+    return ""
+
 # ===================== 钉钉（加签） =====================
 def extract_access_token(token_or_webhook: str) -> str:
     s = (token_or_webhook or "").strip()
@@ -50,24 +58,18 @@ def dingtalk_send_markdown_to(webhook: str, secret: str, title: str, markdown_te
 def get_dingtalk_targets():
     """
     支持多群推送：只要环境变量成对存在，就会推送。
-    - 群1：SHIYANQUNWEBHOOK + SHIYANQUNSECRET
-    - 群2：DINGDINGSHANGYEWEBHOOK + DINGDINGSHANGYESECRET
+    - 群1：DINGTALK_GROUP1_WEBHOOK + DINGTALK_GROUP1_SECRET
+    - 群2：DINGTALK_GROUP2_WEBHOOK + DINGTALK_GROUP2_SECRET
+    兼容旧变量名：SHIYANQUN* / DINGDINGSHANGYE* / DINGTALK_SHIYANQUN* / DINGTALK_SHANGYE*
     """
     pairs = [
-        ("SHIYANQUNWEBHOOK", "SHIYANQUNSECRET", "实验群"),
-        ("DINGDINGSHANGYEWEBHOOK", "DINGDINGSHANGYESECRET", "商业群"),
+        (("DINGTALK_GROUP1_WEBHOOK", "SHIYANQUNWEBHOOK", "DINGTALK_SHIYANQUNWEBHOOK"), ("DINGTALK_GROUP1_SECRET", "SHIYANQUNSECRET", "DINGTALK_SHIYANQUNSECRET"), "群1"),
+        (("DINGTALK_GROUP2_WEBHOOK", "DINGDINGSHANGYEWEBHOOK", "DINGTALK_SHANGYEWEBHOOK"), ("DINGTALK_GROUP2_SECRET", "DINGDINGSHANGYESECRET", "DINGTALK_SHANGYESECRET"), "群2"),
     ]
     targets = []
-    for w_key, s_key, label in pairs:
-        w = (os.getenv(w_key) or "").strip()
-        s = (os.getenv(s_key) or "").strip()
-
-        # Hardcode for 实验群
-        if w_key == "SHIYANQUNWEBHOOK":
-            w = "https://oapi.dingtalk.com/robot/send?access_token=faab6d223739948d5644b12a7478923a98b188bceb1960d02cd66dff9b061a0c"
-        if s_key == "SHIYANQUNSECRET":
-            s = "SEC6bbb8f9fc11b6355482d53a9d56142237b481cf38172cdd7536d49d88273baa2"
-
+    for w_keys, s_keys, label in pairs:
+        w = _pick_env(*w_keys)
+        s = _pick_env(*s_keys)
         if w and s:
             targets.append((w, s, label))
     return targets
@@ -78,7 +80,7 @@ def dingtalk_send_markdown(title: str, markdown_text: str) -> list[dict]:
     """
     targets = get_dingtalk_targets()
     if not targets:
-        raise RuntimeError("缺少钉钉变量：至少需要一组 webhook+secret（实验群或商业群）")
+        raise RuntimeError("缺少钉钉变量：至少需要一组 webhook+secret（群1或群2）")
 
     results = []
     for webhook, secret, label in targets:

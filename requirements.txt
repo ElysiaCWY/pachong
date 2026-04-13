@@ -2,3 +2,5 @@ requests
 beautifulsoup4
 lxml
 playwright
+tzdata
+python-dotenv

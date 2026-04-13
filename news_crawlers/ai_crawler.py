@@ -447,22 +447,24 @@ def call_ai_deduplicate(items: list[dict]) -> list[dict]:
     for i, it in enumerate(items):
         t = it.get("title", "无标题")
         s = it.get("summary", "")[:100] # 摘要截取前100字避免过长
-        prompt_text += f"No.{i}\nTitle: {t}\nSummary: {s}\n\n"
+        src = it.get("source", "未知网站")
+        prompt_text += f"No.{i}\nTitle: {t}\nSummary: {s}\nSource: {src}\n\n"
 
     system_prompt = (
-        "你是一个极其严格的新闻去重专家。你的任务是找出**完全相同事件**的重复报道。\n"
+        "你是一个极其严格的新闻去重专家。你的任务是找出**核心事件或报道主体完全一致**的重复新闻，尤其是那些来自不同网站或相同网站但表述略有差异的相似报道。\n"
         "【判断标准】\n"
-        "1. **完全重复**：针对同一个具体的事件（如“某公司发布财报”、“某高管离职”）。\n"
-        "   - 标题相似度高，主体一致。\n"
-        "   - 例子：“贾国龙新品牌落地北京” 与 “西贝贾国龙推新品牌” -> 重复。\n"
+        "1. **完全重复（不同网站的相同新闻，或同网站的类似新闻）**：\n"
+        "   - 针对同一个具体的事件或核心主体（如“某公司发布财报”、“某公司发布新产品”、“某地出台新政策”）。\n"
+        "   - 即使新闻的具体内容、字数有一定区别，或者不同网站的标题写法不同，只要报道的核心主旨、主体内容一致，即视为重复。\n"
+        "   - 例子：“贾国龙新品牌落地北京” 与 “西贝贾国龙推新品牌” -> 核心都是贾国龙推新品牌事件，算重复。\n"
         "2. **非重复**：\n"
-        "   - 同一公司的不同事件。\n"
-        "   - 相似话题但通过的政策/发生的地点不同。\n\n"
+        "   - 同一公司的完全不同的独立事件（如“A公司发财报”与“A公司高管变更”，虽然公司相同但事件不同）。\n"
+        "   - 相似话题但通过的政策/发生的地点完全不同。\n\n"
         "【操作】\n"
-        "对于重复的一组新闻，只保留**信息量最丰富**（通常摘要更详细或标题更完整）的那一条。\n"
+        "对于重复的一组新闻，只保留**信息量最丰富或最权威**（通常摘要更详细或标题更完整）的那一条。\n"
         "对于不重复的新闻，全部保留。\n\n"
         "【输出格式】\n"
-        "请返回一个 JSON 数组，包含由于**保留**的新闻的编号（No.后面的数字）。\n"
+        "请返回一个 JSON 数组，包含由你**保留**的新闻的编号（No.后面的数字）。\n"
         "例如：[0, 2, 5, 8]\n"
         "只返回数字列表，不要任何废话。"
     )
@@ -1092,4 +1094,112 @@ def call_ai_behavior_similarity_hits(current_enterprise_items: list[dict], recen
     except Exception as e:
         print(f"[AI Similarity] 判断失败: {e}")
         return 0
+
+
+def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], recent_history_items: list[dict]) -> bool:
+    """
+    基于新闻前置标签（如【AI】、【车企】）与近 6 个月历史样本，
+    判断“今日行业趋势是否已对人力资源外包(HRO)行业形成明确影响信号”。
+    """
+    if not current_enterprise_items:
+        return False
+
+    tag_re = re.compile(r"^【([^】]{1,12})】")
+
+    def _pick_tag(title: str) -> str:
+        m = tag_re.match((title or "").strip())
+        if not m:
+            return "未标注"
+        return m.group(1).strip() or "未标注"
+
+    today_lines = []
+    for it in current_enterprise_items[:60]:
+        title = (it.get("title") or "").strip()
+        if not title:
+            continue
+        summary = re.sub(r"\s+", " ", (it.get("summary") or "").strip())
+        tag = _pick_tag(title)
+        today_lines.append(f"- [{tag}] {title} | 摘要: {summary}")
+
+    history_lines = []
+    for it in recent_history_items[-260:]:
+        if (it.get("category") or "").strip() != "enterprise":
+            continue
+        d = (it.get("date") or "").strip()
+        title = (it.get("title") or "").strip()
+        if not d or not title:
+            continue
+        tag = _pick_tag(title)
+        history_lines.append(f"- {d} [{tag}] {title}")
+
+    if not today_lines:
+        return False
+
+    system_prompt = (
+        "你是人力资源外包(HRO)行业趋势分析师。请基于‘今日行业标签分布’与‘历史样本标签趋势’，判断今天是否出现了会影响 HRO 的行业变化。\n\n"
+        "判定口径：\n"
+        "1. 必须结合新闻前置标签分析（如【AI】、【车企】、【制造】、【消费】、【政策】等）。\n"
+        "2. 影响可以是机会或风险（如招聘需求结构变化、灵活用工波动、合规成本变化、交付压力变化等）。\n"
+        "3. 只有在‘影响明确且可落到 HRO 业务’时返回 true；否则返回 false。\n"
+        "4. 输出必须是 JSON，不要输出其他文字："
+        "{\"impact\": true, \"reason\": \"一句话说明\"}"
+    )
+
+    user_content = (
+        "【今日企业新闻（含标签）】\n"
+        + "\n".join(today_lines)
+        + "\n\n【近6个月历史企业样本（含标签）】\n"
+        + ("\n".join(history_lines) if history_lines else "- 无历史样本")
+    )
+
+    headers = {
+        "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": DASHSCOPE_MODEL,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_content}
+        ],
+        "temperature": 0.1
+    }
+
+    try:
+        url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+        resp = requests.post(url, headers=headers, json=payload, timeout=35)
+        resp.raise_for_status()
+
+        data = resp.json()
+        _log_token_usage(data, "Industry Trend Impact")
+        content = data["choices"][0]["message"]["content"].strip()
+        content = re.sub(r"```json|```", "", content).strip()
+
+        obj = None
+        try:
+            obj = json.loads(content)
+        except Exception:
+            m = re.search(r"\{[\s\S]*\}", content)
+            if m:
+                obj = json.loads(m.group(0))
+
+        if not isinstance(obj, dict):
+            return False
+
+        impact = obj.get("impact", False)
+        if isinstance(impact, str):
+            impact = impact.strip().lower() in {"true", "1", "yes", "y"}
+
+        if bool(impact):
+            reason = (obj.get("reason") or "").strip()
+            if reason:
+                print(f"[Insight] 行业趋势影响命中: {reason}")
+            else:
+                print("[Insight] 行业趋势影响命中")
+            return True
+        return False
+    except Exception as e:
+        print(f"[AI Trend Impact] 判断失败: {e}")
+        return False
 

@@ -1,6 +1,9 @@
+from dotenv import load_dotenv
 from spiders.beijing_yaowen import crawl as crawl_beijing
 from core.render import render_markdown
 from core.dingtalk import send_markdown
+
+load_dotenv()
 
 def main():
     blocks = []
