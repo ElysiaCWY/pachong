@@ -879,16 +879,16 @@ def call_ai_summary(content: str) -> str:
 
 def call_ai_shorten_title(title: str) -> str:
     """
-    如果标题超过30字，调用AI进行缩写，保持原意，不超过30字。
+    如果标题超过50字，调用AI进行缩写，保持原意，不超过50字。
     """
     title = title.strip()
-    if len(title) <= 30:
+    if len(title) <= 50:
         return title
         
     system_prompt = (
         "你是一个资深新闻编辑。请将用户的**新闻标题进行极度精简**。\n"
         "要求：\n"
-        "1. **必须缩写到 30 字以内**。\n"
+        "1. **必须缩写到 50 字以内**。\n"
         "2. 保留最核心的主语、动词和结果（如：某公司裁员多少人，某政策发布等）。\n"
         "3. 去除无意义的修饰词、虚词。\n"
         "4. 直接输出缩写后的标题，不要任何标点符号外的解释。"
@@ -1096,13 +1096,13 @@ def call_ai_behavior_similarity_hits(current_enterprise_items: list[dict], recen
         return 0
 
 
-def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], recent_history_items: list[dict]) -> bool:
+def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], recent_history_items: list[dict]) -> tuple[bool, str]:
     """
     基于新闻前置标签（如【AI】、【车企】）与近 6 个月历史样本，
     判断“今日行业趋势是否已对人力资源外包(HRO)行业形成明确影响信号”。
     """
     if not current_enterprise_items:
-        return False
+        return False, ""
 
     tag_re = re.compile(r"^【([^】]{1,12})】")
 
@@ -1133,7 +1133,7 @@ def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], rece
         history_lines.append(f"- {d} [{tag}] {title}")
 
     if not today_lines:
-        return False
+        return False, ""
 
     system_prompt = (
         "你是人力资源外包(HRO)行业趋势分析师。请基于‘今日行业标签分布’与‘历史样本标签趋势’，判断今天是否出现了会影响 HRO 的行业变化。\n\n"
@@ -1185,7 +1185,7 @@ def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], rece
                 obj = json.loads(m.group(0))
 
         if not isinstance(obj, dict):
-            return False
+            return False, ""
 
         impact = obj.get("impact", False)
         if isinstance(impact, str):
@@ -1197,9 +1197,9 @@ def call_ai_industry_trend_impact_hit(current_enterprise_items: list[dict], rece
                 print(f"[Insight] 行业趋势影响命中: {reason}")
             else:
                 print("[Insight] 行业趋势影响命中")
-            return True
-        return False
+            return True, reason
+        return False, ""
     except Exception as e:
         print(f"[AI Trend Impact] 判断失败: {e}")
-        return False
+        return False, ""
 

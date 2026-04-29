@@ -33,6 +33,15 @@
     *   **山西**：山西省人社厅部门文件。
     *   **内蒙古**：内蒙古人社厅政策解读。
     *   **吉林**：吉林省人社厅地方法规政策。
+    *   **河南**：河南省人社厅规范性文件资料库（近 24 小时）。
+    *   **湖北**：湖北省人社厅政策板块（规范性文件、其他主动公开文件，近24小时）。
+    *   **湖南**：湖南省人社厅厅发规范性文件（近24小时）。
+    *   **广东**：广东省人社厅政策板块（规范性文件、其他文件-社会保障，近24小时）。
+    *   **广西**：广西壮族自治区人社厅规章政策 / 本厅规范性文件（近24小时）。
+    *   **甘肃**：甘肃省人社厅信息公开目录（近24小时，支持 `GANSU_RST_COOKIE` 可选补充 cookie）。
+    *   **青海**：青海省人社厅政策知识库（近24小时）。
+    *   **宁夏**：宁夏人社厅政策板块（社会保障、厅发文件、劳动关系、规范性文件，近24小时）。
+    *   **新疆**：新疆人社厅政策文件 / 规范性文件（近24小时）。
     *   **黑龙江**：黑龙江省人社厅政策板块（行政规范性文件、其它文件，近24小时）。
     *   **辽宁**：辽宁省人社厅政策文件三栏（辽人社规、辽人社发、辽人社，近24小时）。
 4.  **AI 分析能力**：
@@ -96,6 +105,22 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `RUN_INFOQ`: 是否运行 InfoQ 抓取（1=运行，0=不运行）。
 *   `RUN_CYZONE`: 是否运行创业邦 (Cyzone) 抓取（1=运行，0=不运行）。
 *   `RUN_HUXIU`: 是否运行虎嗅 (Huxiu) 抓取（1=运行，0=不运行）。
+*   `RUN_HENAN_HRSS_POLICY`: 是否运行河南省人社厅规范性文件资料库抓取（1=运行，0=不运行）。
+*   `RUN_HUBEI_RST_POLICY`: 是否运行湖北省人社厅政策抓取（规范性文件、其他主动公开文件，1=运行，0=不运行）。
+*   `RUN_HUNAN_RST_POLICY`: 是否运行湖南省人社厅厅发规范性文件抓取（1=运行，0=不运行）。
+*   `RUN_GUANGDONG_HRSS_POLICY`: 是否运行广东省人社厅政策抓取（规范性文件、其他文件-社会保障，1=运行，0=不运行）。
+*   `RUN_GUANGXI_RST_POLICY`: 是否运行广西壮族自治区人社厅政策抓取（规章政策、本厅规范性文件，1=运行，0=不运行）。
+*   `RUN_HAINAN_HRSS_POLICY`: 是否运行海南省人社厅部门文件抓取（1=运行，0=不运行）。
+*   `RUN_CHONGQING_HRSS_POLICY`: 是否运行重庆市人社局行政规范性文件抓取（1=运行，0=不运行）。
+*   `RUN_SICHUAN_RST_POLICY`: 是否运行四川省人社厅政策抓取（政策、行政规范性文件，1=运行，0=不运行）。
+*   `RUN_GUIZHOU_RST_POLICY`: 是否运行贵州省人社厅政策文件 + 规范性文件数据库抓取（1=运行，0=不运行）。
+*   `RUN_YUNNAN_HRSS_POLICY`: 是否运行云南省人社厅通知公告 + 政策文件抓取（1=运行，0=不运行）。
+*   `RUN_XIZANG_HRSS_POLICY`: 是否运行西藏自治区人社厅行政规范性文件抓取（1=运行，0=不运行）。
+*   `RUN_SHAANXI_RST_POLICY`: 是否运行陕西省人社厅规范性文件（就业）抓取（1=运行，0=不运行）。
+*   `RUN_GANSU_RST_POLICY`: 是否运行甘肃省人社厅信息公开目录抓取（1=运行，0=不运行）。
+*   `RUN_QINGHAI_RST_POLICY`: 是否运行青海省人社厅政策知识库抓取（1=运行，0=不运行）。
+*   `RUN_NINGXIA_HRSS_POLICY`: 是否运行宁夏人社厅政策抓取（社会保障、厅发文件、劳动关系、规范性文件，1=运行，0=不运行）。
+*   `RUN_XINJIANG_RST_POLICY`: 是否运行新疆人社厅政策抓取（政策文件、规范性文件，1=运行，0=不运行）。
 *   `RUN_HEILONGJIANG_HRSS_POLICY`: 是否运行黑龙江省人社厅政策抓取（1=运行，0=不运行）。
 *   `RUN_LIAONING_HRSS_POLICY`: 是否运行辽宁省人社厅政策抓取（1=运行，0=不运行）。
 
@@ -104,6 +129,7 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
 *   `SINA_TARGET_DATE`: 指定新浪/第一资源目标日期（格式 `YYYY-MM-DD`）。
 *   `HRVALUE_POLICY_TARGET_DATE`: 指定 HR 价值网政策目标日期（格式 `YYYY-MM-DD`）。
 *   `GOVCN_POLICY_TARGET_DATE`: 指定中国政府网政策目标日期（格式 `YYYY-MM-DD`）。
+*   `GANSU_RST_COOKIE`: 甘肃省人社厅可选 cookie 字符串（命中 412/400 防护时可补充）。
 *   `OUT_FILE`: 输出 Markdown 文件名（默认 `daily_all.md`）。
 *   `INSIGHT_HISTORY_FILE`: 洞察历史样本文件（默认 `insight_history.jsonl`）。
 
@@ -117,6 +143,21 @@ python -c "from news_crawlers.hrvalue_policy import crawl_hrvalue_policy; print(
     *   `shanxi_rst.py`: 山西爬虫。
     *   `neimenggu_rst.py`: 内蒙古爬虫。
     *   `jilin_hrss.py`: 吉林省人社厅地方法规政策爬虫。
+    *   `hubei_rst.py`: 湖北省人社厅政策爬虫（规范性文件、其他主动公开文件，近24小时）。
+    *   `hunan_rst.py`: 湖南省人社厅厅发规范性文件爬虫（近24小时）。
+    *   `guangdong_hrss.py`: 广东省人社厅政策爬虫（规范性文件、其他文件-社会保障，近24小时）。
+    *   `guangxi_rst.py`: 广西壮族自治区人社厅政策爬虫（规章政策、本厅规范性文件，近24小时）。
+    *   `hainan_hrss.py`: 海南省人社厅部门文件爬虫（近24小时）。
+    *   `chongqing_hrss.py`: 重庆市人社局行政规范性文件爬虫（近24小时）。
+    *   `sichuan_rst.py`: 四川省人社厅政策爬虫（政策、行政规范性文件，近24小时）。
+    *   `guizhou_rst.py`: 贵州省人社厅政策文件与规范性文件数据库爬虫（近24小时）。
+    *   `yunnan_hrss.py`: 云南省人社厅通知公告与政策文件爬虫（近24小时）。
+    *   `xizang_hrss.py`: 西藏自治区人社厅行政规范性文件爬虫（近24小时）。
+    *   `shaanxi_rst.py`: 陕西省人社厅规范性文件（就业）爬虫（近24小时）。
+    *   `gansu_rst.py`: 甘肃省人社厅信息公开目录爬虫（近24小时，支持可选 cookie 补充）。
+    *   `qinghai_rst.py`: 青海省人社厅政策知识库爬虫（近24小时）。
+    *   `ningxia_hrss.py`: 宁夏人社厅政策爬虫（社会保障、厅发文件、劳动关系、规范性文件，近24小时）。
+    *   `xinjiang_rst.py`: 新疆人社厅政策爬虫（政策文件、规范性文件，近24小时）。
     *   `heilongjiang_hrss.py`: 黑龙江省人社厅政策爬虫（行政规范性文件、其它文件，近24小时）。
     *   `liaoning_hrss.py`: 辽宁省人社厅政策文件爬虫（三栏近24小时）。
     *   `yicai_hongguan.py`: 第一财经大政爬虫。
