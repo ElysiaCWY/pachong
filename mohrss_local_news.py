@@ -3,9 +3,9 @@ import json
 import time  
 import re
 import sys
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from dotenv import load_dotenv
-from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content, clean_yicai_summary
+from news_crawlers.common import now_cn, md_item_with_detail, target_prev_workday, fetch_url_content, clean_yicai_summary, norm
 from news_crawlers.log_utils import setup_logging
 from news_crawlers.history_manager import (
     load_recent_history,
@@ -53,6 +53,13 @@ from news_crawlers.shanghai_hrss import crawl_shanghai_hrss_policy
 from news_crawlers.shanghai_gjj import crawl_shanghai_gjj_policy
 from news_crawlers.taiyuan_gjj import crawl_taiyuan_gjj_policy
 from news_crawlers.shijiazhuang_gjj import crawl_shijiazhuang_gjj_policy
+from news_crawlers.zhengzhou_gjj import crawl_zhengzhou_gjj_law
+from news_crawlers.hefei_gjj import crawl_hefei_gjj_policy
+from news_crawlers.shenyang_gjj import crawl_shenyang_gjj_policy
+from news_crawlers.hrbgjj import crawl_hrbgjj_zxwj
+from news_crawlers.jlgjj import crawl_jlgjj_policy
+from news_crawlers.nanjing_gjj import crawl_nanjing_gjj_tzgg
+from news_crawlers.hangzhou_gjj import crawl_hangzhou_gjj_xzfg
 from news_crawlers.jiangsu_hrss import crawl_jiangsu_hrss_policy
 from news_crawlers.zhejiang_hrss import crawl_zhejiang_hrss_policy
 from news_crawlers.anhui_hrss import crawl_anhui_hrss_policy
@@ -259,6 +266,78 @@ def _filter_policy_items_by_keywords(items: list[dict], source_name: str) -> lis
         else:
             print(f"[Policy Keyword Filter] 剔除({source_name}): {(it.get('title') or '').strip()}")
     print(f"[Policy Keyword Filter] {source_name}: {before} -> {len(kept)}")
+    return kept
+
+
+def _coerce_policy_item_datetime(raw_date) -> datetime | None:
+    """
+    将政策条目的 date 字段统一转为 datetime，便于做近24小时过滤。
+    """
+    if not raw_date:
+        return None
+
+    tz = now_cn().tzinfo
+
+    if isinstance(raw_date, datetime):
+        return raw_date if raw_date.tzinfo else raw_date.replace(tzinfo=tz)
+
+    if isinstance(raw_date, date):
+        return datetime(raw_date.year, raw_date.month, raw_date.day, tzinfo=tz)
+
+    text = norm(str(raw_date))
+    if not text:
+        return None
+
+    for fmt, width in (
+        ("%Y-%m-%d %H:%M:%S", 19),
+        ("%Y-%m-%d %H:%M", 16),
+        ("%Y/%m/%d %H:%M:%S", 19),
+        ("%Y/%m/%d %H:%M", 16),
+        ("%Y-%m-%d", 10),
+        ("%Y/%m/%d", 10),
+    ):
+        try:
+            dt = datetime.strptime(text[:width], fmt)
+            return dt.replace(tzinfo=tz)
+        except Exception:
+            continue
+
+    return None
+
+
+def _filter_policy_items_last_24h(items: list[dict], source_name: str, now: datetime) -> list[dict]:
+    """
+    统一近24小时过滤兜底：
+    - 若条目带完整时间，用严格 24h 窗口；
+    - 若站点仅提供 YYYY-MM-DD，则按日期粒度近似 24h（since_date~today）。
+    """
+    since = now - timedelta(hours=24)
+    kept = []
+    before = len(items)
+
+    for it in items:
+        raw_date = it.get("date")
+        dt = _coerce_policy_item_datetime(raw_date)
+        if not dt:
+            print(f"[Policy 24h Filter] 剔除({source_name}): 无法解析发布时间 - {(it.get('title') or '').strip()}")
+            continue
+
+        if dt > now:
+            print(f"[Policy 24h Filter] 剔除({source_name}): 发布时间晚于当前时间 - {(it.get('title') or '').strip()}")
+            continue
+
+        # 日期粒度站点无法做到严格到小时，这里用日期窗口近似。
+        if isinstance(raw_date, date) and not isinstance(raw_date, datetime):
+            in_window = (since.date() <= dt.date() <= now.date())
+        else:
+            in_window = (since <= dt <= now)
+
+        if in_window:
+            kept.append(it)
+        else:
+            print(f"[Policy 24h Filter] 剔除({source_name}): 超出24小时窗口 - {(it.get('title') or '').strip()}")
+
+    print(f"[Policy 24h Filter] {source_name}: {before} -> {len(kept)}")
     return kept
 
 
@@ -683,7 +762,14 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     shanghai_gjj_policies = []
     taiyuan_gjj_policies = []
     shijiazhuang_policies = []
+    zhengzhou_gjj_policies = []
+    shenyang_gjj_policies = []
+    hrbgjj_policies = []
+    jlgjj_policies = []
+    hangzhou_gjj_policies = []
+    hefei_gjj_policies = []
     tianjin_gjj_policies = []
+    nanjing_gjj_policies = []
     cqgjj_gsgg_policies = []
     jiangsu_policies = []
     zhejiang_policies = []
@@ -922,6 +1008,62 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         except Exception as e:
             print(f"Shijiazhuang GJJ policy fetch error: {e}")
 
+    # 郑州住房公积金管理中心 - 行政规范性文件（近24小时）
+    run_zhengzhou_gjj_policy_env = (os.getenv("RUN_ZHENGZHOU_GJJ_POLICY", "1") != "0")
+    if run_zhengzhou_gjj_policy_env:
+        try:
+            zhengzhou_gjj_policies = crawl_zhengzhou_gjj_law()
+        except Exception as e:
+            print(f"Zhengzhou GJJ policy fetch error: {e}")
+
+    # 沈阳住房公积金管理中心 - 政策法规（近24小时）
+    run_shenyang_gjj_policy_env = (os.getenv("RUN_SHENYANG_GJJ_POLICY", "1") != "0")
+    if run_shenyang_gjj_policy_env:
+        try:
+            shenyang_gjj_policies = crawl_shenyang_gjj_policy()
+        except Exception as e:
+            print(f"Shenyang GJJ policy fetch error: {e}")
+
+    # 哈尔滨住房公积金中心 - 中心文件（近24小时）
+    run_harbin_gjj_policy_env = (os.getenv("RUN_HARBIN_GJJ_POLICY", "1") != "0")
+    if run_harbin_gjj_policy_env:
+        try:
+            hrbgjj_policies = crawl_hrbgjj_zxwj()
+        except Exception as e:
+            print(f"Harbin GJJ policy fetch error: {e}")
+
+    # 吉林市住房公积金管理中心 - 政策文件（近24小时）
+    run_jlgjj_policy_env = (os.getenv("RUN_JLGJJ_POLICY", "1") != "0")
+    if run_jlgjj_policy_env:
+        try:
+            jlgjj_policies = crawl_jlgjj_policy()
+        except Exception as e:
+            print(f"Jilin GJJ policy fetch error: {e}")
+
+    # 南京住房公积金网 - 通知公告（近24小时）
+    run_nanjing_gjj_env = (os.getenv("RUN_NANJING_GJJ_TZGG", "1") != "0")
+    if run_nanjing_gjj_env:
+        try:
+            nanjing_gjj_policies = crawl_nanjing_gjj_tzgg()
+        except Exception as e:
+            print(f"Nanjing GJJ tzgg fetch error: {e}")
+
+    # 合肥住房公积金网 - 公积金政策（近24小时）
+    run_hefei_gjj_env = (os.getenv("RUN_HEFEI_GJJ_POLICY", "1") != "0")
+    if run_hefei_gjj_env:
+        try:
+            hefei_gjj_policies = crawl_hefei_gjj_policy()
+        except Exception as e:
+            print(f"Hefei GJJ policy fetch error: {e}")
+
+    # 杭州住房公积金网 - 行政规范性文件（近24小时）
+    run_hangzhou_gjj_env = (os.getenv("RUN_HANGZHOU_GJJ_XZFG", "1") != "0")
+    if run_hangzhou_gjj_env:
+        try:
+            hangzhou_gjj_policies = crawl_hangzhou_gjj_xzfg()
+        except Exception as e:
+            print(f"Hangzhou GJJ xzfg fetch error: {e}")
+
     # 天津住房公积金网 - 本市规范性文件 + 中心文件库（近24小时）
     run_tianjin_gjj_policy_env = (os.getenv("RUN_TIANJIN_GJJ_POLICY", "1") != "0")
     if run_tianjin_gjj_policy_env:
@@ -986,6 +1128,57 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         except Exception as e:
             print(f"Shandong HRSS policy fetch error: {e}")
 
+    # 统一“近24小时”兜底过滤，覆盖所有政策/官网通知来源。
+    hit_dynamics = _filter_policy_items_last_24h(hit_dynamics, "mohrss_dynamics", now)
+    hit_policies = _filter_policy_items_last_24h(hit_policies, "mohrss_policy", now)
+    chinatax_policies = _filter_policy_items_last_24h(chinatax_policies, "chinatax_policy", now)
+    beijing_policies = _filter_policy_items_last_24h(beijing_policies, "beijing_policy", now)
+    beijing_gjj_policies = _filter_policy_items_last_24h(beijing_gjj_policies, "beijing_gjj_policy", now)
+    tianjin_gjj_policies = _filter_policy_items_last_24h(tianjin_gjj_policies, "tianjin_gjj_policy", now)
+    cqgjj_gsgg_policies = _filter_policy_items_last_24h(cqgjj_gsgg_policies, "cqgjj_gsgg", now)
+    tianjin_policies = _filter_policy_items_last_24h(tianjin_policies, "tianjin_policy", now)
+    hebei_policies = _filter_policy_items_last_24h(hebei_policies, "hebei_policy", now)
+    shanxi_policies = _filter_policy_items_last_24h(shanxi_policies, "shanxi_policy", now)
+    neimenggu_policies = _filter_policy_items_last_24h(neimenggu_policies, "neimenggu_policy", now)
+    jilin_policies = _filter_policy_items_last_24h(jilin_policies, "jilin_policy", now)
+    henan_policies = _filter_policy_items_last_24h(henan_policies, "henan_hrss_policy", now)
+    hubei_policies = _filter_policy_items_last_24h(hubei_policies, "hubei_rst_policy", now)
+    hunan_policies = _filter_policy_items_last_24h(hunan_policies, "hunan_rst_policy", now)
+    guangdong_policies = _filter_policy_items_last_24h(guangdong_policies, "guangdong_hrss_policy", now)
+    guangxi_policies = _filter_policy_items_last_24h(guangxi_policies, "guangxi_rst_policy", now)
+    hainan_policies = _filter_policy_items_last_24h(hainan_policies, "hainan_hrss_policy", now)
+    chongqing_policies = _filter_policy_items_last_24h(chongqing_policies, "chongqing_hrss_policy", now)
+    sichuan_policies = _filter_policy_items_last_24h(sichuan_policies, "sichuan_rst_policy", now)
+    guizhou_policies = _filter_policy_items_last_24h(guizhou_policies, "guizhou_rst_policy", now)
+    yunnan_policies = _filter_policy_items_last_24h(yunnan_policies, "yunnan_hrss_policy", now)
+    xizang_policies = _filter_policy_items_last_24h(xizang_policies, "xizang_hrss_policy", now)
+    shaanxi_policies = _filter_policy_items_last_24h(shaanxi_policies, "shaanxi_rst_policy", now)
+    gansu_policies = _filter_policy_items_last_24h(gansu_policies, "gansu_rst_policy", now)
+    qinghai_policies = _filter_policy_items_last_24h(qinghai_policies, "qinghai_rst_policy", now)
+    ningxia_policies = _filter_policy_items_last_24h(ningxia_policies, "ningxia_hrss_policy", now)
+    xinjiang_policies = _filter_policy_items_last_24h(xinjiang_policies, "xinjiang_rst_policy", now)
+    hrvalue_policies = _filter_policy_items_last_24h(hrvalue_policies, "hrvalue_policy", now)
+    govcn_policies = _filter_policy_items_last_24h(govcn_policies, "govcn_policy", now)
+    heilongjiang_policies = _filter_policy_items_last_24h(heilongjiang_policies, "heilongjiang_hrss_policy", now)
+    liaoning_policies = _filter_policy_items_last_24h(liaoning_policies, "liaoning_hrss_policy", now)
+    shanghai_policies = _filter_policy_items_last_24h(shanghai_policies, "shanghai_hrss_policy", now)
+    shanghai_gjj_policies = _filter_policy_items_last_24h(shanghai_gjj_policies, "shanghai_gjj_policy", now)
+    taiyuan_gjj_policies = _filter_policy_items_last_24h(taiyuan_gjj_policies, "taiyuan_gjj_policy", now)
+    shijiazhuang_policies = _filter_policy_items_last_24h(shijiazhuang_policies, "shijiazhuang_gjj_policy", now)
+    zhengzhou_gjj_policies = _filter_policy_items_last_24h(zhengzhou_gjj_policies, "zhengzhou_gjj_law", now)
+    shenyang_gjj_policies = _filter_policy_items_last_24h(shenyang_gjj_policies, "shenyang_gjj_zcfg", now)
+    hrbgjj_policies = _filter_policy_items_last_24h(hrbgjj_policies, "hrb_gjj_zxwj", now)
+    jlgjj_policies = _filter_policy_items_last_24h(jlgjj_policies, "jlgjj_gfxwj", now)
+    hangzhou_gjj_policies = _filter_policy_items_last_24h(hangzhou_gjj_policies, "hangzhou_gjj_xzfg", now)
+    hefei_gjj_policies = _filter_policy_items_last_24h(hefei_gjj_policies, "hefei_gjj_policy", now)
+    jiangsu_policies = _filter_policy_items_last_24h(jiangsu_policies, "jiangsu_hrss_policy", now)
+    nanjing_gjj_policies = _filter_policy_items_last_24h(nanjing_gjj_policies, "nanjing_gjj_tzgg", now)
+    zhejiang_policies = _filter_policy_items_last_24h(zhejiang_policies, "zhejiang_hrss_policy", now)
+    anhui_policies = _filter_policy_items_last_24h(anhui_policies, "anhui_hrss_policy", now)
+    fujian_policies = _filter_policy_items_last_24h(fujian_policies, "fujian_rst_bbmwj", now)
+    jiangxi_policies = _filter_policy_items_last_24h(jiangxi_policies, "jiangxi_rst_policy", now)
+    shandong_policies = _filter_policy_items_last_24h(shandong_policies, "shandong_hrss_policy", now)
+
     # 政策抓取结果汇总日志（便于排查“是否抓到/是否进入筛选”）
     policy_fetch_stats = [
         ("mohrss_dynamics", len(hit_dynamics)),
@@ -1024,6 +1217,12 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         ("shanghai_gjj_policy", len(shanghai_gjj_policies)),
         ("taiyuan_gjj_policy", len(taiyuan_gjj_policies)),
         ("shijiazhuang_gjj_policy", len(shijiazhuang_policies)),
+        ("zhengzhou_gjj_law", len(zhengzhou_gjj_policies)),
+        ("shenyang_gjj_zcfg", len(shenyang_gjj_policies)),
+        ("hrb_gjj_zxwj", len(hrbgjj_policies)),
+        ("jlgjj_gfxwj", len(jlgjj_policies)),
+        ("hangzhou_gjj_xzfg", len(hangzhou_gjj_policies)),
+        ("nanjing_gjj_tzgg", len(nanjing_gjj_policies)),
         ("jiangsu_hrss_policy", len(jiangsu_policies)),
         ("zhejiang_hrss_policy", len(zhejiang_policies)),
         ("anhui_hrss_policy", len(anhui_policies)),
@@ -1071,6 +1270,10 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         not shanghai_policies and
         not shanghai_gjj_policies and
         not taiyuan_gjj_policies and
+        not zhengzhou_gjj_policies and
+        not shenyang_gjj_policies and
+        not hrbgjj_policies and
+        not jlgjj_policies and
         not jiangsu_policies and
         not zhejiang_policies and
         not anhui_policies and
@@ -1122,7 +1325,14 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     shanghai_policies = filter_against_history(shanghai_policies, history_file, category="policy")
     shanghai_gjj_policies = filter_against_history(shanghai_gjj_policies, history_file, category="policy")
     taiyuan_gjj_policies = filter_against_history(taiyuan_gjj_policies, history_file, category="policy")
+    zhengzhou_gjj_policies = filter_against_history(zhengzhou_gjj_policies, history_file, category="policy")
+    shenyang_gjj_policies = filter_against_history(shenyang_gjj_policies, history_file, category="policy")
+    hrbgjj_policies = filter_against_history(hrbgjj_policies, history_file, category="policy")
+    jlgjj_policies = filter_against_history(jlgjj_policies, history_file, category="policy")
+    hangzhou_gjj_policies = filter_against_history(hangzhou_gjj_policies, history_file, category="policy")
+    hefei_gjj_policies = filter_against_history(hefei_gjj_policies, history_file, category="policy")
     jiangsu_policies = filter_against_history(jiangsu_policies, history_file, category="policy")
+    nanjing_gjj_policies = filter_against_history(nanjing_gjj_policies, history_file, category="policy")
     zhejiang_policies = filter_against_history(zhejiang_policies, history_file, category="policy")
     anhui_policies = filter_against_history(anhui_policies, history_file, category="policy")
     fujian_policies = filter_against_history(fujian_policies, history_file, category="policy")
@@ -1158,7 +1368,12 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     govcn_policies = _filter_policy_items_by_keywords(govcn_policies, "govcn_policy")
     heilongjiang_policies = _filter_policy_items_by_keywords(heilongjiang_policies, "heilongjiang_hrss_policy")
     liaoning_policies = _filter_policy_items_by_keywords(liaoning_policies, "liaoning_hrss_policy")
+    hrbgjj_policies = _filter_policy_items_by_keywords(hrbgjj_policies, "hrb_gjj_zxwj")
+    jlgjj_policies = _filter_policy_items_by_keywords(jlgjj_policies, "jlgjj_gfxwj")
     shanghai_policies = _filter_policy_items_by_keywords(shanghai_policies, "shanghai_hrss_policy")
+    nanjing_gjj_policies = _filter_policy_items_by_keywords(nanjing_gjj_policies, "nanjing_gjj_tzgg")
+    hangzhou_gjj_policies = _filter_policy_items_by_keywords(hangzhou_gjj_policies, "hangzhou_gjj_xzfg")
+    hefei_gjj_policies = _filter_policy_items_by_keywords(hefei_gjj_policies, "hefei_gjj_policy")
     jiangsu_policies = _filter_policy_items_by_keywords(jiangsu_policies, "jiangsu_hrss_policy")
     zhejiang_policies = _filter_policy_items_by_keywords(zhejiang_policies, "zhejiang_hrss_policy")
     anhui_policies = _filter_policy_items_by_keywords(anhui_policies, "anhui_hrss_policy")
@@ -1208,6 +1423,8 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         or shanghai_policies
         or shanghai_gjj_policies
         or taiyuan_gjj_policies
+        or zhengzhou_gjj_policies
+        or shenyang_gjj_policies
         or jiangsu_policies
         or zhejiang_policies
         or anhui_policies
@@ -1391,6 +1608,41 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
+        for it in zhengzhou_gjj_policies:
+            title = f"【郑州公积金-{it.get('source', '行政规范性文件')}】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in shenyang_gjj_policies:
+            title = f"【沈阳公积金-{it.get('source', '政策法规')}】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in hrbgjj_policies:
+            title = f"【哈尔滨公积金-{it.get('source', '中心文件')}】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in jlgjj_policies:
+            title = f"【吉林公积金-政策文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in nanjing_gjj_policies:
+            title = f"【南京公积金-通知公告】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in hangzhou_gjj_policies:
+            title = f"【杭州公积金-行政规范性文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in hefei_gjj_policies:
+            title = f"【合肥公积金-政策文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
         for it in jiangsu_policies:
             title = f"【江苏】{it['title']}"
             policy_items_all.append({"title": title, "url": it["url"]})
@@ -1421,6 +1673,12 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
+
+        # 政策文件标题统一去掉开头的【】标签，保留纯标题展示。
+        for i, line in enumerate(lines):
+            lines[i] = re.sub(r"^(\d+\.\s*)【[^】]{1,30}】", r"\1", line)
+        for it in policy_items_all:
+            it["title"] = _strip_leading_tag((it.get("title") or "").strip())
 
     # 再展示人社部的地方动态
     if hit_dynamics:

@@ -1,0 +1,456 @@
+=================================================
+日志记录已启动
+日志文件: C:\Users\admin\Desktop\pachong-main\pachong-main\logs\run_log_20260506_091539.txt
+启动时间: 2026-05-06 09:15:39
+=================================================
+[Log Cleanup] 已删除旧日志: run_log_20260430_090218.txt
+[Log Cleanup] 已删除旧日志: run_log_20260430_090546.txt
+[Log Cleanup] 共清理 2 个旧日志文件。
+正在筛选三茅新闻 (5 条)...
+[Token Usage] Filter: 880 (In: 0, Out: 0)
+  -> [AI Filter] 筛掉三茅: 国家医保局：1到3月职工医保个人账户共济1.15亿人次
+  -> [AI Filter] 筛掉三茅: 重庆：2026年拟开展补贴性培训16万人次
+  -> [AI Filter] 筛掉三茅: 江苏扬州：“人才安家券”最高抵扣200万元首付款
+[Token Usage] Summary: 242 (In: 0, Out: 0)
+[Token Usage] Summary: 265 (In: 0, Out: 0)
+[Jiemian] Crawling page 1...
+[Jiemian] Crawling page 2: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=2
+[Jiemian] Crawling page 3: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=3
+[Jiemian] Page 3 has no recent items. Stopping.
+[Jiemian] Collected 21 items within 24h.
+[CNFIN] Crawling page 1: https://www.cnfin.com/dj/index.html
+[CNFIN] Page 1 has no recent items. Stopping.
+[CNFIN] Collected 0 items within 24h.
+[TMTPost] Start crawling with Playwright...
+[TMTPost] Scroll 1/30, items found: 43
+[TMTPost] Scroll 2/30, items found: 61
+[TMTPost] Scroll 3/30, items found: 81
+[TMTPost] Scroll 4/30, items found: 101
+[TMTPost] Scroll 5/30, items found: 119
+[TMTPost] Scroll 6/30, items found: 139
+[TMTPost] Scroll 7/30, items found: 158
+[TMTPost] Scroll 8/30, items found: 177
+[TMTPost] Scroll 9/30, items found: 197
+[TMTPost] Scroll 10/30, items found: 217
+[TMTPost] Scroll 11/30, items found: 237
+[TMTPost] Scroll 12/30, items found: 257
+[TMTPost] Scroll 13/30, items found: 277
+[TMTPost] Scroll 14/30, items found: 297
+[TMTPost] Scroll 15/30, items found: 317
+[TMTPost] Scroll 16/30, items found: 317
+[TMTPost] No new items loaded. Stopping.
+[TMTPost] Parsing 317 total items...
+[TMTPost] Collected 12 items within 24h.
+[THSI] Target Date: 2026-05-05 (Previous Workday)
+[THSI] Start crawling items...
+[THSI] Found older date 2026-05-04 < 2026-05-05, stopping crawl.
+[FortuneCN] Target date: 2026-05-05
+[FortuneCN] Found candidates: 18
+[FortuneCN] Collected 8 items for 2026-05-05
+[Gasgoo] 开始抓取，目标日期: 2026-05-05
+  -> 正在抓取板块: 产业 (https://auto.gasgoo.com/industry/C-108)
+     已抓取 1 条符合条件的文章
+  -> 正在抓取板块: 车企 (https://auto.gasgoo.com/automaker/C-109)
+     已抓取 2 条符合条件的文章
+[InfoQ] Start crawling... Target Date: 2026-05-05
+  -> Visiting https://www.infoq.cn/topic/industry-news
+  -> Found 0 article links via locator
+[Cyzone] Start crawling... Target Date: 2026-05-05
+  -> Visiting https://www.cyzone.cn/channel/news
+  -> Found 20 potential items
+[Huxiu] Start crawling... Target Date: 2026-05-05
+c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3\connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'www.huxiu.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+  -> Found 0 items
+[History Filter] 财经/人力新闻排重: 105 -> 105
+  -> [Hard Keep] 命中新规则保留: DeepMind创始人的豪赌：攻克一切疾病
+  -> [Hard Keep] 命中新规则保留: 苹果新任CEO的首个关键考题
+
+[AI Filter] 正在筛选来源: yicai_hongguan (共 5 条) ...
+[Token Usage] Filter: 1033 (In: 0, Out: 0)
+  -> 筛掉: 湖南烟花爆竹企业全面停产整顿 此次停产整顿重点查处企业“三超一改”、分包转包等问题。 405 昨天 22:56
+  -> 筛掉: 针对浏阳烟花厂爆炸事故，将成立国务院事故调查组 按照“四不放过”原则查清查透事故原因和责任，加强行刑衔接，严肃追责问责。 1062 昨天 19:08
+  -> 筛掉: 湖南浏阳烟花厂爆炸事故已致26人死亡，基本完成现场搜救 目前，已基本完成现场搜救；依法对涉事企业负责人采取控制措施。 1278 昨天 13:39
+  -> 筛掉: 湖南浏阳烟花厂爆炸事故已致21人死亡61人受伤 截至目前，爆炸事故已致21人死亡，61人受伤。 5883 昨天 08:59
+  -> 筛掉: 网信部门严管“自媒体”未规范标注信息来源行为 处置违规账号9.8万余个。 756 05-03 10:13
+  -> yicai_hongguan: 保留 0 / 5
+
+[AI Filter] 正在筛选来源: caixin_companies (共 1 条) ...
+[Token Usage] Filter: 806 (In: 0, Out: 0)
+  -> 筛掉: T早报｜美国政府将审查AI大模型；豆包拟增加付费服务；游戏驿站拟收购电商平台eBay
+  -> caixin_companies: 保留 0 / 1
+
+[AI Filter] 正在筛选来源: jiemian_business (共 21 条) ...
+[Token Usage] Filter: 1064 (In: 0, Out: 0)
+[Token Usage] Filter: 1029 (In: 0, Out: 0)
+[Token Usage] Filter: 801 (In: 0, Out: 0)
+  -> 筛掉: 汽车早报｜比亚迪4月新能源汽车销量32.11万辆 福特4月美国市场销量同比减少14.4%
+  -> 筛掉: 5月6日投资早报|长安汽车4月份销量17.93万辆同比下降5.95%，华林证券筹划现金受让海航期货94%股份，今日一只新股申购
+  -> 筛掉: 李嘉诚抛售英国电讯资产，套现约455亿港元
+  -> 筛掉: 财说| 宣亚国际连亏三年，AI转型难解近渴
+  -> 筛掉: 打新早报| 汽车电子产业链概念股 维通利今日申购
+  -> 筛掉: AI早报 | 中国移动将推出AI-eSIM产品；OpenAI 首款 AI Agent 手机目标最快2027年上半年量产
+  -> 筛掉: 科技早报 | 抖音副总裁否认红果短剧收费；苹果或与英特尔和三星合作生产设备处理器
+  -> 筛掉: 赏花海、品咖啡、玩转二次元，“五一”假期上海吸引游客1690万人次
+  -> 筛掉: 天弘余额宝收益率跌破1%，撑起公司四成收入，货基降费正在持续
+  -> 筛掉: 红果短剧将收费？抖音副总裁深夜回应：免费追剧核心模式未变
+  -> 筛掉: 金建希二审被加刑一周后，主审法官疑似坠亡
+  -> 筛掉: 涉疫邮轮“洪迪厄斯”号将在非洲西岸群岛靠岸，船上没有中国公民
+  -> 筛掉: 美伊局势渐趋缓和，特朗普暂停护航霍尔木兹行动
+  -> 筛掉: 白宫附近发生枪击事件：一人被执法人员击中，另有一人被子弹擦伤
+  -> 筛掉: 界面早报 | 湖南烟花爆竹企业全面停产整顿；伊朗外长阿拉格齐将访华
+  -> 筛掉: 界面快评 | 悬空寺黄牛抢票被曝光，根治仍须法律与技术双管齐下
+  -> 筛掉: 官方通报女游客玩悬崖秋千时坠落：送医途中死亡，属生产安全责任事故
+  -> 筛掉: 湖南浏阳烟花厂爆炸致26死61伤，当地居民：十公里外有震感
+  -> 筛掉: 《生态环境法典》共出现56次“损害”，如何理解与适用？
+  -> 筛掉: 浏阳烟花厂爆炸已致26死61伤：现场搜救基本完成，事故处置仍存两大难点
+  -> 筛掉: 浏阳烟花厂爆炸事故已致21死61伤，涉事企业负责人被控制
+  -> jiemian_business: 保留 0 / 21
+
+[AI Filter] 正在筛选来源: tmtpost (共 12 条) ...
+[Token Usage] Filter: 968 (In: 0, Out: 0)
+[Token Usage] Filter: 851 (In: 0, Out: 0)
+  -> 筛掉: 聚变裂变混合堆：未来能源的可靠基石
+  -> 筛掉: 被两线夹击的中国光伏：印度8年狂翻扩产17倍，日本另起炉灶抢下一代定义权
+  -> 筛掉: AI自主炒二手：从议价到送奶茶，AI正在绕过人类直接做生意
+  -> 筛掉: 用户越多，字节越穷
+  -> 筛掉: 多邻国：匍匐前进，Duo 的翻身路没那么好走
+  -> 筛掉: OPC的第一步不要从AI开始
+  -> 筛掉: “五一”出境游，韩国热度激增五倍
+  -> 筛掉: 54部IP长改短已宣告“大IP+短顶流”模式死亡？
+  -> 筛掉: Shopify：电商 Agent 退潮，支付龙头在裸泳吗？
+  -> 筛掉: Edge AI Daily 早报（5月6日）
+  -> 筛掉: 2026年5月6日钛早·语音播报
+  -> 筛掉: 【钛晨报】2025年全市场上市公司实现营收73.01万亿元，同比增长1.2%；伯克希尔哈撒韦一季度净利润增至101.06亿美元；主要产油国宣布6月增产
+  -> tmtpost: 保留 0 / 12
+
+[AI Filter] 正在筛选来源: thsi_unlisted (共 55 条) ...
+[Token Usage] Filter: 1014 (In: 0, Out: 0)
+[Token Usage] Filter: 998 (In: 0, Out: 0)
+[Token Usage] Filter: 983 (In: 0, Out: 0)
+[Token Usage] Filter: 1000 (In: 0, Out: 0)
+[Token Usage] Filter: 983 (In: 0, Out: 0)
+[Token Usage] Filter: 871 (In: 0, Out: 0)
+  -> 筛掉: 大唐EV已到店，诚邀亲临体验
+  -> 筛掉: PayPal(PYPL.US)加速AI部署推动降本增效 计划节省15亿美元用于再投资增长
+  -> 筛掉: 市低空经济产业专班会见北斗伏羲公司客人
+  -> 筛掉: Q2每股收益将下滑 Paypal(PYPL.US)跌超10%
+  -> 筛掉: 港股IPO：厦门科拓通信技术股份有限公司递表港交所
+  -> 筛掉: Bose 推出 Lifestyle Ultra 系列音频产品：含回音壁 / 低音炮等、支持苹果隔空播放，299-1099 美元
+  -> 筛掉: PayPal盘前交易当前下跌8%
+  -> 筛掉: 享界S9零重力座椅夹人？鸿蒙智行：网传视频场景未达到防夹功能触发阈值
+  -> 筛掉: 豆包“付费版”，AI变现分水岭
+  -> 筛掉: 贝莱德5000万美元领衔18家基石天团认购 AI药物递送第一股剂泰科技启动公开招股
+  -> 筛掉: 上轮融资刚完成，灵心巧手又在寻求下一轮融资，估值60亿美元！
+  -> 筛掉: 行者×蓝图达成战略合作 辰Pro AI智能导航码表全球首发
+  -> 筛掉: 从“被遗忘”到“被热议”：红果短剧收费VIP为何突然成为焦点
+  -> 筛掉: 贝莱德5000万美元领衔基石认购 “AI药物递送第一股”剂泰科技启动公开招股
+  -> 筛掉: 胖东来郑州店于4月29日注册成立
+  -> 筛掉: 入沪客流上升20.7%，报警类警情下降3.1%，上海平安过“五一”
+  -> 筛掉: SHOPIFY抹去了早前的涨幅，盘前下跌11%
+  -> 筛掉: 中山大学启动调查：回应附属医院康某某论文存疑争议
+  -> 筛掉: 侃股：年报收官，现金分红成估值重估重要变量
+  -> 筛掉: 创同期新高！鸿海4月营收同比增长近30% AI服务器需求强劲
+  -> 筛掉: 从蔡伦造纸到索帅造“芯”：跨越两千年的“纯度”对话
+  -> 筛掉: 国内水下机器人龙头深之蓝拟科创板IPO
+  -> 筛掉: 小红书旗下东方电子支付等4家机构未续展，17家机构获“长期”牌照
+  -> 筛掉: 高地人徒步项目首次落地中国长城
+  -> 筛掉: WING ON CO5月5日斥资2.99万港元回购2000股
+  -> 筛掉: 网传红果短剧收费？抖音副总裁发文回应
+  -> 筛掉: 践行初心使命 铸就保供重器——记三峡集团劳动模范胡少斌
+  -> 筛掉: 抖音副总裁深夜发声：网传所谓红果短剧收费消息不实
+  -> 筛掉: XL二南方海力士规模突破300亿港元
+  -> 筛掉: 奕境汽车推出首款旗舰SUV X9首批搭载华为乾崑ADS5
+  -> 筛掉: 马斯克因推特披露与SEC和解
+  -> 筛掉: 业内人士分析：Steam Machine 售价应该不超过 700 美元
+  -> 筛掉: Steam 手柄开售秒没，黄牛转手卖三倍价
+  -> 筛掉: 出海拓新局，匠心铸标杆——大明服务又一海外高端油气工程项目
+  -> 筛掉: 浏阳烟花厂爆炸事故已致26人死亡61人受伤 已基本完成现场搜救
+  -> 筛掉: 礼邦医药再冲港交所，去年亏损高达7.5亿元
+  -> 筛掉: 寿光蔬菜集团再陷债务危机：年内 7 次被执行，法人屡遭限高
+  -> 筛掉: 长和：和记拥有的Vodafonethree 49%股份将按代价金额43亿英镑予以注销
+  -> 筛掉: 威海银行“智汇融”赋能进口企业降本增效
+  -> 筛掉: 威海银行落地全国首例银联标准信用付产品“威易付”
+  -> 筛掉: IPO 前夕，消息称 OpenAI 曾考虑分拆机器人和消费硬件部门、避免拖累核心业务
+  -> 筛掉: 为豫光奔跑的人——记豫光集团劳动模范 李强
+  -> 筛掉: 爱尔发联合研究：雨生红球藻粉改善线粒体功能障碍并减轻氧化应激，从而改善口腔上皮屏障损伤
+  -> 筛掉: 太重两家公司入选国家级质量管理能力高等级企业
+  -> 筛掉: 甘南监管分局同意太平洋产险玛曲支公司变更营业场所
+  -> 筛掉: 万山集团法定代表人变更为于磊，曾任集团安全总监
+  -> 筛掉: 抖音副总裁深夜发声：网传所谓红果短剧收费消息不实
+  -> 筛掉: 红果短剧收费？抖音副总裁辟谣：免费追剧模式未变
+  -> 筛掉: 贝特利创业板IPO5月8日上会
+  -> 筛掉: 辽宁省化工学会理事长孙云来连石化工调研
+  -> 筛掉: 从“替补”到“主心骨”，这个女班长有股“钻”劲
+  -> 筛掉: 上海三中院裁定受理集度汽车重整申请
+  -> 筛掉: 湖南浏阳烟花厂爆炸事故已致21人死亡61人受伤
+  -> 筛掉: 抖音集团李亮：网传所谓红果短剧收费的消息不实
+  -> 筛掉: 宇树机器人在美买票坐飞机，电池被没收
+  -> thsi_unlisted: 保留 0 / 55
+
+[AI Filter] 正在筛选来源: fortune_cn (共 6 条) ...
+[Token Usage] Filter: 889 (In: 0, Out: 0)
+  -> 筛掉: 维多利亚的秘密如何重拾性感？
+  -> 筛掉: 年近六旬，近四成即将结束职业生涯的美国人没有退休账户
+  -> 筛掉: AI内存芯片短缺正在悄然向整个经济征收“隐形税”
+  -> 筛掉: 黄仁勋：无人能复制英伟达
+  -> 筛掉: 如今席卷经济领域的AI恐慌，源头正是山姆·奥尔特曼、黄仁勋等AI巨头
+  -> 筛掉: 达美航空CEO拒绝使用“人工智能”一词，因为它会让人感到恐惧
+  -> fortune_cn: 保留 0 / 6
+
+[AI Filter] 正在筛选来源: gasgoo (共 3 条) ...
+[Token Usage] Filter: 870 (In: 0, Out: 0)
+  -> 筛掉: 【车企】鸿蒙智行回应享界S9零重力座椅争议：未达防夹功能触发阈值，将优化产品
+  -> 筛掉: 【产业】4S店把闲置工位分租给其他车企，修理厂按小时出租工位…“共享”又热起来了？
+  -> 筛掉: 【车企】昊铂埃安BU焕新出发，4月销量同比增长15.6%
+  -> gasgoo: 保留 0 / 3
+正在生成摘要: DeepMind创始人的豪赌：攻克一切疾病 ...
+[Token Usage] Summary: 2038 (In: 0, Out: 0)
+[Token Usage] SummaryCompact: 189 (In: 0, Out: 0)
+[Token Usage] Check Relevance: 440 (In: 0, Out: 0)
+  -> [AI SecFilter] 剔除无关内容: DeepMind创始人的豪赌：攻克一切疾病
+正在生成摘要: 苹果新任CEO的首个关键考题 ...
+[Token Usage] Summary: 1996 (In: 0, Out: 0)
+[Token Usage] SummaryCompact: 226 (In: 0, Out: 0)
+[Token Usage] Check Relevance: 457 (In: 0, Out: 0)
+  -> [AI SecFilter] 剔除无关内容: 苹果新任CEO的首个关键考题
+[History Filter][2nd pass] 企业新闻排重: 2 -> 2
+[AI CompanyImpact] 检查同公司多新闻影响力：共 2 条...
+[Token Usage] CompanyNameExtract: 242 (In: 0, Out: 0)
+[AI CompanyImpact] 未发现同公司多条新闻，跳过影响力比较。
+[AI Deduplicate]正在对 2 条新闻进行去重检查...
+[Token Usage] Deduplicate: 510 (In: 0, Out: 0)
+[AI Deduplicate] 去重完成：2 -> 2
+[Token Usage] IndustryTag: 186 (In: 0, Out: 0)
+[Token Usage] IndustryTag: 194 (In: 0, Out: 0)
+[GansuRST] blocked or unavailable: status=412, url=https://rst.gansu.gov.cn/rst/c113672/xxgk_xxlist.shtml. 如需本地补充 cookie，可设置环境变量 GANSU_RST_COOKIE。
+[JLGJJ] Crawl error(p1): HTTPConnectionPool(host='www.jlgjj.gov.cn', port=80): Max retries exceeded with url: /zcfg/gfxwj/ (Caused by NameResolutionError("HTTPConnection(host='www.jlgjj.gov.cn', port=80): Failed to resolve 'www.jlgjj.gov.cn' ([Errno 11001] getaddrinfo failed)"))
+[Policy 24h Filter] mohrss_dynamics: 0 -> 0
+[Policy 24h Filter] mohrss_policy: 0 -> 0
+[Policy 24h Filter] chinatax_policy: 0 -> 0
+[Policy 24h Filter] beijing_policy: 0 -> 0
+[Policy 24h Filter] beijing_gjj_policy: 0 -> 0
+[Policy 24h Filter] tianjin_gjj_policy: 0 -> 0
+[Policy 24h Filter] cqgjj_gsgg: 0 -> 0
+[Policy 24h Filter] tianjin_policy: 0 -> 0
+[Policy 24h Filter] hebei_policy: 0 -> 0
+[Policy 24h Filter] shanxi_policy: 0 -> 0
+[Policy 24h Filter] neimenggu_policy: 0 -> 0
+[Policy 24h Filter] jilin_policy: 0 -> 0
+[Policy 24h Filter] henan_hrss_policy: 0 -> 0
+[Policy 24h Filter] hubei_rst_policy: 1 -> 1
+[Policy 24h Filter] hunan_rst_policy: 0 -> 0
+[Policy 24h Filter] guangdong_hrss_policy: 0 -> 0
+[Policy 24h Filter] guangxi_rst_policy: 0 -> 0
+[Policy 24h Filter] hainan_hrss_policy: 0 -> 0
+[Policy 24h Filter] chongqing_hrss_policy: 0 -> 0
+[Policy 24h Filter] sichuan_rst_policy: 0 -> 0
+[Policy 24h Filter] guizhou_rst_policy: 0 -> 0
+[Policy 24h Filter] yunnan_hrss_policy: 0 -> 0
+[Policy 24h Filter] xizang_hrss_policy: 0 -> 0
+[Policy 24h Filter] shaanxi_rst_policy: 0 -> 0
+[Policy 24h Filter] gansu_rst_policy: 0 -> 0
+[Policy 24h Filter] qinghai_rst_policy: 0 -> 0
+[Policy 24h Filter] ningxia_hrss_policy: 0 -> 0
+[Policy 24h Filter] xinjiang_rst_policy: 0 -> 0
+[Policy 24h Filter] hrvalue_policy: 0 -> 0
+[Policy 24h Filter] govcn_policy: 0 -> 0
+[Policy 24h Filter] heilongjiang_hrss_policy: 0 -> 0
+[Policy 24h Filter] liaoning_hrss_policy: 0 -> 0
+[Policy 24h Filter] shanghai_hrss_policy: 0 -> 0
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于优化本市住房公积金个人住房贷款政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于在沪工作的外籍人员、获得境外永久（长期）居留权人员住房公积金个人住房贷款若干问题的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于开展提取住房公积金直付房租业务试点的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于本市住房公积金支持城市更新有关政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于2025年度上海市调整住房公积金缴存基数、比例以及月缴存额上下限的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金异地个人住房贷款管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于进一步优化本市住房公积金提取和贷款政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于上海市住房公积金支持老旧电梯更新有关政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市灵活就业人员自愿缴存、提取和使用住房公积金实施办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于调整本市住房公积金个人住房贷款政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于优化本市住房公积金租赁提取业务相关事项的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于优化家庭生活困难提取住房公积金政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于2024年度上海市调整住房公积金缴存基数、比例以及月缴存额上下限的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于调整本市住房公积金个人住房贷款最高贷款额度和最低首付款比例的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于本市住房公积金提取偿还长三角异地住房公积金贷款有关政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于调整本市住房公积金个人住房贷款政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于优化本市住房公积金个人住房贷款套数认定标准的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于调整本市住房公积金购买存量住房最长贷款期限的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于2023年度上海市调整住房公积金缴存基数、比例以及月缴存额上下限的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于本市实施多子女家庭住房公积金支持政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于本市住房公积金提取业务月提取限额等事项的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金缴存管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金提取管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金个人住房贷款管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于在沪工作的香港澳门台湾居民住房公积金个人住房贷款若干问题的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金个人购买征收安置住房贷款管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金领域轻微违法行为依法不予行政处罚清单
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金个人贷款受托机构管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于2022年度上海市调整住房公积金缴存基数、比例以及月缴存额上下限的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】关于继续执行本市住房公积金个人住房贷款政策的通知
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市公积金管理中心住房公积金信息公开办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金行政执法管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金个人购买共有产权保障住房贷款实施细则
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金个人住房贴息贷款管理办法
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市个人建造、翻建、大修自住住房公积金贷款实施细则
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】住房公积金管理条例
+[Policy 24h Filter] 剔除(shanghai_gjj_policy): 超出24小时窗口 - 【💰收入】上海市住房公积金管理若干规定
+[Policy 24h Filter] shanghai_gjj_policy: 37 -> 0
+[Policy 24h Filter] taiyuan_gjj_policy: 0 -> 0
+[Policy 24h Filter] shijiazhuang_gjj_policy: 0 -> 0
+[Policy 24h Filter] zhengzhou_gjj_law: 0 -> 0
+[Policy 24h Filter] shenyang_gjj_zcfg: 0 -> 0
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于支持缴存人提取公积金支付购房首付款的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整职工住房公积金缴存基数下限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于支持新市民、青年人提取公积金支付住房租金的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整优化高校毕业生住房公积金贷款支持政策的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于支持产权人父母、子女提取住房公积金用于职工家庭购房的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于提高“以旧换新”购房家庭公积金个人住房贷款额度的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2025年度职工住房公积金缴存基数上限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整二套房住房公积金贷款最低首付款比例的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整公积金个人住房贷款借款申请人最高年龄限制的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于进一步调整优化住房公积金个人住房贷款政策有关事宜的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于提高多子女家庭公积金个人住房贷款额度上限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于进一步加强住房公积金提取审核工作的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于支持个体工商户按单位建户缴存住房公积金的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发《哈尔滨住房公积金提取业务实施细则（试行）》的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于开通新建商品房公积金个人住房贷款“不见面”审批业务的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】新建商品房住房公积金个人住房贷款“不见面”审批网上业务操作流程
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于新增租赁自住住房委托提取公积金业务的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于取消住房公积金账户余额按月委托提取还贷限制条件的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于继续支持城镇老旧小区居民提取住房公积金用于加装电梯等自住住房改造的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于进一步扩大高层次人才申请公积金贷款优惠政策惠及范围的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于住房公积金进一步支持缴存人购买和租赁保障性住房的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发哈尔滨住房公积金个人住房贷款业务实施细则（试行）的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发哈尔滨住房公积金归集业务实施细则（试行）的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2024年度职工住房公积金缴存基数下限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化住房公积金个人住房贷款套数认定标准的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于受理人民法院查询、冻结、解冻和扣划个人住房公积金业务有关事宜的通知（〔...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于建立人民法院执行住房公积金协作联动机制的若干意见（试行）（公积金联发〔...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】哈尔滨住房公积金管理中心关于开展存量房“带押过户”贷款业务的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发《<哈尔滨住房公积金管理中心商业性个人住房贷款转住房公积金个人贷款...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发《哈尔滨住房公积金管理中心商业性个人住房贷款转住房公积金个人贷款管...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整我市住房公积金租房提取额度的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化个人转移接续和扩大灵活就业人员缴存公积金范围的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于完善购房提取住房公积金业务的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于使用电子营业执照优化住房公积金缴存登记的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 关于开通企业注销“一站式服务”有关事宜的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于下调首套个人住房公积金贷款利率的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于使用企业开办直通车优化企业住房公积金缴存登记的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于放宽高校毕业生、政策内二孩及以上家庭住房公积金贷款申请条件的通知（〔20...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于提高公积金个人贷款额度的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2022年度职工住房公积金缴存基数上限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于支持哈尔滨市高层次人才申请住房公积金贷款优惠政策的通知（〔2022〕—27号）
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2021年度职工住房公积金缴存基数上限的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于住房公积金业务“全市通办”有关事项的通知（〔2021〕—57号）
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整职工住房公积金缴存基数下限的通知(〔2021〕—21号)
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 关于开展“跨省通办”业务有关事项的通知(〔2021〕—2号)
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2020年度职工住房公积金缴存基数上限的通知（哈公积金发〔2020〕5号）
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】哈尔滨住房公积金管理中心、哈尔滨市财政局、 中国人民银行哈尔滨中心支行、哈...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化企业住房公积金缴存登记的通知
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整住房公积金存款利率的通知（哈公积金发[2016]11号）
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于印发哈尔滨住房公积金管理中心按月委托提取住房公积金偿还贷款暂行规定的通...
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整住房公积金个人贷款最低首付款比例的通知（哈公积金发[2015]29号）
+[Policy 24h Filter] 剔除(hrb_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整住房公积金贷款首付款比例的通知（哈公积金发[2015]17号）
+[Policy 24h Filter] hrb_gjj_zxwj: 52 -> 0
+[Policy 24h Filter] jlgjj_gfxwj: 0 -> 0
+[Policy 24h Filter] jiangsu_hrss_policy: 0 -> 0
+[Policy 24h Filter] zhejiang_hrss_policy: 0 -> 0
+[Policy 24h Filter] anhui_hrss_policy: 0 -> 0
+[Policy 24h Filter] fujian_rst_bbmwj: 0 -> 0
+[Policy 24h Filter] jiangxi_rst_policy: 0 -> 0
+[Policy 24h Filter] shandong_hrss_policy: 0 -> 0
+[Policy Fetch] 各来源抓取条数：
+  - mohrss_dynamics: 0
+  - mohrss_policy: 0
+  - chinatax_policy: 0
+  - beijing_policy: 0
+  - beijing_gjj_policy: 0
+  - tianjin_gjj_policy: 0
+  - cqgjj_gsgg: 0
+  - tianjin_policy: 0
+  - hebei_policy: 0
+  - shanxi_policy: 0
+  - neimenggu_policy: 0
+  - jilin_policy: 0
+  - henan_hrss_policy: 0
+  - hubei_rst_policy: 1
+  - hunan_rst_policy: 0
+  - guangdong_hrss_policy: 0
+  - guangxi_rst_policy: 0
+  - hainan_hrss_policy: 0
+  - chongqing_hrss_policy: 0
+  - sichuan_rst_policy: 0
+  - guizhou_rst_policy: 0
+  - yunnan_hrss_policy: 0
+  - xizang_hrss_policy: 0
+  - shaanxi_rst_policy: 0
+  - gansu_rst_policy: 0
+  - qinghai_rst_policy: 0
+  - ningxia_hrss_policy: 0
+  - xinjiang_rst_policy: 0
+  - hrvalue_policy: 0
+  - govcn_policy: 0
+  - heilongjiang_hrss_policy: 0
+  - liaoning_hrss_policy: 0
+  - shanghai_hrss_policy: 0
+  - shanghai_gjj_policy: 0
+  - taiyuan_gjj_policy: 0
+  - shijiazhuang_gjj_policy: 0
+  - zhengzhou_gjj_law: 0
+  - shenyang_gjj_zcfg: 0
+  - hrb_gjj_zxwj: 0
+  - jlgjj_gfxwj: 0
+  - jiangsu_hrss_policy: 0
+  - zhejiang_hrss_policy: 0
+  - anhui_hrss_policy: 0
+  - fujian_rst_bbmwj: 0
+  - jiangxi_rst_policy: 0
+  - shandong_hrss_policy: 0
+[Policy Keyword Filter] mohrss_policy: 0 -> 0
+[Policy Keyword Filter] chinatax_policy: 0 -> 0
+[Policy Keyword Filter] beijing_policy: 0 -> 0
+[Policy Keyword Filter] tianjin_policy: 0 -> 0
+[Policy Keyword Filter] hebei_policy: 0 -> 0
+[Policy Keyword Filter] shanxi_policy: 0 -> 0
+[Policy Keyword Filter] neimenggu_policy: 0 -> 0
+[Policy Keyword Filter] jilin_policy: 0 -> 0
+[Policy Keyword Filter] henan_hrss_policy: 0 -> 0
+[Policy Keyword Filter] 剔除(hubei_rst_policy): 湖北省人力资源和社会保障厅关于启用新版社会保障卡“儿童头像标识” 的通知
+[Policy Keyword Filter] hubei_rst_policy: 1 -> 0
+[Policy Keyword Filter] hunan_rst_policy: 0 -> 0
+[Policy Keyword Filter] guangdong_hrss_policy: 0 -> 0
+[Policy Keyword Filter] guangxi_rst_policy: 0 -> 0
+[Policy Keyword Filter] qinghai_rst_policy: 0 -> 0
+[Policy Keyword Filter] gansu_rst_policy: 0 -> 0
+[Policy Keyword Filter] ningxia_hrss_policy: 0 -> 0
+[Policy Keyword Filter] xinjiang_rst_policy: 0 -> 0
+[Policy Keyword Filter] hainan_hrss_policy: 0 -> 0
+[Policy Keyword Filter] chongqing_hrss_policy: 0 -> 0
+[Policy Keyword Filter] sichuan_rst_policy: 0 -> 0
+[Policy Keyword Filter] guizhou_rst_policy: 0 -> 0
+[Policy Keyword Filter] yunnan_hrss_policy: 0 -> 0
+[Policy Keyword Filter] xizang_hrss_policy: 0 -> 0
+[Policy Keyword Filter] shaanxi_rst_policy: 0 -> 0
+[Policy Keyword Filter] hrvalue_policy: 0 -> 0
+[Policy Keyword Filter] govcn_policy: 0 -> 0
+[Policy Keyword Filter] heilongjiang_hrss_policy: 0 -> 0
+[Policy Keyword Filter] liaoning_hrss_policy: 0 -> 0
+[Policy Keyword Filter] hrb_gjj_zxwj: 0 -> 0
+[Policy Keyword Filter] jlgjj_gfxwj: 0 -> 0
+[Policy Keyword Filter] shanghai_hrss_policy: 0 -> 0
+[Policy Keyword Filter] jiangsu_hrss_policy: 0 -> 0
+[Policy Keyword Filter] zhejiang_hrss_policy: 0 -> 0
+[Policy Keyword Filter] anhui_hrss_policy: 0 -> 0
+[Policy Keyword Filter] fujian_rst_bbmwj: 0 -> 0
+[Policy Keyword Filter] jiangxi_rst_policy: 0 -> 0
+[Policy Keyword Filter] shandong_hrss_policy: 0 -> 0
+[Token Usage] Behavior Similarity: 5421 (In: 0, Out: 0)
+[Token Usage] Industry Trend Impact: 7742 (In: 0, Out: 0)
+[Insight] 行业趋势影响命中: 阿里发布可承担工程师、运营、销售等岗位的数字员工产品，叠加猎聘数据显示机器人领域职位激增75%、人形机器人赛道增长215.8%，预示AI替代加速将直接冲击HRO在IT、运营、销售等岗位的中低端招聘与灵活用工交付，同时倒逼其升级为AI协同型人力服务提供商。
+[Insight] 触发检查: 当日高价值新闻=2, 历史相似命中=3, 行业趋势影响命中=True
+[Token Usage] Daily Insight: 15936 (In: 0, Out: 0)
+[Insight] 已更新历史记录文件（新增 1 条，保留最近 6 个月）
+✅ DingTalk OK (群1): {'errcode': 0, 'errmsg': 'ok'}
+✅ DingTalk OK (群2): {'errcode': 0, 'errmsg': 'ok'}
+✅ wrote: daily_all.md
