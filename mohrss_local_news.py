@@ -75,8 +75,15 @@ from news_crawlers.zjkgjj import crawl_zjkgjj_normative_files
 from news_crawlers.chengde_gjj import crawl_chengde_gjj_announcement
 from news_crawlers.cangzhou_gjj import crawl_cangzhou_gjj_announcement
 from news_crawlers.lfzfgjj import crawl_lfzfgjj_announcement
+from news_crawlers.tlzfgjj import crawl_tlzfgjj_tzgg
+from news_crawlers.cfszfgjj import crawl_cfszfgjj_policy
+from news_crawlers.ordos_gjj import crawl_ordos_gjj_zxgdw
 from news_crawlers.hszfgjj import crawl_hszfgjj_policy_regulations
 from news_crawlers.wuhan_gjj import crawl_wuhan_gjj_gfxwj
+from news_crawlers.whsgjj import crawl_whsgjj_zxwj
+from news_crawlers.xamzfgjj import crawl_xamzfgjj_zxwj
+from news_crawlers.xlglgjj import crawl_xlglgjj_dfwj
+from news_crawlers.alszfgjj import crawl_alszfgjj_policy
 from news_crawlers.tsgjj import crawl_tsgjj_center
 from news_crawlers.changsha_gjj import crawl_changsha_gjj_wzjd
 from news_crawlers.guangzhou_gjj import crawl_guangzhou_gjj_policy
@@ -106,6 +113,8 @@ from news_crawlers.gansu_rst import crawl_gansu_rst_policy
 from news_crawlers.qinghai_rst import crawl_qinghai_rst_policy
 from news_crawlers.xinjiang_rst import crawl_xinjiang_rst_policy
 from news_crawlers.ningxia_hrss import crawl_ningxia_hrss_policy
+from news_crawlers.hlbe_gjj import crawl_hlbe_gjj_policy
+from news_crawlers.btgjj import crawl_btgjj_policy
 from news_crawlers.caixin_companies import crawl_caixin_companies
 from news_crawlers.jiemian_business import crawl_jiemian_business
 from news_crawlers.thsi_unlisted import crawl_thsi_unlisted
@@ -784,6 +793,8 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     qinghai_policies = []
     ningxia_policies = []
     xinjiang_policies = []
+    hlbe_gjj_policies = []
+    btgjj_policies = []
     hrvalue_policies = []
     govcn_policies = []
     heilongjiang_policies = []
@@ -823,6 +834,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     chengde_gjj_policies = []
     cangzhou_gjj_policies = []
     lfzfgjj_policies = []
+    tlzfgjj_policies = []
+    cfszfgjj_policies = []
+    ordos_gjj_policies = []
+    whsgjj_zxwj_policies = []
+    xamzfgjj_zxwj_policies = []
+    xlglgjj_dfwj_policies = []
+    alszfgjj_policies = []
     hszfgjj_policies = []
     wuhan_gjj_policies = []
     tianjin_gjj_policies = []
@@ -1023,6 +1041,22 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
             xinjiang_policies = crawl_xinjiang_rst_policy()
         except Exception as e:
             print(f"Xinjiang RST policy fetch error: {e}")
+
+    # 呼伦贝尔住房公积金 - 政策法规（近24小时）
+    run_hlbe_gjj_policy_env = (os.getenv("RUN_HLBE_GJJ_POLICY", "1") != "0")
+    if run_hlbe_gjj_policy_env:
+        try:
+            hlbe_gjj_policies = crawl_hlbe_gjj_policy()
+        except Exception as e:
+            print(f"HLBE GJJ policy fetch error: {e}")
+
+    # 包头住房公积金 - 公积金法规（近24小时）
+    run_btgjj_policy_env = (os.getenv("RUN_BTGJJ_POLICY", "1") != "0")
+    if run_btgjj_policy_env:
+        try:
+            btgjj_policies = crawl_btgjj_policy()
+        except Exception as e:
+            print(f"BTGJJ policy fetch error: {e}")
 
     # 4. HR价值网 - 政策
     run_hrvalue_policy_env = (os.getenv("RUN_HRVALUE_POLICY", "1") != "0")
@@ -1288,6 +1322,62 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         except Exception as e:
             print(f"Langfang GJJ announcement fetch error: {e}")
 
+    # 通辽公积金中心 - 通知公告（近24小时，且标题必须包含“公积金”）
+    run_tlzfgjj_env = (os.getenv("RUN_TLZFGJJ_TZGG", "1") != "0")
+    if run_tlzfgjj_env:
+        try:
+            tlzfgjj_policies = crawl_tlzfgjj_tzgg()
+        except Exception as e:
+            print(f"TLZFGJJ tzgg fetch error: {e}")
+
+    # 赤峰市住房公积金中心 - 政策法规（近24小时）
+    run_cfszfgjj_env = (os.getenv("RUN_CFSZFGJJ_POLICY", "1") != "0")
+    if run_cfszfgjj_env:
+        try:
+            cfszfgjj_policies = crawl_cfszfgjj_policy()
+        except Exception as e:
+            print(f"CFSZFGJJ policy fetch error: {e}")
+
+    # 鄂尔多斯住房公积金 - 中心规定文件（近24小时）
+    run_ordos_gjj_env = (os.getenv("RUN_ORDOS_GJJ_ZXGDW", "1") != "0")
+    if run_ordos_gjj_env:
+        try:
+            ordos_gjj_policies = crawl_ordos_gjj_zxgdw()
+        except Exception as e:
+            print(f"Ordos GJJ zxgdw fetch error: {e}")
+
+    # 乌海市住房公积金中心 - 中心文件（近24小时）
+    run_whsgjj_zxwj_env = (os.getenv("RUN_WHSGJJ_ZXWJ", "1") != "0")
+    if run_whsgjj_zxwj_env:
+        try:
+            whsgjj_zxwj_policies = crawl_whsgjj_zxwj()
+        except Exception as e:
+            print(f"WHSGJJ zxwj fetch error: {e}")
+
+    # 兴安盟住房公积金中心 - 中心文件（近24小时）
+    run_xamzfgjj_zxwj_env = (os.getenv("RUN_XAMZFGJJ_ZXWJ", "1") != "0")
+    if run_xamzfgjj_zxwj_env:
+        try:
+            xamzfgjj_zxwj_policies = crawl_xamzfgjj_zxwj()
+        except Exception as e:
+            print(f"XAMZFGJJ zxwj fetch error: {e}")
+
+    # 锡林郭勒盟住房公积金中心 - 地方文件（近24小时）
+    run_xlglgjj_dfwj_env = (os.getenv("RUN_XLGLGJJ_DFWJ", "1") != "0")
+    if run_xlglgjj_dfwj_env:
+        try:
+            xlglgjj_dfwj_policies = crawl_xlglgjj_dfwj()
+        except Exception as e:
+            print(f"XLGLGJJ dfwj fetch error: {e}")
+
+    # 阿拉善盟住房公积金中心 - 政策法规（近24小时）
+    run_alszfgjj_env = (os.getenv("RUN_ALSZFGJJ_POLICY", "1") != "0")
+    if run_alszfgjj_env:
+        try:
+            alszfgjj_policies = crawl_alszfgjj_policy()
+        except Exception as e:
+            print(f"ALSZFGJJ policy fetch error: {e}")
+
     # 衡水公积金网 - 政策法规（近24小时）
     run_hszfgjj_env = (os.getenv("RUN_HSZFGJJ_POLICY_REGULATIONS", "1") != "0")
     if run_hszfgjj_env:
@@ -1460,6 +1550,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     qinghai_policies = _filter_policy_items_last_24h(qinghai_policies, "qinghai_rst_policy", now)
     ningxia_policies = _filter_policy_items_last_24h(ningxia_policies, "ningxia_hrss_policy", now)
     xinjiang_policies = _filter_policy_items_last_24h(xinjiang_policies, "xinjiang_rst_policy", now)
+    hlbe_gjj_policies = _filter_policy_items_last_24h(hlbe_gjj_policies, "hlbe_gjj_policy", now)
+    btgjj_policies = _filter_policy_items_last_24h(btgjj_policies, "btgjj_policy", now)
+    ordos_gjj_policies = _filter_policy_items_last_24h(ordos_gjj_policies, "ordos_gjj_zxgdw", now)
+    whsgjj_zxwj_policies = _filter_policy_items_last_24h(whsgjj_zxwj_policies, "whsgjj_zxwj", now)
+    xamzfgjj_zxwj_policies = _filter_policy_items_last_24h(xamzfgjj_zxwj_policies, "xamzfgjj_zxwj", now)
+    xlglgjj_dfwj_policies = _filter_policy_items_last_24h(xlglgjj_dfwj_policies, "xlglgjj_dfwj", now)
+    alszfgjj_policies = _filter_policy_items_last_24h(alszfgjj_policies, "alszfgjj_policy", now)
     hrvalue_policies = _filter_policy_items_last_24h(hrvalue_policies, "hrvalue_policy", now)
     govcn_policies = _filter_policy_items_last_24h(govcn_policies, "govcn_policy", now)
     heilongjiang_policies = _filter_policy_items_last_24h(heilongjiang_policies, "heilongjiang_hrss_policy", now)
@@ -1528,6 +1625,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         ("qinghai_rst_policy", len(qinghai_policies)),
         ("ningxia_hrss_policy", len(ningxia_policies)),
         ("xinjiang_rst_policy", len(xinjiang_policies)),
+        ("hlbe_gjj_policy", len(hlbe_gjj_policies)),
+        ("btgjj_policy", len(btgjj_policies)),
+        ("ordos_gjj_zxgdw", len(ordos_gjj_policies)),
+        ("whsgjj_zxwj", len(whsgjj_zxwj_policies)),
+        ("xamzfgjj_zxwj", len(xamzfgjj_zxwj_policies)),
+        ("xlglgjj_dfwj", len(xlglgjj_dfwj_policies)),
+        ("alszfgjj_policy", len(alszfgjj_policies)),
         ("hrvalue_policy", len(hrvalue_policies)),
         ("govcn_policy", len(govcn_policies)),
         ("heilongjiang_hrss_policy", len(heilongjiang_policies)),
@@ -1593,6 +1697,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         not qinghai_policies and
         not ningxia_policies and
         not xinjiang_policies and
+        not hlbe_gjj_policies and
+        not btgjj_policies and
+        not ordos_gjj_policies and
+        not whsgjj_zxwj_policies and
+        not xamzfgjj_zxwj_policies and
+        not xlglgjj_dfwj_policies and
+        not alszfgjj_policies and
         not hrvalue_policies and
         not govcn_policies and
         not heilongjiang_policies and
@@ -1651,6 +1762,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     qinghai_policies = filter_against_history(qinghai_policies, history_file, category="policy")
     ningxia_policies = filter_against_history(ningxia_policies, history_file, category="policy")
     xinjiang_policies = filter_against_history(xinjiang_policies, history_file, category="policy")
+    hlbe_gjj_policies = filter_against_history(hlbe_gjj_policies, history_file, category="policy")
+    btgjj_policies = filter_against_history(btgjj_policies, history_file, category="policy")
+    ordos_gjj_policies = filter_against_history(ordos_gjj_policies, history_file, category="policy")
+    whsgjj_zxwj_policies = filter_against_history(whsgjj_zxwj_policies, history_file, category="policy")
+    xamzfgjj_zxwj_policies = filter_against_history(xamzfgjj_zxwj_policies, history_file, category="policy")
+    xlglgjj_dfwj_policies = filter_against_history(xlglgjj_dfwj_policies, history_file, category="policy")
+    alszfgjj_policies = filter_against_history(alszfgjj_policies, history_file, category="policy")
     hrvalue_policies = filter_against_history(hrvalue_policies, history_file, category="policy")
     govcn_policies = filter_against_history(govcn_policies, history_file, category="policy")
     heilongjiang_policies = filter_against_history(heilongjiang_policies, history_file, category="policy")
@@ -1699,6 +1817,13 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
     gansu_policies = _filter_policy_items_by_keywords(gansu_policies, "gansu_rst_policy")
     ningxia_policies = _filter_policy_items_by_keywords(ningxia_policies, "ningxia_hrss_policy")
     xinjiang_policies = _filter_policy_items_by_keywords(xinjiang_policies, "xinjiang_rst_policy")
+    hlbe_gjj_policies = _filter_policy_items_by_keywords(hlbe_gjj_policies, "hlbe_gjj_policy")
+    btgjj_policies = _filter_policy_items_by_keywords(btgjj_policies, "btgjj_policy")
+    ordos_gjj_policies = _filter_policy_items_by_keywords(ordos_gjj_policies, "ordos_gjj_zxgdw")
+    whsgjj_zxwj_policies = _filter_policy_items_by_keywords(whsgjj_zxwj_policies, "whsgjj_zxwj")
+    xamzfgjj_zxwj_policies = _filter_policy_items_by_keywords(xamzfgjj_zxwj_policies, "xamzfgjj_zxwj")
+    xlglgjj_dfwj_policies = _filter_policy_items_by_keywords(xlglgjj_dfwj_policies, "xlglgjj_dfwj")
+    alszfgjj_policies = _filter_policy_items_by_keywords(alszfgjj_policies, "alszfgjj_policy")
     hainan_policies = _filter_policy_items_by_keywords(hainan_policies, "hainan_hrss_policy")
     chongqing_policies = _filter_policy_items_by_keywords(chongqing_policies, "chongqing_hrss_policy")
     sichuan_policies = _filter_policy_items_by_keywords(sichuan_policies, "sichuan_rst_policy")
@@ -1773,6 +1898,14 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
         or qinghai_policies
         or ningxia_policies
         or xinjiang_policies
+        or hlbe_gjj_policies
+        or btgjj_policies
+        or ordos_gjj_policies
+        or whsgjj_zxwj_policies
+        or xamzfgjj_zxwj_policies
+        or xlglgjj_dfwj_policies
+        or tlzfgjj_policies
+        or cfszfgjj_policies
         or hrvalue_policies
         or govcn_policies
         or heilongjiang_policies
@@ -1945,6 +2078,16 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1
+        for it in hlbe_gjj_policies:
+            title = f"【呼伦贝尔公积金】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in btgjj_policies:
+            title = f"【包头公积金】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
         for it in hrvalue_policies:
             title = f"【HR价值网】{it['title']}"
             policy_items_all.append({"title": title, "url": it["url"]})
@@ -2103,6 +2246,41 @@ def build_policy_block(run_mohrss: bool, history_file: str = "insight_history.js
                 lines.append(f"【衡水公积金-政策法规】{pub_time} {title} {link}")
         for it in lfzfgjj_policies:
             title = f"【廊坊公积金-通知公告】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in tlzfgjj_policies:
+            title = f"【通辽公积金-通知公告】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in cfszfgjj_policies:
+            title = f"【赤峰公积金-政策法规】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in ordos_gjj_policies:
+            title = f"【鄂尔多斯公积金-中心规定文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in alszfgjj_policies:
+            title = f"【阿拉善盟公积金-政策法规】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in whsgjj_zxwj_policies:
+            title = f"【乌海公积金-中心文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in xamzfgjj_zxwj_policies:
+            title = f"【兴安盟公积金-中心文件】{it['title']}"
+            policy_items_all.append({"title": title, "url": it["url"]})
+            lines.append(md_item_with_detail(idx, title, it["url"]))
+            idx += 1
+        for it in xlglgjj_dfwj_policies:
+            title = f"【锡盟公积金-地方文件】{it['title']}"
             policy_items_all.append({"title": title, "url": it["url"]})
             lines.append(md_item_with_detail(idx, title, it["url"]))
             idx += 1

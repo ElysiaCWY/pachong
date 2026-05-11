@@ -1,20 +1,25 @@
 =================================================
 日志记录已启动
-日志文件: C:\Users\admin\Desktop\pachong-main\pachong-main\logs\run_log_20260509_091908.txt
-启动时间: 2026-05-09 09:19:08
+日志文件: C:\Users\admin\Desktop\pachong-main\pachong-main\logs\run_log_20260511_090047.txt
+启动时间: 2026-05-11 09:00:47
 =================================================
+[Log Cleanup] 已删除旧日志: run_log_20260509_090031.txt
+[Log Cleanup] 已删除旧日志: run_log_20260509_090212.txt
+[Log Cleanup] 已删除旧日志: run_log_20260509_090544.txt
+[Log Cleanup] 已删除旧日志: run_log_20260509_091908.txt
+[Log Cleanup] 共清理 4 个旧日志文件。
 正在筛选三茅新闻 (5 条)...
-[Token Usage] Filter: 866 (In: 0, Out: 0)
-  -> [AI Filter] 筛掉三茅: 美国：4月非农就业人数可能仅增加6.2万人
-  -> [AI Filter] 筛掉三茅: 德国商业银行将裁员3000人
-  -> [AI Filter] 筛掉三茅: 日本：3月实际薪资连续第三个月攀升
-[Token Usage] Summary: 268 (In: 0, Out: 0)
-[Token Usage] Summary: 242 (In: 0, Out: 0)
+[Token Usage] Filter: 872 (In: 0, Out: 0)
+  -> [AI Filter] 筛掉三茅: 市监局：一季度广告业头部企事业单位收入同比增长17.1%
+  -> [AI Filter] 筛掉三茅: 民政部：一季度全国结婚登记169.7万对
+  -> [AI Filter] 筛掉三茅: 员工人均奖金达610万人民币？SK海力士回应
+[Token Usage] Summary: 220 (In: 0, Out: 0)
+  -> [AI Filter] 筛掉三茅: 报告：全球17.8%的适龄劳动力使用生成式人工智能
 [Jiemian] Crawling page 1...
 [Jiemian] Crawling page 2: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=2
 [Jiemian] Crawling page 3: https://www.jiemian.com/index.php?m=lists&a=ajax_news&cid=2&page=3
 [Jiemian] Page 3 has no recent items. Stopping.
-[Jiemian] Collected 23 items within 24h.
+[Jiemian] Collected 14 items within 24h.
 [CNFIN] Crawling page 1: https://www.cnfin.com/dj/index.html
 [CNFIN] Page 1 has no recent items. Stopping.
 [CNFIN] Collected 0 items within 24h.
@@ -23,34 +28,43 @@
 [TMTPost] Scroll 2/30, items found: 65
 [TMTPost] Scroll 3/30, items found: 85
 [TMTPost] Scroll 4/30, items found: 105
-[TMTPost] Scroll 5/30, items found: 125
-[TMTPost] Scroll 6/30, items found: 145
+[TMTPost] Scroll 5/30, items found: 123
+[TMTPost] Scroll 6/30, items found: 143
 [TMTPost] Scroll 7/30, items found: 163
 [TMTPost] Scroll 8/30, items found: 183
 [TMTPost] Scroll 9/30, items found: 203
-[TMTPost] Scroll 10/30, items found: 221
-[TMTPost] Scroll 11/30, items found: 240
-[TMTPost] Scroll 12/30, items found: 260
-[TMTPost] Scroll 13/30, items found: 280
-[TMTPost] Scroll 14/30, items found: 297
-[TMTPost] Scroll 15/30, items found: 317
-[TMTPost] Scroll 16/30, items found: 336
-[TMTPost] Scroll 17/30, items found: 354
-[TMTPost] Scroll 18/30, items found: 354
+[TMTPost] Scroll 10/30, items found: 223
+[TMTPost] Scroll 11/30, items found: 243
+[TMTPost] Scroll 12/30, items found: 263
+[TMTPost] Scroll 13/30, items found: 281
+[TMTPost] Scroll 14/30, items found: 301
+[TMTPost] Scroll 15/30, items found: 321
+[TMTPost] Scroll 16/30, items found: 339
+[TMTPost] Scroll 17/30, items found: 358
+[TMTPost] Scroll 18/30, items found: 378
+[TMTPost] Scroll 19/30, items found: 398
+[TMTPost] Scroll 20/30, items found: 415
+[TMTPost] Scroll 21/30, items found: 435
+[TMTPost] Scroll 22/30, items found: 455
+[TMTPost] Scroll 23/30, items found: 473
+[TMTPost] Scroll 24/30, items found: 491
+[TMTPost] Scroll 25/30, items found: 511
+[TMTPost] Scroll 26/30, items found: 531
+[TMTPost] Scroll 27/30, items found: 531
 [TMTPost] No new items loaded. Stopping.
-[TMTPost] Parsing 373 total items...
-[TMTPost] Collected 4 items within 24h.
+[TMTPost] Parsing 549 total items...
+[TMTPost] Collected 3 items within 24h.
 [THSI] Target Date: 2026-05-08 (Previous Workday)
 [THSI] Start crawling items...
-[THSI] Found older date 2026-05-07 < 2026-05-08, stopping crawl.
-[FortuneCN] Target date: 2026-05-08
+[THSI] Total collected: 71
+[FortuneCN] Target date: 2026-05-10
 [FortuneCN] Found candidates: 18
-[FortuneCN] Collected 3 items for 2026-05-08
+[FortuneCN] Collected 0 items for 2026-05-10
 [Gasgoo] 开始抓取，目标日期: 2026-05-08
   -> 正在抓取板块: 产业 (https://auto.gasgoo.com/industry/C-108)
-     已抓取 6 条符合条件的文章
+     已抓取 1 条符合条件的文章
   -> 正在抓取板块: 车企 (https://auto.gasgoo.com/automaker/C-109)
-     已抓取 15 条符合条件的文章
+     已抓取 0 条符合条件的文章
 [InfoQ] Start crawling... Target Date: 2026-05-08
   -> Visiting https://www.infoq.cn/topic/industry-news
   -> Found 0 article links via locator
@@ -64,23 +78,19 @@ Call log:
 c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3\connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'www.huxiu.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(
   -> Found 0 items
-[History Filter] 财经/人力新闻排重: 464 -> 464
+[History Filter] 拦截已发布过的新闻: 今夜！DeepSeek，突传重磅！
+[History Filter] 拦截近似重复新闻: 今夜！DeepSeek，突传重磅！ | 历史: 【AI】今夜！DeepSeek，突传重磅！
+[History Filter] 拦截已发布过的新闻: 新紫光集团：重整至今负债降低74.2% 发布“AI全家桶”
+[History Filter] 拦截已发布过的新闻: 西安奕材：第二工厂计划在2026年底达到设计产能50万片/月
+[History Filter] 拦截已发布过的新闻: 影石创新：公司持续加强芯片、算法、产品与组织能力建设
+[History Filter] 拦截近似重复新闻: 西安奕材：第二工厂预计于2026年底达产 | 历史: 【半导体】西安奕材：第二工厂计划在2026年底达到设计产能50万片/月
+[History Filter] 财经/人力新闻排重: 109 -> 103
   -> [Hard Filter] 命中新规则剔除: 剧集年报｜欢瑞世纪信披违规再遭立案 隐瞒财政部行政处罚长达5个月 会计差错更正后2022年由盈转亏
   -> [Hard Filter] 命中新规则剔除: 剧集年报｜百纳千成一头扎进数字营销“红海” 海外收入仅百万元且逐年下滑 存货周转率跌至历史冰点
-  -> [Hard Keep] 命中新规则保留: 中科大核聚变方向面向本科招生，国内聚变人才培养驶入快车道 国内已有约30所高校布局核聚变领域，形成基础研究、技术突破、工程转化的三层结构。 4919 昨天 20:35
-  -> [Hard Keep] 命中新规则保留: 中国首个卫星物联网商用试验获批，激活空天产业万亿级新生态 未来2至3年，低轨卫星物联网星座部署将加速，与5G/6G地面网络形成互补。
-  -> [Hard Filter] 命中新规则剔除: 5月8日晚间公告集锦|元道通信可能触及重大违法强制退市情形，新希望4月商品猪销售收入13.12亿元同比下降32.37%
   -> [Hard Keep] 命中新规则保留: 中国移动×火山引擎：首创“机密模型服务”新模式，让企业安全用好AI
   -> [Hard Keep] 命中新规则保留: 星环聚能完成5亿元融资 冲刺核聚变关键技术的工程化转化
   -> [Hard Filter] 命中新规则剔除: 未来智能完成亿元级A+轮融资 传音参投
   -> [Hard Keep] 命中新规则保留: 泰鸿万立：公司将加强研发创新，进行技术升级迭代
-  -> [Hard Keep] 命中新规则保留: 国电高科获批全国首个卫星物联网业务商用试验许可
-  -> [Hard Keep] 命中新规则保留: 服务长三角 东方在行动丨中国东方旗下上海东兴：以盘活存量为切入口 打造服务长三角实体经济的生动实践
-  -> [Hard Filter] 命中新规则剔除: 联发科 4 月营收 467.4 亿元新台币，同比下降 4.1%
-  -> [Hard Keep] 命中新规则保留: 国电高科成为全国首个卫星物联网业务商用试验企业
-  -> [Hard Keep] 命中新规则保留: 天有为电子斩获FPC结构专利 赋能车载HUD模组技术升级
-  -> [Hard Filter] 命中新规则剔除: 开发新一代持久mRNA药物，新锐完成1300万美元种子轮融资；共价PI3Kα抑制剂早期临床结果积极
-  -> [Hard Keep] 命中新规则保留: 【车企】零跑汽车进军德国市场 电动车月租低至49欧元
 
 [AI Filter] 正在筛选来源: sina (共 10 条) ...
 [Token Usage] Filter: 1089 (In: 0, Out: 0)
@@ -101,104 +111,54 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   -> 筛掉: Slasify 加入 PUMM（马来西亚创业促进会），深化东南亚本地支持
   -> tophr: 保留 0 / 1
 
-[AI Filter] 正在筛选来源: yicai_hongguan (共 3 条) ...
-[Token Usage] Filter: 925 (In: 0, Out: 0)
-  -> 筛掉: 中国餐饮品牌出海提速，业内强化海外业务经营能力 国际化人才储备、适合本土市场的产品研发以及支付等方面的合规经营，成为企业关心的话题。 4051 昨天 20:40
-  -> 筛掉: 酝酿三十多年的社会救助法出台，未来落地有哪些挑战？ 基层执行能力不足是一大考验。 9414 昨天 19:34
-  -> yicai_hongguan: 保留 1 / 3
-
-[AI Filter] 正在筛选来源: caixin_companies (共 12 条) ...
+[AI Filter] 正在筛选来源: yicai_hongguan (共 5 条) ...
 [Token Usage] Filter: 1029 (In: 0, Out: 0)
-[Token Usage] Filter: 832 (In: 0, Out: 0)
-  -> 筛掉: T早报｜大模型公司阶跃星辰融资25亿美元；昆仑芯同步推进科创板和港股上市；Stellantis集团与零跑汽车扩大战略合作
-  -> 筛掉: 昆仑芯科创板上市辅导备案 港股上市继续推进
-  -> 筛掉: 华友钴业2.1亿美元收购非洲加纳锂矿 锂行业迎新一轮扩张｜出海·能源
-  -> 筛掉: 欧盟拟对“使用中国逆变器”项目采取融资禁令 中方坚决反对
-  -> 筛掉: 大模型公司阶跃星辰融资25亿美元 推进港股上市
-  -> 筛掉: 涉嫌受贿、洗钱 贵州市监局长、茅台原董事长丁雄军被提起公诉
-  -> 筛掉: 宁德时代滑板底盘“出海” 与土耳其企业合作开发新车
-  -> 筛掉: “五大发电”2025年煤电板块普涨 新能源板块业绩承压
-  -> 筛掉: GPT周报｜法国对X启动司法调查程序；OpenAI推出“可信联系人”安全机制；豆包拟增加付费服务
-  -> 筛掉: 地缘不确定性增强 中企赴欧在能源转型等领域机遇仍存｜出海·风险
-  -> 筛掉: 受贿数额特别巨大 东航集团前“一把手”刘绍勇被提起公诉
-  -> 筛掉: 能源内参｜欧盟对使用中国逆变器项目发融资禁令 中方坚决反对；新一批中央生态环境保护督察全面启动
-  -> caixin_companies: 保留 0 / 12
+  -> 筛掉: 商务部新闻发言人就中美经贸磋商有关问题答记者问 商务部新闻发言人就中美经贸磋商有关问题答记者问 18125 昨天 22:31
+  -> 筛掉: 发力方向明确：地方化债进入“下半场” 国务院常务会议对化债“下半场”给出新的部署——化债将继续聚焦“重点领域和薄弱环节”，这指的是什么？ 21039 昨天 21:50
+  -> 筛掉: 关键一步！三部门划定“智能体”发展底线与空间 《实施意见》将“安全、可靠、可信”作为不可逾越的底线。 4671 昨天 20:43
+  -> 筛掉: 算力银行、算力超市来了，利好中小企业 提升算力普惠易用水平、降低中小企业用算成本。 9104 昨天 11:59
+  -> 筛掉: 国务院对化解地方政府债务风险有新部署，如何解读？ 完善化债政策，增强地方自主偿债能力，确保如期完成化债任务。 25193 昨天 10:44
+  -> yicai_hongguan: 保留 0 / 5
 
-[AI Filter] 正在筛选来源: jiemian_business (共 22 条) ...
-[Token Usage] Filter: 1029 (In: 0, Out: 0)
-[Token Usage] Filter: 1041 (In: 0, Out: 0)
-[Token Usage] Filter: 814 (In: 0, Out: 0)
-  -> 筛掉: 纳指标普连涨六周创新高，存储芯片股集体狂欢
-  -> 筛掉: 精神病院炒股成为上市公司前十大股东，院方回应：合规参与资本市场
-  -> 筛掉: 05月09日投资早报|ST清越股票将实施退市风险警示，经纬辉开终止筹划重大资产重组，冰轮环境拟收购烟台铭祥45%股权
-  -> 筛掉: AI早报 | 千问AI眼镜S1推出空间3D显示能力；OpenAI推出“可信联系人”安全功能
-  -> 筛掉: 科技早报 | 腾讯客服回应微信未读语音消息由红变灰；任天堂宣布Switch 2涨价
-  -> 筛掉: 欺诈发行、财务造假！清越科技、元道通信或将强制退市
-  -> 筛掉: 消息称DeepSeek拟募资最高500亿，将创中国人工智能领域最高纪录
-  -> 筛掉: 执掌九年霍达告别招商证券，“风控专家”朱江涛代行董事长
-  -> 筛掉: 70份致辞里的中国银行业：灰犀牛、第二增长曲线与穿越周期
-  -> 筛掉: 任天堂宣布Switch 2涨价，索尼预警：今年游戏机卖不动了
-  -> 筛掉: “史上最严”医药代表新规落地，药企再难“甩锅”
-  -> 筛掉: 直通部委｜司法部全面推行“扫码入企” 国内成品油价今晚上调
-  -> 筛掉: 我国未报告人类感染病例，中疾控回应本轮汉坦疫情关切
-  -> 筛掉: 界面早报 | 国务院成立浏阳烟花爆炸事故调查组；世卫组织启动应对汉坦病毒疫情行动
-  -> 筛掉: 细化申请情形、完善取证方式，行政复议法实施条例上“新”
-  -> 筛掉: 地方新闻精选 | 太原通报中学职工举报自己“吃空饷” “4只皮皮虾1035元”店主病逝
-  -> 筛掉: 第三轮第六批中央生态环境保护督察全面启动，为第三轮督察“收官之战”
-  -> 筛掉: 重庆市委政法委原书记陆克华一审被判死缓：27年受贿1.89亿余元
-  -> 筛掉: 界面晚报 | 浏阳烟花厂爆炸已致37人死亡1人失联；我国未报告汉坦病毒人类感染病例
-  -> 筛掉: 中国油轮在霍尔木兹海峡遭袭？外交部：相关船只系马绍尔群岛籍
-  -> 筛掉: “十五五”时期的基建投资应关注结构优化和效益提升｜宏观晚6点
-  -> 筛掉: 最新版营商环境发展报告出炉！透露这些重要信息
-  -> jiemian_business: 保留 0 / 22
+[AI Filter] 正在筛选来源: caixin_companies (共 1 条) ...
+[Token Usage] Filter: 824 (In: 0, Out: 0)
+[AI Filter] 警告：返回长度 (3) 与输入 (1) 不一致，保留全部。
+  -> caixin_companies: 保留 1 / 1
 
-[AI Filter] 正在筛选来源: tmtpost (共 4 条) ...
-[Token Usage] Filter: 890 (In: 0, Out: 0)
-  -> 筛掉: 锂矿股唱多声中创新高，实控人携董监高和机构离场忙｜行业风向标
-  -> 筛掉: Edge AI Daily 早报（5月9日）
-  -> 筛掉: 2026年5月9日钛早·语音播报
-  -> 筛掉: 【钛晨报】促进智能体规范应用与创新发展，三部门最新部署；Anthropic将筹集数百亿美元，估值或近万亿超OpenAI；人工智能终端国家标准上新，涉及眼镜、电视、耳机等
-  -> tmtpost: 保留 0 / 4
+[AI Filter] 正在筛选来源: jiemian_business (共 14 条) ...
+[Token Usage] Filter: 1066 (In: 0, Out: 0)
+[Token Usage] Filter: 875 (In: 0, Out: 0)
+  -> 筛掉: 汽车早报｜比亚迪与神州租车签署10万台采购框架协议 特斯拉最后一辆Model S和Model X下线
+  -> 筛掉: AI早报 | 马斯克入局 AI 编程赛道；谷歌DeepMind聘请芝大教授担任AGI经济总监
+  -> 筛掉: 能源早报 | 风范股份中标国家电网等项目；沙特阿美一季度净利润同比增长26%
+  -> 筛掉: 科技早报 | 哈啰回应员工“聚会脚踩青桔、美团单车合照”；SK海力士回应员工人均奖金达610万元
+  -> 筛掉: 一周新车盘点 | AUDI预售第二款产品 雷克萨斯亮相纯电SUV旗舰
+  -> 筛掉: 平价超市Iceland想在中国叫板奥乐齐
+  -> 筛掉: 一纸假名单掀起新能源汽车“锁电”风波，这一争议为何长期难解？
+  -> 筛掉: 【财富周刊】纳指标普连涨六周创新高，多只基金派发超亿元“红包”
+  -> 筛掉: 每周债市看点 | 西咸发展集团子公司债务逾期金额达28.63亿元，栖霞建设去年计提资产减值准备21.933亿元
+  -> 筛掉: 伊朗提议30天内撤销对伊石油销售制裁，特朗普：完全不可接受
+  -> 筛掉: 事关文物归还！法国颁布重磅法律，简化非法所获文物归还程序
+  -> 筛掉: 又一艘邮轮爆发疫情，百余人感染诺如病毒
+  -> 筛掉: 界面早报 | 商务部新闻发言人就中美经贸磋商有关问题答记者问；伊朗已回应美国提出的结束战争方案
+  -> 筛掉: “口头约定”贿赂也要按照赃款进行追缴？专家：约定型受贿更应严格把握入罪界线
+  -> jiemian_business: 保留 0 / 14
 
-[AI Filter] 正在筛选来源: thsi_unlisted (共 372 条) ...
+[AI Filter] 正在筛选来源: tmtpost (共 3 条) ...
+[Token Usage] Filter: 868 (In: 0, Out: 0)
+  -> 筛掉: Edge AI Daily 早报（5月11日）
+  -> 筛掉: 2026年5月11日钛早·语音播报
+  -> 筛掉: 【钛晨报】事关综合交通运输体系、化债等，国常会最新部署；DeepSeek和阿里谈崩了？市场人士：双方应该没有进行谈判；英伟达全面布局AI生态，股权投资今年已超400亿美元
+  -> tmtpost: 保留 0 / 3
+
+[AI Filter] 正在筛选来源: thsi_unlisted (共 61 条) ...
 [Token Usage] Filter: 969 (In: 0, Out: 0)
 [Token Usage] Filter: 1000 (In: 0, Out: 0)
-[Token Usage] Filter: 980 (In: 0, Out: 0)
-[Token Usage] Filter: 996 (In: 0, Out: 0)
-[Token Usage] Filter: 980 (In: 0, Out: 0)
-[Token Usage] Filter: 1003 (In: 0, Out: 0)
-[Token Usage] Filter: 1005 (In: 0, Out: 0)
-[Token Usage] Filter: 977 (In: 0, Out: 0)
-[Token Usage] Filter: 975 (In: 0, Out: 0)
-[Token Usage] Filter: 1014 (In: 0, Out: 0)
-[Token Usage] Filter: 985 (In: 0, Out: 0)
-[Token Usage] Filter: 980 (In: 0, Out: 0)
-[Token Usage] Filter: 988 (In: 0, Out: 0)
-[Token Usage] Filter: 1008 (In: 0, Out: 0)
-[Token Usage] Filter: 980 (In: 0, Out: 0)
-[Token Usage] Filter: 982 (In: 0, Out: 0)
-[Token Usage] Filter: 1012 (In: 0, Out: 0)
-[Token Usage] Filter: 993 (In: 0, Out: 0)
-[Token Usage] Filter: 1030 (In: 0, Out: 0)
-[Token Usage] Filter: 1028 (In: 0, Out: 0)
-[Token Usage] Filter: 1040 (In: 0, Out: 0)
-[Token Usage] Filter: 1036 (In: 0, Out: 0)
-[Token Usage] Filter: 981 (In: 0, Out: 0)
-[Token Usage] Filter: 1054 (In: 0, Out: 0)
 [Token Usage] Filter: 992 (In: 0, Out: 0)
-[Token Usage] Filter: 1050 (In: 0, Out: 0)
-[Token Usage] Filter: 1005 (In: 0, Out: 0)
-[Token Usage] Filter: 974 (In: 0, Out: 0)
-[Token Usage] Filter: 968 (In: 0, Out: 0)
-[Token Usage] Filter: 996 (In: 0, Out: 0)
-[Token Usage] Filter: 973 (In: 0, Out: 0)
-[Token Usage] Filter: 988 (In: 0, Out: 0)
-[Token Usage] Filter: 962 (In: 0, Out: 0)
-[Token Usage] Filter: 978 (In: 0, Out: 0)
-[Token Usage] Filter: 991 (In: 0, Out: 0)
-[Token Usage] Filter: 993 (In: 0, Out: 0)
 [Token Usage] Filter: 990 (In: 0, Out: 0)
-[Token Usage] Filter: 809 (In: 0, Out: 0)
+[Token Usage] Filter: 994 (In: 0, Out: 0)
+[Token Usage] Filter: 1007 (In: 0, Out: 0)
+[Token Usage] Filter: 801 (In: 0, Out: 0)
   -> 筛掉: 两家内地会计师事务所获准从事H股企业审计
   -> 筛掉: OPPO就“母亲节文案引争议”致歉：第一时间下架全部相关物料
   -> 筛掉: 新松机器人：努力扭转不利局面 全力改善经营基本面
@@ -217,9 +177,9 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   -> 筛掉: 奔赴自然户外运动集团股份有限公司递表港交所
   -> 筛掉: 上海国投2026年一季度基金投资业绩亮眼 9家企业登陆资本市场
   -> 筛掉: 新紫光集团举办首届创新峰会 引领智能科技产业迈入创新时代
-  -> 筛掉: 欧莱雅中国：美妆科技巨头如何进行AI 价值链转型？
   -> 筛掉: 霸王茶姬澳门首店正式开业 会员单日环比增长最高达318%
   -> 筛掉: 蘑菇车联携多项自动驾驶实践成果亮相第28届北京科博会
+  -> 筛掉: DeepSeek被曝狂融500亿，梁文锋占大头，腾讯投60亿，估值直冲3500亿
   -> 筛掉: 太钢煤气安全智能管控系统正式上线！
   -> 筛掉: 欧诺科技深交所主板IPO已受理 主营印包智能设备的研发和产销
   -> 筛掉: 皇家加勒比2026年一季度总营收达45亿美元
@@ -230,6 +190,7 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   -> 筛掉: 消息称DeepSeek计划募资500亿元
   -> 筛掉: 两家内地会计师事务所获准从事H股企业审计
   -> 筛掉: DeepSeek×ChatGPT强强联手！智云译让150+语言沟通实现“零时差
+  -> 筛掉: 华阳集团：公司与英特尔联合打造的AI BOX为座舱搭建了强劲的AI算力底座
   -> 筛掉: 祝贺！阳光发电和地电朔州在2026年山西省电力行业交流活动中获奖
   -> 筛掉: 事关H股，两家会计师事务所获准从业
   -> 筛掉: 新兴际华集团党委举办树立和践行正确政绩观学习教育第二期读书班
@@ -242,7 +203,6 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   -> 筛掉: 万豪国际一季度收入同比增长6.24% 在华运营酒店规模已突破700家
   -> 筛掉: 资本赋能，向“新”而行——万联证券已投企业重要动态（历史回顾与2026年一季度特辑）
   -> 筛掉: 复星旅文鲍将军：寻找文旅度假“弯道超车”机会
-  -> 筛掉: DeepSeek拟募资500亿，创中国AI融资纪录，拟6月发布V4模型更新
   -> 筛掉: 兴化化工3号锅炉内部检验圆满收官
   -> 筛掉: 五一”在岗，市县联动——扬州分公司用劳动迎来“开门红
   -> 筛掉: 官宣 财跃星辰正式加入智能投研技术联盟（ITL）
@@ -256,380 +216,35 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   -> 筛掉: 金桥德克业绩高增背后：依赖低成本红利，产能狂飙遇消化瓶颈，低研发下护城河深度存疑
   -> 筛掉: AI WAN@517电信日 | 江苏移动携手华为打造AI WAN智算广域网
   -> 筛掉: 泰康人寿“全国销冠”涉嫌诈骗被刑拘 官方回应称已派驻工作组
-  -> 筛掉: 德瑞锂电：公司目前订单、生产经营均正常
-  -> 筛掉: 德瑞锂电：锂带价格上涨将会导致公司产品制造成本上升，毛利率水平下降
-  -> 筛掉: 德瑞锂电：公司出口业务占营业收入的60%以上
-  -> 筛掉: 德瑞锂电：公司自成立以来一直聚焦锂锰、锂铁等一次电池的研发、生产和销售
-  -> 筛掉: 柳化氯碱公司顺利完成广西企业安全发展项目第一阶段运行目标
-  -> 筛掉: 尤安设计：上市行(苏州)科技有限公司、天瑞万合私募基金等多家机构于5月8日调研我司
-  -> 筛掉: 奔赴理想职场，助力安稳就业！
-  -> 筛掉: 太重成功中标两套转炉设备
-  -> 筛掉: 大国重器，再添新兵！太重消防车正式交付
-  -> 筛掉: 新疆青松建材检测有限公司成功通过CNAS质量检测认证
-  -> 筛掉: 张海库拜访超智算（北京）科技有限公司执行董事刘名涛
-  -> 筛掉: 10秒搞定！这个锚点不简单
-  -> 筛掉: 深交所上市委：江苏展芯首发5月14日上会
-  -> 筛掉: 解散xAI：马斯克的财技与SpaceX上市的阳谋
-  -> 筛掉: 国内金融SASE创新先行者：长城证券基于华为星河AI融合SASE，打造金融多分支智能安全防护新基石
-  -> 筛掉: 一机集团两款应急装备亮相长三角国际应急减灾和救援博览会
-  -> 筛掉: 永杉锂业：拟与关联方设合资公司 建设一期3万吨电池级碳酸锂项目
-  -> 筛掉: 贝特利创业板IPO申请通过上市委审议
-  -> 筛掉: 莱赛激光亮相郑州五金机电博览会
-  -> 筛掉: DeepSeek又又又宕机了，3月以来已多次服务异常
-  -> 筛掉: 永杉锂业：与关联方共同设立合资公司投建年产3万吨电池级碳酸锂项目
-  -> 筛掉: 上海环境精彩亮相2026慕尼黑国际环博会
-  -> 筛掉: 楚星生态首批有机无机磷酸二铵成功下线
-  -> 筛掉: 广发银行金融活水精准滴灌乡村产业
-  -> 筛掉: 微信：开展涉税虚假宣传信息治理 目前平台共处置违规账号187个
-  -> 筛掉: 河南航空港投资集团10亿元中票完成发行，利率1.94％
-  -> 筛掉: 筑牢“隐形屏障” 交付“滴水不漏”的家——泰达建安监理以全周期闭环体系护航泰达·华棠印象星空项目住宅品质
-  -> 筛掉: 泰达时尚广场商圈焕新 聚力赋能高质量发展
-  -> 筛掉: “双姜”掌舵，中泰资管董事长、总经理换人！百亿基金经理扛起投资大旗
-  -> 筛掉: 从“后勤兵”到“交付指挥官”：华鼎冷链科技如何托起茶咖万店梦？
-  -> 筛掉: 钟薛高无形资产2110万元卖了，创始人：能多还一点钱了
-  -> 筛掉: 喜报！平高电气1家企业入选国家知识产权示范企业创建对象
-  -> 筛掉: 亚盛农服公司“优乐泉”品牌入选中国农垦品牌目录
-  -> 筛掉: 孚腾资本与智元联合发起 上海具身慧智科技有限公司开始运营
-  -> 筛掉: 曙光数创与京脉科技达成深度战略合作，共拓液冷新蓝海
-  -> 筛掉: 蜀道集团赴成渝公司开展“服务区+物流”专项调研
-  -> 筛掉: 稳！硬核拖引“海工装备”，6小时完美就位！
-  -> 筛掉: 贝特利创业板IPO获上市委会议通过
-  -> 筛掉: 山东重工举办第四期未来大讲堂
-  -> 筛掉: PriceSeek提醒：兴疆牧歌4月生猪销量收入双降猪价走低
-  -> 筛掉: 武汉光谷建投增资至 50 亿 资本赋能 “世界光谷” 建设
-  -> 筛掉: 首批27家支付牌照续展落定，小红书控股机构尚待“补考”
-  -> 筛掉: ST同德获法院指定预重整辅助机构 预重整进入实操阶段
-  -> 筛掉: 方盒子SUV竞争重心转向
-  -> 筛掉: 湖北银行落地全国首笔“电池残值收益贷”
-  -> 筛掉: 证监会同意托伦斯创业板IPO注册
-  -> 筛掉: 香炉山钨业淘金坪多金属选矿厂首批合格钨精矿出库
-  -> 筛掉: 常山北明：公司目前经营正常
-  -> 筛掉: 证监会同意托伦斯精密制造（江苏）股份有限公司首次公开发行股票并在创业板上市的注册申请
-  -> 筛掉: 国药集团经典名方芍药甘草汤颗粒获批上市
-  -> 筛掉: 平安理财：估值标尺精选结构机会 探索稳健底色的权益布局之道
-  -> 筛掉: 逆势前行显担当——苏能郭家河煤业公司获评“宝鸡市高质量发展突出贡献集体”
-  -> 筛掉: 陕西长银消费金融2025年营收32.93亿元 同比增长81.43%
-  -> 筛掉: 智慧展馆黑科技登场！itc 保伦股份智慧展馆解决方案大揭秘！
-  -> 筛掉: 广药牌灵芝孢子油国际专利成果全球首发 国际市场布局提速
-  -> 筛掉: 常奇高效侧叉清障车重磅来袭！
-  -> 筛掉: 包头鑫达公司召开安全生产专题会议
-  -> 筛掉: 马斯克与Anthropic联手对OpenAI形成包围圈
-  -> 筛掉: 山河星航旗下阿若拉机型进驻澳大利亚市场
-  -> 筛掉: 任天堂 2026 财年年报净利润 4240.56 亿日元，同比增长 52.10%
-  -> 筛掉: 惠科有望 2026Q3 宣布 G6 OLED 产线投资，消息称采用“免半切”工艺
-  -> 筛掉: 烟台银行与山东省农担公司开展专项合作座谈会
-  -> 筛掉: 康尔生物汲茶素武夷山溯源之旅圆满收官
-  -> 筛掉: 五家机构被剔除，微众银行入围，公开市场一级交易商名单再调整
-  -> 筛掉: 省级农商行成立后首份年报亮出！内蒙古农商行去年后半年实现营收超100亿元
-  -> 筛掉: 主食89%门店现做：和府捞面如何用“亮家底”重塑品牌护城河
-  -> 筛掉: 南华科技创新混合发起增聘陶星言
-  -> 筛掉: 濮阳国联产投公司拟发行10亿元公司债，中标承销商公示
-  -> 筛掉: 年轻人的“头皮的面护级管家”，弹动TELL DO以产品力荣膺创新大奖！
-  -> 筛掉: 洛阳国兴资本运营公司拟发行8亿元公司债，中标承销商公布
-  -> 筛掉: 2110万元！钟薛高508件无形资产溢价超9倍拍出
-  -> 筛掉: 大鹏工业与哈工大老科协合作签约
-  -> 筛掉: 智慧领航，线上赋能：久雀商业重塑自助共享空间新格局
-  -> 筛掉: 国元金控与海螺集团共商产融合作
-  -> 筛掉: 产业链资本“组团”投资，上海大模型独角兽上市进程或提速
-  -> 筛掉: 环保科技公司入选2026年湖北省中小企业技术中心名单
-  -> 筛掉: 数字化转型驱动成本精细化管理——资材仓储物流结算流程优化实践
-  -> 筛掉: PriceSeek提醒：镇江奇美ABS装置降负 供应端有所收缩
-  -> 筛掉: PriceSeek提醒：漳州奇美ABS装置开工率降至20%
-  -> 筛掉: 再添国家级名片 阿拉尔经济技术开发区2家企业入选工信部数字化转型典型案例名单
-  -> 筛掉: 和讯信息刘昌松：大科技下跌，跌出个普涨
-  -> 筛掉: 飞猫随身 WiFi 技术硬核品控严苛全链路服务打破行业套路
-  -> 筛掉: 匠心服务三十载 品质筑基向未来——复欣物业以创新实践书写城市治理新篇章
-  -> 筛掉: 股价连续跌停 ST龙大回应经营、内控等问题
-  -> 筛掉: 两家内地会计师事务所获准从事H股企业审计
-  -> 筛掉: 两家内地会计师事务所获准从事H股企业审计
-  -> 筛掉: “能源绿色低碳转型”看山东之青岛地铁集团：以绿色与智慧重塑城市出行
-  -> 筛掉: 跨设备不拘束、多语言切换更自如，WPS Office 全球开启 AI 办公新体验
-  -> 筛掉: 传远新材亮相2026亚太地坪展
-  -> 筛掉: 近25亿美元！阶跃星辰，融资新动态！
-  -> 筛掉: 创成立以来最好业绩 财信人寿2025年实现净利润6.01亿元
-  -> 筛掉: 山西征信：抓实信用体系建设 提升征信服务效能
-  -> 筛掉: 2026 政企数智化选型：大连恒智科技 —— 数字档案馆建设标杆服务商
-  -> 筛掉: 武汉光谷建设投资公司增资至50亿，增幅约114%
-  -> 筛掉: 深脉矿业科技纳米比亚首批铜矿交割中铜，科技实力加速海外资源闭环贯通
-  -> 筛掉: 软硬一体成标配？中之杰智能领衔，盘点制造业 WMS 四大流派
-  -> 筛掉: 远程医疗平台 Veri Medtech (VRHI.US)公布IPO条款：深耕医用大麻赛道，发行定价4美元/股
-  -> 筛掉: 同步办、一日结！兴泰担保创新资产处置共赢“样本”
-  -> 筛掉: 河南样道服饰入选工信部 2025 年度数字化转型典型案例
-  -> 筛掉: PriceSeek提醒：华鲁恒升下调己内酰胺华东送到价
-  -> 筛掉: 5月11日两只新股上市
-  -> 筛掉: 杭州顶豪房源陆续网签：万潮玖序已签约81%、栖湖云庄已签约42%
-  -> 筛掉: 未尔科技股转审核获通过 拟于新三板基础层挂牌
-  -> 筛掉: 中核集团召开生态环境法典专题培训暨中核大讲堂第97讲
-  -> 筛掉: 铜化集团与中控技术达成战略合作
-  -> 筛掉: 海辰储能将建中试及智能生产线
-  -> 筛掉: 闪极推出 灵充充电器：提供 20/40/67W 版本、号称还原苹果 AirPods 工艺，59 元起
-  -> 筛掉: 中国航油圆满完成第九届数字中国建设峰会供油保障任务
-  -> 筛掉: 国铁物资公司多措并举加强国铁商城账单管理 切实防范逾期支付风险
-  -> 筛掉: 霍尔辛赫煤业：小改小革提效能 创新驱动促生产
-  -> 筛掉: OpenAI诉讼案牵出“72小时CEO”：当事人自嘲、马斯克回应
-  -> 筛掉: vivo X500 系列手机踪迹曝光：预估天玑 9600 芯片、7000mAh 电池
-  -> 筛掉: 消费者称在泰州万象城滨寿司吃出蛆？商场回复：已联系市监局介入调查
-  -> 筛掉: 绿控传动创业板首发申请将于5月13日上会审核
-  -> 筛掉: 世佳科技股转审核获通过 拟于新三板基础层挂牌
-  -> 筛掉: 大藤峡工程成功突破美丽中条鳅人工繁育技术 填补国内空白
-  -> 筛掉: 全球首款 3 吨级混动载客 eVTOL，DF3000“游龙”样机实现首飞
-  -> 筛掉: 13 英寸最轻薄平板亮相！华为 MatePad Pro Max 海外发布
-  -> 筛掉: 新推300亿元信贷支持！汇丰加码支持绿色产业链出海
-  -> 筛掉: 荣耀MagicOS五月更新上线：新增支持 AirPods 互联、文件夹自动命名等
-  -> 筛掉: 因可转债项目法律服务中存多项违规 浙江天册律师事务所收警示函
-  -> 筛掉: 获批开展卫星物联网业务商用试验 国电高科将持续完善天启星座建设
-  -> 筛掉: 三星 Galaxy S26 FE 手机曝光：Exynos 2500 芯片，有望 9 月登场
-  -> 筛掉: 荣耀 600/Pro 海外发布：搭载高通骁龙 7 Gen4、骁龙 8 Elite
-  -> 筛掉: 大家检验新三板挂牌申请被受理 将于基础层挂牌
-  -> 筛掉: 石化四建收到江苏国信表扬信 天辰鸡西项目动工暨与嘉泽新能签约
-  -> 筛掉: 佳能官宣 5 月 13 日发布新品，预计为 EOS R6 V 相机
-  -> 筛掉: 任天堂股东希望 Switch 2 掌机涨价 50-100 美元，因为目前在亏本卖
-  -> 筛掉: TBW 降级：微星推出 DATAMAG LITE 40Gbps 磁吸移动固态硬盘
-  -> 筛掉: 铭凡推出 7 盘位全闪 AI NAS S7：搭第三代英特尔酷睿 Ultra 386H 处理器、双雷电 4 接口
-  -> 筛掉: PriceSeek提醒：山东圣峰化工DOP报价下调50元/吨
-  -> 筛掉: 铭凡发布 S5：全球首款无风扇 5 盘位全闪 AI NAS
-  -> 筛掉: 河北建投集团党委书记、董事长米大斌到西柏坡电力调研
-  -> 筛掉: 【数智宁能】宁夏能源用“绿星链通”2.0把合规刻进每一笔采购业务
-  -> 筛掉: 南京壹城集团高效完成11个保障房小区消防设施品质提升改造
-  -> 筛掉: 新乡创投拟发行7亿元公司债，选聘承销商
-  -> 筛掉: OpenAI前女董事法庭作证：马斯克主动提出捐精，两人育有4孩
-  -> 筛掉: 金杨精密可转债于5月11日在深交所上市
-  -> 筛掉: 油电共进，全智赋能：一汽奥迪开创豪华品牌高质量转型新路径
-  -> 筛掉: 保健品营销商艾鑫生活国际(AIXN.US)撤回在美IPO申请 原计划筹资1000万美元
-  -> 筛掉: 实力出圈，梅钢又获多项国家级重磅荣誉！
-  -> 筛掉: 深耕细分赛道，河南长润打造液位测量硬核实力
-  -> 筛掉: 华硕推出 ROG STRIX 幻影 2 代 20Gbps 移动硬盘盒：支持 NVMe / SATA 双协议，529 元
-  -> 筛掉: 翼菲科技港交所上市今起招股 预计5月18日上市
-  -> 筛掉: 华为儿童手表国际版阔别五年回归：Watch Kids X1/Pro 发布，249 欧元起
-  -> 筛掉: “请4休11”带火长线自驾 神州租车“五一”订单同比增长超四成
-  -> 筛掉: 灵心巧手注册资本增至11亿元
-  -> 筛掉: 新疆三快科技有限公司成立
-  -> 筛掉: 上海大晓无限机器人有限公司注册资本增至约1.5亿元
-  -> 筛掉: 海南省旅游投资集团注册资本增至35.75亿元
-  -> 筛掉: 蔚能电池注册资本增至约28.1亿元
-  -> 筛掉: 东特股份与蒂森克虏伯富奥辽阳弹簧有限公司达成战略合作
-  -> 筛掉: 生意社：5月8日山东圣峰DOP报价下跌
-  -> 筛掉: 驰为 CoreBook Air Copilot+ AI 轻薄本登场｜2.8K 高分屏轻装上阵
-  -> 筛掉: 官宣！追觅 AI 智能戒指携手 2024-2025 福布斯中国 UNDER 30 峰会，共探发展新机遇
-  -> 筛掉: 恒丰银行北京分行落地首笔央企银团贷款转让业务
-  -> 筛掉: 金融为民 合规笃行 弘康人寿连续十三年稳健发展
-  -> 筛掉: 和讯信息李永熙：一定要等到4145点，届时该怎么操作也就清楚了
-  -> 筛掉: 海得智慧能源再获认证：高效率高能量密度液冷工商储获“浙江省工业新产品证书”
-  -> 筛掉: 广州银行营收连降3年去年净利增16.9% 开年已收4处罚
-  -> 筛掉: 宏碁海外发布 Iconia iM11 5G 平板：天玑 7050 芯片、11.45 英寸 IPS 屏幕
-  -> 筛掉: 中天钢铁以多元善举彰显民企担当 创业25载累捐超15亿元反哺社会
-  -> 筛掉: 美团等入股3D打印机研发商智能派科技
-  -> 筛掉: 新疆中泰集团党委书记、董事长王平洋调研圣雄能源
-  -> 筛掉: 客户重疾获赔60万元，富德生命人寿日照中心支公司快速理赔获赞誉
-  -> 筛掉: 华硕 ExpertBook Ultra 14 笔记本海外上市：1.1kg 重、14 英寸双层 OLED 触屏，3599 美元
-  -> 筛掉: 从音响通讯到智能硬件，蓝海翔龙打造“一站式”电子供应链矩阵
-  -> 筛掉: GPS信号都没有，华赛睿飞这架无人机凭什么在地下室飞？
-  -> 筛掉: 铁韵融春潮 速度与温度共筑丰收底色
-  -> 筛掉: 华新燃气集团与华为数字能源举行工作座谈
-  -> 筛掉: 享界S9座椅险夹伤儿童遭质疑 鸿蒙智行公开回应
-  -> 筛掉: 提前62天！中铁二局四公司成都中欧班列集结中心基础设施项目3号仓库主体结构顺利封顶
-  -> 筛掉: Costco迷局？开市客北京起诉开市客中国商业诋毁？
-  -> 筛掉: 警方通报杰我睿公司涉嫌经济犯罪！老板名下多家企业已注销？
-  -> 筛掉: 南孚电池换帅？新任董事长余斌将面临哪些挑战
-  -> 筛掉: 蓝焰控股吕梁公司：井口增压技改 激活老井潜能
-  -> 筛掉: 传高瓴投资将收购Marsh(MRSH.US)旗下金融风险管理机构PCS
-  -> 筛掉: 燃爆“五一”！华发全业态揽客超300万人次，满“FUN”成绩单重磅出炉
-  -> 筛掉: 深供电新能源筑就虹桥超充“绿色心脏”，解锁园能共融新范式
-  -> 筛掉: 坚持长期主义 聚焦优势赛道 | 复悦生活（高地）荣获“2026中国物业服务百强企业”
-  -> 筛掉: 282 马力、模拟燃油车换挡感受：大众即将推出 ID Polo GTI Clubsport 电动掀背车
-  -> 筛掉: 广东钧明物业：筑牢安全基石，深化服务品质，综合实力获行业认可
-  -> 筛掉: 浙商“围猎”五星级酒店！五折抄底新疆万达文华，宁波建材老板花9亿买下三家富力酒店
-  -> 筛掉: 金邦发布 8000MT/s 标准内存和 AQUARIUS Diamond RGB 灯条
-  -> 筛掉: 400 万周活的 Codex 推出 Chrome 扩展，OpenAI 把 AI 带进浏览器工作流
-  -> 筛掉: “能源绿色低碳转型”看山东之青岛炼化：综合利用氢能及光伏资源
-  -> 筛掉: 春天里强劲开局 海螺恒光绘就精细化工新图景
-  -> 筛掉: 2500亿独角兽一夜归零，全球AI格局彻底变天
-  -> 筛掉: 安徽宿州市委书记王庆武一行到访绿地集团，并与张玉良董事长进行会谈：服务国家战略，携手共促发展
-  -> 筛掉: 新乡监管分局同意撤销中汇人寿新乡市获嘉支公司
-  -> 筛掉: 消息称 Anthropic 拟今夏融资数百亿美元，冲击万亿估值反超 OpenAI
-  -> 筛掉: Anthropic 发布 Claude for Microsoft 365，可跨 Office 文档工作与同步
-  -> 筛掉: 泰康人寿回应代理人涉诈骗案：已启动客户排查，承诺依法担责
-  -> 筛掉: 华为申请“华为云OfficeClaw”商标
-  -> 筛掉: 产学研深度融合杭州唯一代表！光华创芯准独角兽加冕杭州新物种新小龙！
-  -> 筛掉: 阶跃星辰，将完成近25亿美元融资！
-  -> 筛掉: 莉莉丝反腐通报：多名核心负责人涉刑移送，22 家供应商被永久拉黑
-  -> 筛掉: 霸王茶姬澳门首店开业，会员单日环比增长最高达318％
-  -> 筛掉: 绿控传动创业板IPO即将上会 创业板赋能绿色高端装备制造企业跑出加速度
-  -> 筛掉: 灵瑞集首发瑞兽AI灵宠：以IP重构AI陪伴新范式
-  -> 筛掉: 霸王茶姬澳门首店正式开业 会员单日环比增长最高达318%
-  -> 筛掉: 荣耀申请注册“荣耀 Robot”商标
-  -> 筛掉: 换帅换将！中泰资管迎来“双姜”搭档
-  -> 筛掉: 奕行智能融资数亿元，中国移动链长基金投了
-  -> 筛掉: 正扬科技IPO被受理 拟于深交所创业板上市
-  -> 筛掉: 绿控传动5月13日上会 拟发行9,681.6750万股
-  -> 筛掉: 真假开市客对簿公堂，品牌罗生门折射行业隐忧
-  -> 筛掉: 阶跃星辰将完成近25亿美元融资，提速港股IPO
-  -> 筛掉: 阶跃星辰拆除红筹架构，融资25亿美元加速冲击IPO
-  -> 筛掉: 荣耀申请注册“荣耀 Robot”商标
-  -> 筛掉: 维通利中签号码共有81,781个
-  -> 筛掉: 【同创Family】「国仪量子」攻坚高端科学仪器国产替代
-  -> 筛掉: 角力月之暗面20亿美元融资，阶跃星辰官宣25亿美元融资进程
-  -> 筛掉: 中泰资管换帅，姜天坊任董事长、姜诚任总经理
-  -> 筛掉: 中国证券监督管理委员会党委巡视工作领导小组办公室原专职副主任杨春蕾一审获刑七年
-  -> 筛掉: 银担协同精准赋能产业链 渤海银行济南分行落地商票担保创新供应链金融业务
-  -> 筛掉: 科技支撑场景金融 海尔消金助力假日消费
-  -> 筛掉: 上汽大通大拿超级增程车型上市 上汽商用车全球改装生态联盟成立
-  -> 筛掉: 2026年爱尔发藻源虾青素产品展示
-  -> 筛掉: 魔投智能 GEO 赋能：AI 营销破局，助力企业高效推广与品牌增效
-  -> 筛掉: 蓝海银行：阵痛转型，以自营合规谋长远新生
-  -> 筛掉: 申港证券2025年经营业绩实现稳增 四大业务协调发展赋能公司战略落地
-  -> 筛掉: 珠海造“定海神针” 助巴西深海采油
-  -> 筛掉: 南孚电池换帅，余斌任南孚电池董事长
-  -> 筛掉: 月之暗面Kimi完成新一轮约20亿美元融资
-  -> 筛掉: PriceSeek提醒：国泰新华20万吨BDO装置预计5月9日重启
-  -> 筛掉: 国海良时期货：以“金牛至赢”期货大赛为桥 深耕财富管理与产业服务双赛道
-  -> 筛掉: 潞安焦化扎实推进二季度安全生产
-  -> 筛掉: 十三化建西北市场中标额近18亿元
-  -> 筛掉: 联想创投旗下基金等入股微分智飞，后者为飞行具身智能研发商
-  -> 筛掉: 胖东来回应“提价套取国补、价格欺诈”
-  -> 筛掉: 车联天下携手东软睿驰，共启中央计算时代汽车智能化新征程
-  -> 筛掉: 聚氨酯巨头的循环重生：科思创（Covestro）Fully Circular 转型深度研究报告
-  -> 筛掉: 泰康人寿回应青岛分公司代理人涉案事件：对应承担的责任绝不推卸
-  -> 筛掉: 以文化铸魂 以战略领航
-  -> 筛掉: 北京“独角兽”箭元科技再度落子烟台，牵手山东海商发成立航天科技公司
-  -> 筛掉: 底价210万元，济南广电拟转让莱芜广电医药70%股权
-  -> 筛掉: 莱芜农商行换“帅”，行长刘珂升任董事长
-  -> 筛掉: 民营银行频现股权变动
-  -> 筛掉: 机器人出口走强带动 乔锋智能涨超10%
-  -> 筛掉: OpenAI为ChatGPT推出“可信联系人”新功能
-  -> 筛掉: 算力压力大，豆包也扛不住要收费了
-  -> 筛掉: 六堡茶闯出新蓝海
-  -> 筛掉: 鞍钢集团成功研发生产铝铁镀层合金化钢板
-  -> 筛掉: XL二南方海力士规模突破400亿港元
-  -> 筛掉: “4只皮皮虾1035元”，当事人称已收到官方最新回复：未超出调控价格
-  -> 筛掉: 恒拓开源成立低空科技公司
-  -> 筛掉: SpaceXAI与Anthropic强强联手！再度瞄准太空算力
-  -> 筛掉: AI巨头激烈对垒！Mythos强势出圈抢占先机 OpenAI火速上线网安新模型
-  -> 筛掉: 换帅换将！中泰资管迎来“双姜”搭档
-  -> 筛掉: 湖北新源浩科公司顺利通过能源管理体系认证
-  -> 筛掉: 绿控传动5月13日深交所首发上会 拟募资15.8亿元
-  -> 筛掉: 宜昌人福药业1类新药RFUS-188注射液获批临床
-  -> 筛掉: 奇瑞控股等成立嘉途汽车公司，注册资本19.2亿
-  -> 筛掉: 德邦基金：母公司总经理武晓春代任董事长 能否破解合规困局？
-  -> 筛掉: 中关村银行2025年“增收不增利”
-  -> 筛掉: 国泰基金：投资运作违规被罚 多只产品大幅跑输基准仍高收费
-  -> 筛掉: 胖东来回应王海：不存在空调价格欺诈、套取国补资金问题
-  -> 筛掉: 周六福Q1净利同比增长约29%
-  -> 筛掉: 开投基金投资项目宁波鞍石1类创新药获批
-  -> 筛掉: CoreWeave 2026财年首季营收同比增长112%
-  -> 筛掉: 雅达利收购《辟邪除妖》前五作版权，追溯至 1981 年的经典 RPG 游戏
-  -> 筛掉: 西贝北京开业十余年的老店关闭！品牌方：系推进调整优化举措
-  -> 筛掉: 翼菲科技招股 拟全球发售2460万股H股
-  -> 筛掉: 倍耐力获准在美生产 Cyber Tyre“联网轮胎”，曾因中国中化持股 34.1% 引发担忧
-  -> 筛掉: 周六福一季度归母净利润同比增长约29%
-  -> 筛掉: 南京航天“加速度” 首枚火箭力争年内出厂
-  -> 筛掉: 民企持股60%入场，青岛中健医疗科技大股东变更
-  -> 筛掉: 中国化学工程为“沙戈荒”火电工程装上“调峰利器”
-  -> 筛掉: 东方证券重组上海证券剑指行业前十 上海国资战投赋能蓄力打造一流投行
-  -> 筛掉: 昆仑芯（北京）科技股份有限公司启动上市辅导
-  -> 筛掉: 大疆 DJI ROMO 2 代扫地机器人官宣 5 月 11 日发布
-  -> 筛掉: 徐鸿与国家能源集团党组副书记、总经理冯来法举行工作会谈
-  -> 筛掉: 泰达环保坚守垃圾处置一线 聚力绿色能源保供
-  -> 筛掉: 双喜临门！合肥产投集团斩获双交易所资质，获批50亿元公司债
-  -> 筛掉: 单季亏超10亿元、偿付能力告急，幸福人寿的“幸福”去哪了
-  -> 筛掉: 20亿元！两股东捆绑清仓光大永明人寿25%股权
-  -> 筛掉: 锚定“十五五”新征程 看国贸资本如何以金融国企担当实践 赋能千亿产业链高质量发展
-  -> 筛掉: 楚道易能&岚图汽车，达成互联互通合作！
-  -> 筛掉: 偿付能力“预警”与单季巨亏10亿元，幸福人寿“压力山大”
-  -> 筛掉: 京东出资 20 亿元控股全国首家市级 AMC，补齐不良资产处置拼图
-  -> 筛掉: “全李酒店”已改名
-  -> 筛掉: 省内省外市场齐开花 公司接连中标多个项目
-  -> 筛掉: 溧水农商银行召开二季度经营工作会议
-  -> 筛掉: 靖江农商银行召开 2026年旺季工作总结表彰暨二季度工作会
-  -> 筛掉: 明阳科技实施2025年年度权益分派 每10股派发现金红利3.743846元
-  -> 筛掉: 代理人涉诈骗案被立案侦查！泰康人寿回应
-  -> 筛掉: 12年来首次，毅达资本“换帅”！
-  -> thsi_unlisted: 保留 27 / 372
-
-[AI Filter] 正在筛选来源: fortune_cn (共 3 条) ...
-[Token Usage] Filter: 833 (In: 0, Out: 0)
-  -> 筛掉: 经济学家证实，避免提前退休可延缓认知衰退
-  -> 筛掉: 一男子以阿斯特家族名义骗走墨西哥亿万富翁4.5亿美元
-  -> 筛掉: 巴菲特卸任后股东大会人流锐减，但新任掌门人获市场认可
-  -> fortune_cn: 保留 0 / 3
+  -> thsi_unlisted: 保留 4 / 61
 
 [AI Filter] 正在筛选来源: chinatax (共 1 条) ...
 [Token Usage] Filter: 797 (In: 0, Out: 0)
   -> 筛掉: 国家税务总局陕西省税务局原一级巡视员郭章献接受纪律审查和监察调查
   -> chinatax: 保留 0 / 1
 
-[AI Filter] 正在筛选来源: gasgoo (共 20 条) ...
-[Token Usage] Filter: 987 (In: 0, Out: 0)
-[Token Usage] Filter: 999 (In: 0, Out: 0)
-  -> 筛掉: 【车企】传小米汽车规划独立子品牌 “寻天”， 首款SUV昆仑N3下半年上市
-  -> 筛掉: 【车企】一张图看懂河北省汽车产业集群丨盖世全球汽车产业大数据
-  -> 筛掉: 【车企】极氪预警：警惕“低价代购”陷阱，认准官方渠道
+[AI Filter] 正在筛选来源: gasgoo (共 1 条) ...
+[Token Usage] Filter: 796 (In: 0, Out: 0)
   -> 筛掉: 【产业】多家汽车行业协会敦促美政府延长美墨加自由贸易协定
-  -> 筛掉: 【车企】特斯拉Model Y成为首款通过美国驾驶辅助系统新规测试的车型
-  -> 筛掉: 【车企】Stellantis CEO承诺现金流将稳步改善
-  -> 筛掉: 【产业】加拿大电动车价格低至3万加元
-  -> 筛掉: 【车企】保时捷调整组织架构 裁撤一名董事会席位
-  -> 筛掉: 【车企】莲花Eletre首批18台发运加拿大
-  -> 筛掉: 【车企】特斯拉4月中国产电动车销量同比大增36%
-  -> 筛掉: 【产业】晓莺说 | 英国，脱欧后的新市场
-  -> 筛掉: 【产业】【国际快讯】特斯拉上海工厂4月全球交付量大涨36%；行业协会敦促美政府延长美墨加自由贸易协定；伟世通一季度净销售额达9.54亿美元
-  -> 筛掉: 【车企】奥迪担忧SUV赴美上市前遭遇关税重大冲击
-  -> 筛掉: 【产业】超豪华汽车，集体“渡劫”
-  -> 筛掉: 【车企】至暗时刻，奔驰押注中国
-  -> 筛掉: 【车企】吉利人才辈出，南圣良一年十八变
-  -> 筛掉: 【产业】2026年4月国内汽车投诉排行及分析报告
-  -> 筛掉: 【车企】中国首家！18台莲花Eletre装船出海赴加拿大 创中国电动车出口新纪录
-  -> gasgoo: 保留 2 / 20
-正在生成摘要: 中科大核聚变方向面向本科招生，国内聚变人才培养驶入快车道 国内已有约30所高校布局核聚变领域，形成基础研究、技术突破、工程转化的三层结构。 4919 昨天 20:35 ...
-[Token Usage] Summary: 1679 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 195 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 493 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 中科大核聚变方向面向本科招生，国内聚变人才培养驶入快车道 国内已有约30所高校布局核聚变领域，形成基础研究、技术突破、工程转化的三层结构。 4919 昨天 20:35
-正在生成摘要: 中国首个卫星物联网商用试验获批，激活空天产业万亿级新生态 未来2至3年，低轨卫星物联网星座部署将加速，与5G/6G地面网络形成互补。 ...
-[Token Usage] Summary: 1906 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 463 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 中国首个卫星物联网商用试验获批，激活空天产业万亿级新生态 未来2至3年，低轨卫星物联网星座部署将加速，与5G/6G地面网络形成互补。
+  -> gasgoo: 保留 0 / 1
 正在生成摘要: 中国移动×火山引擎：首创“机密模型服务”新模式，让企业安全用好AI ...
 [Token Usage] Summary: 1170 (In: 0, Out: 0)
 [Token Usage] SummaryCompact: 183 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 452 (In: 0, Out: 0)
   -> [AI SecFilter] 剔除无关内容: 中国移动×火山引擎：首创“机密模型服务”新模式，让企业安全用好AI
 正在生成摘要: 星环聚能完成5亿元融资 冲刺核聚变关键技术的工程化转化 ...
-[Token Usage] Summary: 1550 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 440 (In: 0, Out: 0)
+[Token Usage] Summary: 1544 (In: 0, Out: 0)
+[Token Usage] Check Relevance: 434 (In: 0, Out: 0)
   -> [AI SecFilter] 剔除无关内容: 星环聚能完成5亿元融资 冲刺核聚变关键技术的工程化转化
 正在生成摘要: 泰鸿万立：公司将加强研发创新，进行技术升级迭代 ...
 [Token Usage] Summary: 517 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 424 (In: 0, Out: 0)
   -> [AI SecFilter] 剔除无关内容: 泰鸿万立：公司将加强研发创新，进行技术升级迭代
-正在生成摘要: 国电高科获批全国首个卫星物联网业务商用试验许可 ...
-[Token Usage] Summary: 717 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 436 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 国电高科获批全国首个卫星物联网业务商用试验许可
-正在生成摘要: 服务长三角 东方在行动丨中国东方旗下上海东兴：以盘活存量为切入口 打造服务长三角实体经济的生动实践 ...
-[Token Usage] Summary: 1190 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 186 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 462 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 服务长三角 东方在行动丨中国东方旗下上海东兴：以盘活存量为切入口 打造服务长三角实体经济的生动实践
-正在生成摘要: 国电高科成为全国首个卫星物联网业务商用试验企业 ...
-[Token Usage] Summary: 1010 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 186 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 446 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 国电高科成为全国首个卫星物联网业务商用试验企业
-正在生成摘要: 天有为电子斩获FPC结构专利 赋能车载HUD模组技术升级 ...
-[Token Usage] Summary: 1214 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 209 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 463 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 天有为电子斩获FPC结构专利 赋能车载HUD模组技术升级
-正在生成摘要: 【车企】零跑汽车进军德国市场 电动车月租低至49欧元 ...
-[Token Usage] Summary: 1567 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 436 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 【车企】零跑汽车进军德国市场 电动车月租低至49欧元
-正在生成摘要: 医药代表管理新规实施在即，药企“第三方外包”避风港不再？ 药品上市许可持有人应在药品流通中承担穿透式主体责任 31393 昨天 15:01 ...
-[Token Usage] Summary: 1969 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 188 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 473 (In: 0, Out: 0)
-  -> 摘要生成成功: 国家药监局等七部门联合发布《医药代表管理...
+正在生成摘要: T早报｜马斯克诉OpenAI案开启庭审；台积电4月营收同比增17.5%；中汽协辟谣新能源车企因锁电被约谈 ...
+[Token Usage] Summary: 2168 (In: 0, Out: 0)
+[Token Usage] SummaryCompact: 180 (In: 0, Out: 0)
+[Token Usage] Check Relevance: 454 (In: 0, Out: 0)
+  -> [AI SecFilter] 剔除无关内容: T早报｜马斯克诉OpenAI案开启庭审；台积电4月营收同比增17.5%；中汽协辟谣新能源车企因锁电被约谈
 正在生成摘要: 阶跃星辰发布新一代实时语音大模型StepAudio 2.5 Realtime ...
 [Token Usage] Summary: 471 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 418 (In: 0, Out: 0)
@@ -639,146 +254,23 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
 [Token Usage] SummaryCompact: 182 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 462 (In: 0, Out: 0)
   -> [AI SecFilter] 剔除无关内容: 紫光展锐发布端边 AI 芯片平台 N9 系列：4nm 工艺，Arm v9.2 CPU
-正在生成摘要: 今夜！DeepSeek，突传重磅！ ...
-[Token Usage] Summary: 1727 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 426 (In: 0, Out: 0)
-  -> 摘要生成成功: DeepSeek计划首轮融资500亿元人...
-正在生成摘要: 今夜！DeepSeek，突传重磅！ ...
-[Token Usage] Summary: 1769 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 427 (In: 0, Out: 0)
-  -> 摘要生成成功: DeepSeek计划首轮融资500亿元人...
-正在生成摘要: 新紫光集团：重整至今负债降低74.2% 发布“AI全家桶” ...
-[Token Usage] Summary: 1146 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 211 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 459 (In: 0, Out: 0)
-  -> 摘要生成成功: 新紫光集团自2022年1月重整以来负债由...
-正在生成摘要: DeepSeek被曝狂融500亿，梁文锋占大头，腾讯投60亿，估值直冲3500亿 ...
-[Token Usage] Summary: 1097 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 192 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 467 (In: 0, Out: 0)
-  -> 摘要生成成功: DeepSeek拟融资超500亿元人民币...
-正在生成摘要: 华阳集团：公司镁合金业务2026年第一季度营业收入及新项目订单金额同比大幅增长 ...
-[Token Usage] Summary: 645 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 429 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 华阳集团：公司镁合金业务2026年第一季度营业收入及新项目订单金额同比大幅增长
-正在生成摘要: 华阳集团：公司与英特尔联合打造的AI BOX为座舱搭建了强劲的AI算力底座 ...
-[Token Usage] Summary: 635 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 443 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 华阳集团：公司与英特尔联合打造的AI BOX为座舱搭建了强劲的AI算力底座
-正在生成摘要: 西安奕材：第二工厂计划在2026年底达到设计产能50万片/月 ...
-[Token Usage] Summary: 543 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 421 (In: 0, Out: 0)
-  -> 摘要生成成功: 西安奕材第二工厂计划于2026年底达产，...
 正在生成摘要: 西安奕材：公司HBM用抛光片产品正处于客户验证和联合研发阶段 ...
 [Token Usage] Summary: 591 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 405 (In: 0, Out: 0)
   -> [AI SecFilter] 剔除无关内容: 西安奕材：公司HBM用抛光片产品正处于客户验证和联合研发阶段
-正在生成摘要: 影石创新：公司持续加强芯片、算法、产品与组织能力建设 ...
-[Token Usage] Summary: 592 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 441 (In: 0, Out: 0)
-  -> 摘要生成成功: 影石创新（688775）持续加强芯片、算...
-正在生成摘要: 西安奕材：第二工厂预计于2026年底达产 ...
-[Token Usage] Summary: 534 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 418 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 西安奕材：第二工厂预计于2026年底达产
-正在生成摘要: 托伦斯精密制造（江苏）股份有限公司创业板IPO注册获证监会批准 ...
-[Token Usage] Summary: 457 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 414 (In: 0, Out: 0)
-  -> 摘要生成成功: 中国证监会于2026年5月8日核准托伦斯...
-正在生成摘要: 星宸科技：SSD2366GI可满足控制、分析、通信并行处理及工业AI多模态推理需求 ...
-[Token Usage] Summary: 590 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 461 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 星宸科技：SSD2366GI可满足控制、分析、通信并行处理及工业AI多模态推理需求
-正在生成摘要: 未来智能完成亿元级 A+ 轮融资，与传音合作打造下一代 AI Agent 硬件 ...
-[Token Usage] Summary: 1938 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 195 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 448 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 未来智能完成亿元级 A+ 轮融资，与传音合作打造下一代 AI Agent 硬件
-正在生成摘要: 宇树人形机器人拳击控制相关专利公布 ...
-[Token Usage] Summary: 718 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 433 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 宇树人形机器人拳击控制相关专利公布
-正在生成摘要: 富达投资重组技术与产品交付团队，将裁撤800人优化架构 ...
-[Token Usage] Summary: 694 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 431 (In: 0, Out: 0)
-  -> 摘要生成成功: 富达投资将裁撤约800名员工以重组技术和...
-正在生成摘要: 基康技术“一种光纤光栅渗压计”获得发明专利 ...
-[Token Usage] Summary: 582 (In: 0, Out: 0)
+正在生成摘要: DeepSeek拟募资500亿，创中国AI融资纪录，拟6月发布V4模型更新 ...
+[Token Usage] Summary: 492 (In: 0, Out: 0)
 [Token Usage] Check Relevance: 419 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 基康技术“一种光纤光栅渗压计”获得发明专利
-正在生成摘要: 新华三发布面向万亿级大模型的全系列超节点 UniPoD S80000 ...
-[Token Usage] Summary: 1468 (In: 0, Out: 0)
-[Token Usage] SummaryCompact: 280 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 496 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 新华三发布面向万亿级大模型的全系列超节点 UniPoD S80000
-正在生成摘要: 敬业集团成功研发高端铁标桥梁用钢Q370qE ...
-[Token Usage] Summary: 955 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 442 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 敬业集团成功研发高端铁标桥梁用钢Q370qE
-正在生成摘要: 未来智能融资亿元级，传音投了 ...
-[Token Usage] Summary: 2002 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 430 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 未来智能融资亿元级，传音投了
-正在生成摘要: 阶跃将融资近25亿美元 已拆除红筹架构冲刺港股IPO ...
-[Token Usage] Summary: 544 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 414 (In: 0, Out: 0)
-  -> 摘要生成成功: 国产大模型公司阶跃星辰将完成近25亿美元...
-正在生成摘要: 阶跃星辰将完成近25亿美元融资 已拆除红筹架构加速冲刺港股IPO ...
-[Token Usage] Summary: 613 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 440 (In: 0, Out: 0)
-  -> 摘要生成成功: 阶跃星辰将完成近25亿美元融资，已拆除红...
-正在生成摘要: 阶跃将完成近25亿美元融资：终端产业链资方集体入场，加速筹备赴港IPO ...
-[Token Usage] Summary: 634 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 441 (In: 0, Out: 0)
-  -> 摘要生成成功: 阶跃星辰将完成近25亿美元融资，已拆除红...
-正在生成摘要: 腾讯、上汽集团等入股机器人灵巧手研发商临界点 ...
-[Token Usage] Summary: 619 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 423 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 腾讯、上汽集团等入股机器人灵巧手研发商临界点
-正在生成摘要: 腾讯、上汽集团等入股机器人灵巧手研发商临界点 ...
-[Token Usage] Summary: 627 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 423 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 腾讯、上汽集团等入股机器人灵巧手研发商临界点
-正在生成摘要: “杭州四小狗”成员云深处科技叩门IPO ...
-[Token Usage] Summary: 1214 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 430 (In: 0, Out: 0)
-  -> 摘要生成成功: 云深处科技已完成IPO上市辅导验收，即将...
-正在生成摘要: 【车企】迫于降本压力，大众拟将中国车型投放欧洲市场 ...
-[Token Usage] Summary: 1758 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 414 (In: 0, Out: 0)
-  -> [AI SecFilter] 剔除无关内容: 【车企】迫于降本压力，大众拟将中国车型投放欧洲市场
-正在生成摘要: 【车企】特斯拉上海超级工厂4月新车交付超7.9万辆，同比增长36% ...
-[Token Usage] Summary: 1366 (In: 0, Out: 0)
-[Token Usage] Check Relevance: 420 (In: 0, Out: 0)
-  -> 摘要生成成功: 特斯拉上海超级工厂4月交付新车超7.9万...
-[History Filter][2nd pass] 企业新闻排重: 16 -> 16
-[AI CompanyImpact] 检查同公司多新闻影响力：共 16 条...
-[Token Usage] CompanyNameExtract: 1434 (In: 0, Out: 0)
-[Token Usage] CompanyImpactPickOne: 357 (In: 0, Out: 0)
-[Token Usage] CompanyImpactPickOne: 344 (In: 0, Out: 0)
-  -> [CompanyImpact] 剔除同公司低影响项: 今夜！DeepSeek，突传重磅！
-  -> [CompanyImpact] 剔除同公司低影响项: DeepSeek被曝狂融500亿，梁文锋占大头，腾讯投60亿，估值直冲3500亿
-  -> [CompanyImpact] 剔除同公司低影响项: 阶跃星辰将完成近25亿美元融资 已拆除红筹架构加速冲刺港股IPO
-  -> [CompanyImpact] 剔除同公司低影响项: 阶跃将完成近25亿美元融资：终端产业链资方集体入场，加速筹备赴港IPO
-[AI CompanyImpact] 完成：16 -> 12
-[AI Deduplicate]正在对 12 条新闻进行去重检查...
-[Token Usage] Deduplicate: 1378 (In: 0, Out: 0)
-[AI Deduplicate] 去重完成：12 -> 12
-[Token Usage] IndustryTag: 202 (In: 0, Out: 0)
+  -> 摘要生成成功: DeepSeek拟募资最高500亿元人民...
+[History Filter][2nd pass] 企业新闻排重: 2 -> 2
+[AI CompanyImpact] 检查同公司多新闻影响力：共 2 条...
+[Token Usage] CompanyNameExtract: 206 (In: 0, Out: 0)
+[AI CompanyImpact] 未发现同公司多条新闻，跳过影响力比较。
+[AI Deduplicate]正在对 2 条新闻进行去重检查...
+[Token Usage] Deduplicate: 472 (In: 0, Out: 0)
+[AI Deduplicate] 去重完成：2 -> 2
+[Token Usage] IndustryTag: 168 (In: 0, Out: 0)
 [Token Usage] IndustryTag: 193 (In: 0, Out: 0)
-  -> 标题过长 (69字)，AI正在缩写: 医药代表管理新规实施在即，药企“第三方外包”避风港不再？ 药品上市许可持有人应在药品流通中承担穿透式主体责任 31393 昨天 15:01
-[Token Usage] Shorten Title: 174 (In: 0, Out: 0)
-     => 医药代表新规实施 药企主体责任穿透至流通 (len=20)
-[Token Usage] IndustryTag: 199 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 200 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 233 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 195 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 215 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 188 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 205 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 188 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 204 (In: 0, Out: 0)
-[Token Usage] IndustryTag: 192 (In: 0, Out: 0)
 [GansuRST] blocked or unavailable: status=412, url=https://rst.gansu.gov.cn/rst/c113672/xxgk_xxlist.shtml. 如需本地补充 cookie，可设置环境变量 GANSU_RST_COOKIE。
 [JLGJJ] Crawl error(p1): HTTPConnectionPool(host='www.jlgjj.gov.cn', port=80): Max retries exceeded with url: /zcfg/gfxwj/ (Caused by NameResolutionError("HTTPConnection(host='www.jlgjj.gov.cn', port=80): Failed to resolve 'www.jlgjj.gov.cn' ([Errno 11001] getaddrinfo failed)"))
 c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3\connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'www.hszfgjj.org.cn'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
@@ -814,6 +306,81 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
 [Policy 24h Filter] tianjin_policy: 0 -> 0
 [Policy 24h Filter] hebei_policy: 0 -> 0
 [Policy 24h Filter] shanxi_policy: 0 -> 0
+[Policy 24h Filter] sxjz_policy: 0 -> 0
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 问答知识库
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 部门专题
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 通知公告
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 要闻动态
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 网站首页
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 涉企行政检查公示专栏
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 权责清单专栏
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 政策法规
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 信息公开
+[Policy 24h Filter] 剔除(yuncheng_policy): 无法解析发布时间 - 业务指南
+[Policy 24h Filter] yuncheng_policy: 10 -> 0
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 关于调整归集提取贷款政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】关于购买新建商品住房提取住房公积金支付购房首付款的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于做好2025年度住房公积金缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金提取、贷款政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金提取、贷款政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金提取、贷款政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于下调个人住房公积金贷款利率的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金提取管理实施细则
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金归集管理实施细则
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金个人住房贷款管理实施细则
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于推行住房公积金个人证明事项“亮码可办”的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于做好2023年度住房公积金缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于开通“退休提取住房公积金和租房提取住房公积金”两项“跨省通...
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整租赁住房提取住房公积金的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金提取管理实施细则（试行）
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金归集管理实施细则（试行）
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金个人住房贷款管理实施细则（试行）
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整首套个人住房公积金贷款利率的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于推进太忻一体化发展优化异地购房提取住房公积金的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于实施住房公积金阶段性支持政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于住房公积金提取业务调整政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金个人贷款实施细则
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金个人住房贷款最高额度的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于住房公积金个人住房贷款业务有关事项的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于规范和阶段性适当降低住房公积金缴存比例的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于印发《灵活就业人员住房公积金缴存和使用暂行办法》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于印发2016年法律法规工作要点的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心“七五”普法工作规划
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于转发《山西省住房和城乡建设厅关于“三去一降一补”工作重点发...
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于修订《忻州市住房公积金阶段性提取办法》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于住房公积金个人贷款业务中有关问题的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于修订《忻州市住房公积金提取、转移管理办法》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于切实提高住房公积金使用效率的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心 部门主要职责及预算单位构成
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金贷款政策的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于调整住房公积金个人住房贷款业务的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于印发《忻州市住房公积金个人贷款实施细则》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于修订《忻州市住房公积金归集管理办法》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于修订《忻州市住房公积金个人住房按揭贷款暂行规定》的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心关于住房公积金提取、贷款业务补充规定的通知
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心逾期贷款催缴办法
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金管理中心稽查科下半年的工作方案
+[Policy 24h Filter] 剔除(sxxz_xzgjj): 超出24小时窗口 - 【💰收入】忻州市住房公积金行政执法监督规范管理办法
+[Policy 24h Filter] sxxz_xzgjj: 43 -> 0
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】吕梁市住房公积金2025年年度报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】一图带你读懂！吕梁市住房公积金2025年年度报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于支持购买新建商品住房提取住房公积金直付购房首付款的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于2025年度住房公积金结息期间暂停业务办理的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】一图带你读懂！吕梁市住房公积金2024年年度报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】吕梁市住房公积金2024年年度报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 关于劳动节期间暂停业务办理的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】吕梁市住房公积金2023年年度报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 关于2023年工作总结及2024年工作打算的报告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 关于系统迁移政务云期间暂停办理业务的公告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于市直公积金缴存人购买商品房办理公积金贷款的服务指南
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于市直公积金缴存人购买商品房办理公积金提取服务指南
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于2023年度住房公积金结息期间暂停办理业务的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 关于开通两项提取业务网上办理的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】关于开通网上办理“购买自住住房”提取公积金业务的通知
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】吕梁市住房公积金管理中心关于个人住房公积金贷款信息将纳入征信系统的通告
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】一图带你读懂《吕梁市住房公积金2022年年度报告》
+[Policy 24h Filter] 剔除(lvliang_policy): 超出24小时窗口 - 【💰收入】住房公积金管理条例
+[Policy 24h Filter] lvliang_policy: 18 -> 0
 [Policy 24h Filter] neimenggu_policy: 0 -> 0
 [Policy 24h Filter] jilin_policy: 0 -> 0
 [Policy 24h Filter] henan_hrss_policy: 0 -> 0
@@ -833,7 +400,9 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
 [Policy 24h Filter] ningxia_hrss_policy: 0 -> 0
 [Policy 24h Filter] xinjiang_rst_policy: 0 -> 0
 [Policy 24h Filter] hrvalue_policy: 0 -> 0
-[Policy 24h Filter] govcn_policy: 2 -> 2
+[Policy 24h Filter] 剔除(govcn_policy): 超出24小时窗口 - 中华人民共和国行政复议法实施条例
+[Policy 24h Filter] 剔除(govcn_policy): 超出24小时窗口 - 国务院关于同意在上海市暂时调整实施有关行政法规规定的批复
+[Policy 24h Filter] govcn_policy: 2 -> 0
 [Policy 24h Filter] heilongjiang_hrss_policy: 0 -> 0
 [Policy 24h Filter] liaoning_hrss_policy: 0 -> 0
 [Policy 24h Filter] shanghai_hrss_policy: 0 -> 0
@@ -1050,6 +619,84 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
 [Policy 24h Filter] guilin_gjj_zxwj: 23 -> 0
 [Policy 24h Filter] lanzhou_gjj_policy: 0 -> 0
 [Policy 24h Filter] yinchuan_gjj_policy: 0 -> 0
+[Policy 24h Filter] 剔除(yqgjj_policy): 无法解析发布时间 - 网站地图
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 惠民新政策速递之二 “商转公”业务办理时间继续延长
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 关于开展涉及不平等对待企业法律法规政策清理工作的公告
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 二手房贷款操作流程
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】阳泉市住房公积金缴存政策解读
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】阳泉市住房公积金管理中心关于印发《阳泉市灵活就业人员参加住房公积金制度实施细则》的通知
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】阳泉市住房公积金存量贷款利率调整
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】政策速递：购房、既有住宅加装电梯提取公积金
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】惠民新政策速递之三 既有住宅加装电梯，父母子女可互提公积金
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】惠民新政策速递之一 阳泉住房公积金提高最高贷款额度
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】关于印发《阳泉市住房公积金管理中心关于开展年度规范住房公积金缴存工作实施方案》的通知
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】关于印发《2025年市住房公积金管理中心普法依法治理工作要点》的通知
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】关于做好二〇二四年度住房公积金 缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] 剔除(yqgjj_policy): 超出24小时窗口 - 【💰收入】关于做好二〇二五年度住房公积金 缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] yqgjj_policy: 14 -> 0
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化住房公积金提取及贷款政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化个人住房商业贷款转住房公积金贷款业务办理时限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 关于开展个人住房贷款还款方式及期限变更业务的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2025年度住房公积金缴存基数上限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化住房公积金使用政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整个人住房公积金贷款利率有关事项的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2025年4月至12月政府采购意向
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整我市住房公积金缴存下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于对高层次人才享受住房公积金使用政策的补充通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化部分住房公积金使用政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2024年度住房公积金缴存基数上下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2024年6月政府采购意向
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2024年度部门预算公开报告
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2024年度单位预算公开报告
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于恢复办理“个人住房商业贷款转个人住房公积金贷款”业务的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 关于印发《个人征信系统使用管理办法 （试行）》的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于扩大既有住宅加装电梯提取公积金范围的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于开展二手房“带押过户”住房公积金贷款业务的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 关于精简部分提取政策办理要件的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化我市住房公积金个人住房贷款中住房套数认定标准的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于优化部分公积金使用政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2022年度部门决算公开
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2023年度住房公积金缴存基数 上下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2023年度部门预算公开
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2023年度单位预算公开
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心关于优化部分使用政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2023年4月政府采购意向
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心关于调整二套房住房公积金贷款购房最低首付款比例的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2022年度住房公积金缴存基数上下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于实施住房公积金阶段性支持政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心关于进一步完善提取政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2022年部门预算公开
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2022年 3月（至）6月政府采购意向
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于进一步优化住房公积金贷款政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2021年10（至）12月政府采购意向
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】关于调整2021年住房公积金缴存基数下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心 关于进一步优化住房公积金提取政策的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心关于印发《逾期贷款催收管理办法（试行）》的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心关于调整2021年住房公积金缴存基数上下限的通知
+[Policy 24h Filter] 剔除(changzhi_gjj_zxwj): 超出24小时窗口 - 【💰收入】长治市住房公积金管理中心2021年7（至）9月政府采购意向
+[Policy 24h Filter] changzhi_gjj_zxwj: 40 -> 0
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于废止有关文件的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于做好2025年度住房公积金缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于做好2024年度灵活就业的大中专毕业生缴存住房公积金补贴发...
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于优化住房公积金使用政策的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金2024年年度报告解读
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于废止有关文件的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于做好2023年度灵活就业的大中专毕业生缴存住房公积金补贴发...
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于做好2024年度住房公积金缴存基数和缴存比例调整工作的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于调整个人住房公积金贷款利率的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】​晋城市商业性个人住房贷款转住房公积金个人住房贷款实施办法
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于印发《晋城市住房公积金组合贷款业务管理办法（试行）》的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于印发《晋城市住房公积金存量房“带押过户”贷款业务管理办...
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理中心关于废止有关文件的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理委员会关于印发《晋城市住房公积金个人住房贷款管理办法》的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理委员会关于印发《晋城市住房公积金缴存管理办法》的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市住房公积金管理委员会关于印发《晋城市住房公积金提取管理办法》的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市人民政府办公室印发晋城市灵活就业人员参加住房公积金制度试点管理办法的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】晋城市人民政府办公室印发晋城市灵活就业人员参加住房公积金制度试点实施方案的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】关于印发《晋城市住房公积金贷款业务实施细则》的通知
+[Policy 24h Filter] 剔除(jcgov_policy): 超出24小时窗口 - 【💰收入】关于印发《晋城市住房公积金缴存管理实施细则》的通知
+[Policy 24h Filter] jcgov_policy: 20 -> 0
+[Policy 24h Filter] zf365_tzgg: 0 -> 0
 [Policy 24h Filter] 剔除(qdgjj_zcjd): 超出24小时窗口 - 【💰收入】视频解读：青岛市住房公积金管理中心关于明确个人住房公积金贷款有关事项的通知
 [Policy 24h Filter] 剔除(qdgjj_zcjd): 超出24小时窗口 - 【💰收入】政策解读：青岛市住房公积金管理中心关于调整申请住房公积金贷款缴存认定标准的通知
 [Policy 24h Filter] 剔除(qdgjj_zcjd): 超出24小时窗口 - 【💰收入】政策解读：青岛市住房公积金管理中心关于调整我市住房公积金贷款政策的通知
@@ -1246,7 +893,7 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   - ningxia_hrss_policy: 0
   - xinjiang_rst_policy: 0
   - hrvalue_policy: 0
-  - govcn_policy: 2
+  - govcn_policy: 0
   - heilongjiang_hrss_policy: 0
   - liaoning_hrss_policy: 0
   - shanghai_hrss_policy: 0
@@ -1274,64 +921,12 @@ c:\Users\admin\Desktop\pachong-main\pachong-main\.venv\Lib\site-packages\urllib3
   - fujian_rst_bbmwj: 0
   - jiangxi_rst_policy: 0
   - shandong_hrss_policy: 0
-[Policy Keyword Filter] mohrss_policy: 0 -> 0
-[Policy Keyword Filter] chinatax_policy: 0 -> 0
-[Policy Keyword Filter] beijing_policy: 0 -> 0
-[Policy Keyword Filter] tianjin_policy: 0 -> 0
-[Policy Keyword Filter] hebei_policy: 0 -> 0
-[Policy Keyword Filter] shanxi_policy: 0 -> 0
-[Policy Keyword Filter] neimenggu_policy: 0 -> 0
-[Policy Keyword Filter] jilin_policy: 0 -> 0
-[Policy Keyword Filter] henan_hrss_policy: 0 -> 0
-[Policy Keyword Filter] hubei_rst_policy: 0 -> 0
-[Policy Keyword Filter] hunan_rst_policy: 0 -> 0
-[Policy Keyword Filter] guangdong_hrss_policy: 0 -> 0
-[Policy Keyword Filter] guangxi_rst_policy: 0 -> 0
-[Policy Keyword Filter] qinghai_rst_policy: 0 -> 0
-[Policy Keyword Filter] gansu_rst_policy: 0 -> 0
-[Policy Keyword Filter] ningxia_hrss_policy: 0 -> 0
-[Policy Keyword Filter] xinjiang_rst_policy: 0 -> 0
-[Policy Keyword Filter] hainan_hrss_policy: 0 -> 0
-[Policy Keyword Filter] chongqing_hrss_policy: 0 -> 0
-[Policy Keyword Filter] sichuan_rst_policy: 0 -> 0
-[Policy Keyword Filter] guizhou_rst_policy: 0 -> 0
-[Policy Keyword Filter] yunnan_hrss_policy: 0 -> 0
-[Policy Keyword Filter] xizang_hrss_policy: 0 -> 0
-[Policy Keyword Filter] shaanxi_rst_policy: 0 -> 0
-[Policy Keyword Filter] hrvalue_policy: 0 -> 0
-[Policy Keyword Filter] 剔除(govcn_policy): 中华人民共和国行政复议法实施条例
-[Policy Keyword Filter] 剔除(govcn_policy): 国务院关于同意在上海市暂时调整实施有关行政法规规定的批复
-[Policy Keyword Filter] govcn_policy: 2 -> 0
-[Policy Keyword Filter] heilongjiang_hrss_policy: 0 -> 0
-[Policy Keyword Filter] liaoning_hrss_policy: 0 -> 0
-[Policy Keyword Filter] hrb_gjj_zxwj: 0 -> 0
-[Policy Keyword Filter] jlgjj_gfxwj: 0 -> 0
-[Policy Keyword Filter] shanghai_hrss_policy: 0 -> 0
-[Policy Keyword Filter] nanjing_gjj_tzgg: 0 -> 0
-[Policy Keyword Filter] hangzhou_gjj_xzfg: 0 -> 0
-[Policy Keyword Filter] hefei_gjj_policy: 0 -> 0
-[Policy Keyword Filter] fuzhou_gjj_zcfg: 0 -> 0
-[Policy Keyword Filter] nanchang_gjj_zcfg: 0 -> 0
-[Policy Keyword Filter] changsha_gjj_wzjd: 0 -> 0
-[Policy Keyword Filter] guangzhou_gjj_policy: 0 -> 0
-[Policy Keyword Filter] guilin_gjj_zxwj: 0 -> 0
-[Policy Keyword Filter] lanzhou_gjj_policy: 0 -> 0
-[Policy Keyword Filter] yinchuan_gjj_policy: 0 -> 0
-[Policy Keyword Filter] qdgjj_zcjd: 0 -> 0
-[Policy Keyword Filter] wuhan_gjj_gfxwj: 0 -> 0
-[Policy Keyword Filter] jiangsu_hrss_policy: 0 -> 0
-[Policy Keyword Filter] zhejiang_hrss_policy: 0 -> 0
-[Policy Keyword Filter] anhui_hrss_policy: 0 -> 0
-[Policy Keyword Filter] fujian_rst_bbmwj: 0 -> 0
-[Policy Keyword Filter] jiangxi_rst_policy: 0 -> 0
-[Policy Keyword Filter] shandong_hrss_policy: 0 -> 0
-[Policy Keyword Filter] kunming_gjj_policy: 0 -> 0
-[Token Usage] Behavior Similarity: 6101 (In: 0, Out: 0)
-[Token Usage] Industry Trend Impact: 8505 (In: 0, Out: 0)
-[Insight] 行业趋势影响命中: 今日多起【AI】标签企业大规模裁员（Cloudflare、Coinbase、富达投资、PayPal、贝宝等）叠加【医药】新规明确药企对医药代表的穿透式主体责任，将直接驱动HRO在AI相关岗位灵活用工结构调整、医药行业外包合规风险重检及交付模式升级。
-[Insight] 触发检查: 当日高价值新闻=12, 历史相似命中=5, 行业趋势影响命中=True
-[Token Usage] Daily Insight: 16578 (In: 0, Out: 0)
-[Insight] 已更新历史记录文件（新增 11 条，保留最近 6 个月）
+[Token Usage] Behavior Similarity: 5355 (In: 0, Out: 0)
+[Token Usage] Industry Trend Impact: 7741 (In: 0, Out: 0)
+[Insight] 行业趋势影响命中: 保时捷精简三家子公司影响逾500名员工，属车企领域结构性调整，将直接触发HRO在裁员安置、过渡期灵活用工、岗位外包及再就业服务等环节的业务需求；叠加近期车企普遍重组（如Stellantis、雷诺、日产等裁员动作频发），表明行业正进入组织效能优化周期，HRO交付压力与合规管理复杂度同步上升。
+[Insight] 触发检查: 当日高价值新闻=2, 历史相似命中=4, 行业趋势影响命中=True
+[Token Usage] Daily Insight: 15787 (In: 0, Out: 0)
+[Insight] 已更新历史记录文件（新增 2 条，保留最近 6 个月）
 ✅ DingTalk OK (群1): {'errcode': 0, 'errmsg': 'ok'}
 ✅ DingTalk OK (群2): {'errcode': 0, 'errmsg': 'ok'}
 ✅ wrote: daily_all.md
