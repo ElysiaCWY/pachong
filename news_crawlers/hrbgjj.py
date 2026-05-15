@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime, timedelta, date
 import re
 from urllib.parse import urljoin
+
 from bs4 import BeautifulSoup
-from news_crawlers.common import make_session, norm, parse_ymd, mark_income_related
+
+from news_crawlers.common import make_session, now_cn, norm, parse_ymd, mark_income_related
 
 BASE = "https://www.hrbgjj.org.cn"
 INDEX = "https://www.hrbgjj.org.cn/zxwj/index.jhtml"
@@ -10,8 +13,10 @@ PAGE_FMT = "https://www.hrbgjj.org.cn/zxwj/index_{page}.jhtml"
 ARTICLE_RE = re.compile(r"/zxwj/\d+\.jhtml$")
 
 
-def _extract_items_from_soup(soup):
+def _extract_items_from_soup(soup, page_url: str, since_date: date):
     items = []
+    has_older_item = False
+
     # 匹配 /zxwj/xxxx.jhtml 的链接
     for a in soup.find_all("a", href=ARTICLE_RE):
         try:
@@ -20,7 +25,7 @@ def _extract_items_from_soup(soup):
                 continue
 
             href = a.get("href")
-            full = urljoin(BASE, href)
+            full = urljoin(page_url, href)
 
             # 尝试从父节点文本中抽取日期（常见展示为：<a>title</a> 2025-12-24）
             parent_text = norm(a.parent.get_text(" ")) if a.parent else ""
@@ -46,17 +51,26 @@ def _extract_items_from_soup(soup):
                     m = re.search(r"(\d{4}-\d{2}-\d{2})", str(nxt))
 
             dt = parse_ymd(m.group(1)) if m else None
+            if not dt:
+                continue
+
+            if dt < since_date:
+                has_older_item = True
+                continue
 
             items.append({"title": mark_income_related(title), "url": full, "date": dt, "source": "hrb_gjj_zxwj"})
         except Exception:
             continue
-    return items
+    return items, has_older_item
 
 
-def crawl_hrbgjj_zxwj(current_time=None, max_pages: int = 6):
+def crawl_hrbgjj_zxwj(current_time: datetime | None = None, max_pages: int = 6):
     """抓取哈尔滨公积金中心文件列表，返回条目列表，条目字典包含 title/url/date/source"""
+    now = current_time or now_cn()
+    since_date = (now - timedelta(days=1)).date()
     session = make_session()
     out = []
+    seen_urls = set()
 
     for p in range(1, max_pages + 1):
         try:
@@ -66,21 +80,27 @@ def crawl_hrbgjj_zxwj(current_time=None, max_pages: int = 6):
             resp.encoding = resp.apparent_encoding
             soup = BeautifulSoup(resp.text, "lxml")
 
-            items = _extract_items_from_soup(soup)
+            items, has_older_item = _extract_items_from_soup(soup, url, since_date)
+            if not items and p == 1:
+                break
+
             if not items:
                 # 如果当前页没有符合的条目，继续下一页以防分页结构不同
                 continue
 
             # 合并去重（简单按 url）
-            seen = set(it["url"] for it in out)
             for it in items:
-                if it["url"] in seen:
+                if it["url"] in seen_urls:
                     continue
                 out.append(it)
-                seen.add(it["url"])
+                seen_urls.add(it["url"])
+
+            if has_older_item:
+                break
 
         except Exception as e:
             print(f"[Harbin GJJ Crawl Error] {e}")
             break
 
+    out.sort(key=lambda x: (x.get("date") or now.date(), x.get("title", "")), reverse=True)
     return out
