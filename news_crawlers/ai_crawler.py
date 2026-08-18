@@ -9,7 +9,7 @@ import html
 # 优先读取环境变量；如果环境变量不存在或为空字符串，则使用默认的硬编码 Key
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
 if not DASHSCOPE_API_KEY:
-    DASHSCOPE_API_KEY = "sk-86fa3d1f35784c80a85640bb1df05909"
+    DASHSCOPE_API_KEY = ""
 
 # 使用更强理解能力的模型进行筛选和摘要
 DASHSCOPE_MODEL   = "qwen-plus" 
